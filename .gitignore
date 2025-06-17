@@ -12,3 +12,6 @@ wheels/
 # secrets file
 .env
 .secrets
+
+# dev database
+instance/
