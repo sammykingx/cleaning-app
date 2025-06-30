@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanPro - Professional Cleaning Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#024522',
+                        secondary: '#bcb330'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn { animation: fadeIn 0.5s ease-in-out; }
+        .animate-slideIn { animation: slideIn 0.5s ease-out; }
+        .animate-slideUp { animation: slideUp 0.3s ease-out; }
+        
+        .step { display: none; }
+        .step.active { display: block; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #024522; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #035529; }
+        
+        input:focus, textarea:focus, button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(2, 69, 34, 0.1);
+        }
+        
+        button, input, textarea { transition: all 0.2s ease-in-out; }
+        
+        .hover-card { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+        .hover-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); }
+        
+        .time-slot {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .time-slot:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .day-card {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .day-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-4xl mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">CleanPro</h1>
+                        <p class="text-sm text-gray-500">Professional Cleaning Services</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-500">Total</p>
+                    <p id="totalPrice" class="text-2xl font-bold text-primary">$90</p>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mt-8">
+                <div class="flex items-center justify-between mb-2">
+                    <span id="stepIndicator" class="text-sm text-gray-500">Step 1 of 6</span>
+                    <span id="progressPercent" class="text-sm text-gray-500">17% complete</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="progressBar" class="bg-primary h-2 rounded-full transition-all duration-300 ease-out" style="width: 17%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <!-- Step 1: Service Selection -->
+            <div id="step1" class="step active p-8 animate-slideIn">
+                <div class="flex items-center space-x-3 mb-6">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    <h2 class="text-2xl font-bold text-gray-900">Select Your Service</h2>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Choose a cleaning category</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <button onclick="selectCategory('Standard Cleaning')" class="category-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-left hover:shadow-md hover-card">
+                                <div class="flex items-center space-x-3">
+                                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                    <span class="font-medium">Standard Cleaning</span>
+                                </div>
+                            </button>
+                            <button onclick="selectCategory('Deep Cleaning')" class="category-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-left hover:shadow-md hover-card">
+                                <div class="flex items-center space-x-3">
+                                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                    <span class="font-medium">Deep Cleaning</span>
+                                </div>
+                            </button>
+                            <button onclick="selectCategory('Specialized')" class="category-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-left hover:shadow-md hover-card">
+                                <div class="flex items-center space-x-3">
+                                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                    <span class="font-medium">Specialized</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="serviceSelection" class="hidden animate-fadeIn">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Choose specific service</label>
+                        <div id="serviceOptions" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Room Selection -->
+            <div id="step2" class="step p-8 animate-slideIn">
+                <div class="flex items-center space-x-3 mb-6">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    <h2 class="text-2xl font-bold text-gray-900">Property Details</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Number of Bedrooms</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button onclick="selectBedrooms(1)" class="bedroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                                <span class="font-bold text-lg">1</span>
+                            </button>
+                            <button onclick="selectBedrooms(2)" class="bedroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                                <span class="font-bold text-lg">2</span>
+                            </button>
+                            <button onclick="selectBedrooms(3)" class="bedroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                                <span class="font-bold text-lg">3</span>
+                            </button>
+                            <button onclick="selectBedrooms(4)" class="bedroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                                <span class="font-bold text-lg">4</span>
+                            </button>
+                            <button onclick="selectBedrooms(5)" class="bedroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                                <span class="font-bold text-lg">5</span>
+                            </button>
+                            <button onclick="selectBedrooms(6)" class="bedroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                                <span class="font-bold text-lg">6</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Number of Bathrooms</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button onclick="selectBathrooms(1)" class="bathroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                                <span class="font-bold text-lg">1</span>
+                            </button>
+                            <button onclick="selectBathrooms(2)" class="bathroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                                <span class="font-bold text-lg">2</span>
+                            </button>
+                            <button onclick="selectBathrooms(3)" class="bathroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                                <span class="font-bold text-lg">3</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Base Price (<span id="bedroomDisplay">1</span> bed, <span id="bathroomDisplay">1</span> bath)</span>
+                        <span id="basePrice" class="font-bold text-primary">$90</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Frequency Selection -->
+            <div id="step3" class="step p-8 animate-slideIn">
+                <div class="flex items-center space-x-3 mb-6">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <h2 class="text-2xl font-bold text-gray-900">Cleaning Frequency</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <button onclick="selectFrequency('weekly')" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                        <div class="text-center">
+                            <h3 class="font-bold text-lg mb-2">Weekly</h3>
+                            <p class="text-sm text-gray-600 mb-2">Save 0%</p>
+                            <p id="weeklyPrice" class="font-bold text-primary">$90</p>
+                        </div>
+                    </button>
+                    <button onclick="selectFrequency('bi-weekly')" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                        <div class="text-center">
+                            <h3 class="font-bold text-lg mb-2">Bi-Weekly</h3>
+                            <p class="text-sm text-gray-600 mb-2">Save 10%</p>
+                            <p id="biWeeklyPrice" class="font-bold text-primary">$81</p>
+                        </div>
+                    </button>
+                    <button onclick="selectFrequency('monthly')" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                        <div class="text-center">
+                            <h3 class="font-bold text-lg mb-2">Monthly</h3>
+                            <p class="text-sm text-gray-600 mb-2">Save 20%</p>
+                            <p id="monthlyPrice" class="font-bold text-primary">$72</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Add-on Services -->
+            <div id="step4" class="step p-8 animate-slideIn">
+                <div class="flex items-center space-x-3 mb-6">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    <h2 class="text-2xl font-bold text-gray-900">Add-on Services</h2>
+                    <span class="text-sm text-gray-500">(Optional - $30 each)</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <button onclick="toggleAddOn('Fridge Cleaning')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Fridge Cleaning">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                            <div class="text-left">
+                                <span class="font-medium block">Fridge Cleaning</span>
+                                <span class="text-sm text-gray-500">+$30</span>
+                            </div>
+                        </div>
+                    </button>
+                    <button onclick="toggleAddOn('Oven Cleaning')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Oven Cleaning">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                            <div class="text-left">
+                                <span class="font-medium block">Oven Cleaning</span>
+                                <span class="text-sm text-gray-500">+$30</span>
+                            </div>
+                        </div>
+                    </button>
+                    <button onclick="toggleAddOn('Blinds Dusting')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Blinds Dusting">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 3H5a2 2 0 00-2 2v12a4 4 0 004 4h2a2 2 0 002-2V5a2 2 0 00-2-2z"/>
+                            </svg>
+                            <div class="text-left">
+                                <span class="font-medium block">Blinds Dusting</span>
+                                <span class="text-sm text-gray-500">+$30</span>
+                            </div>
+                        </div>
+                    </button>
+                    <button onclick="toggleAddOn('Furniture Polish')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Furniture Polish">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                            <div class="text-left">
+                                <span class="font-medium block">Furniture Polish</span>
+                                <span class="text-sm text-gray-500">+$30</span>
+                            </div>
+                        </div>
+                    </button>
+                    <button onclick="toggleAddOn('Laundry Service')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Laundry Service">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M8 11v6a2 2 0 002 2h4a2 2 0 002-2v-6M8 11h8"/>
+                            </svg>
+                            <div class="text-left">
+                                <span class="font-medium block">Laundry Service</span>
+                                <span class="text-sm text-gray-500">+$30</span>
+                            </div>
+                        </div>
+                    </button>
+                    <button onclick="toggleAddOn('Garage Cleaning')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Garage Cleaning">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM21 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17h4v-5H9M15 17h2v-5h-2M7 12V6a4 4 0 118 0v6"/>
+                            </svg>
+                            <div class="text-left">
+                                <span class="font-medium block">Garage Cleaning</span>
+                                <span class="text-sm text-gray-500">+$30</span>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <div id="addOnSummary" class="mt-6 p-4 bg-gray-50 rounded-lg hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Add-on Services (<span id="addOnCount">0</span>)</span>
+                        <span id="addOnTotal" class="font-bold text-primary">+$0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Date and Time Selection -->
+            <div id="step5" class="step p-8 animate-slideIn">
+                <div class="flex items-center space-x-3 mb-6">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <h2 class="text-2xl font-bold text-gray-900">Select Date & Time</h2>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Preferred Day Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-4">Preferred Day of the Week</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+                            <button onclick="selectDay('Monday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm">Mon</div>
+                                <div class="text-xs text-gray-500 mt-1">Monday</div>
+                            </button>
+                            <button onclick="selectDay('Tuesday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm">Tue</div>
+                                <div class="text-xs text-gray-500 mt-1">Tuesday</div>
+                            </button>
+                            <button onclick="selectDay('Wednesday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm">Wed</div>
+                                <div class="text-xs text-gray-500 mt-1">Wednesday</div>
+                            </button>
+                            <button onclick="selectDay('Thursday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm">Thu</div>
+                                <div class="text-xs text-gray-500 mt-1">Thursday</div>
+                            </button>
+                            <button onclick="selectDay('Friday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm">Fri</div>
+                                <div class="text-xs text-gray-500 mt-1">Friday</div>
+                            </button>
+                            <button onclick="selectDay('Saturday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm">Sat</div>
+                                <div class="text-xs text-gray-500 mt-1">Saturday</div>
+                            </button>
+                            <button onclick="selectDay('Sunday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm">Sun</div>
+                                <div class="text-xs text-gray-500 mt-1">Sunday</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Time Slot Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-4">Preferred Time Slot</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <button onclick="selectTime('8:00 AM - 10:00 AM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="font-medium">8:00 AM</div>
+                                <div class="text-xs text-gray-500 mt-1">to 10:00 AM</div>
+                            </button>
+                            <button onclick="selectTime('10:00 AM - 12:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="font-medium">10:00 AM</div>
+                                <div class="text-xs text-gray-500 mt-1">to 12:00 PM</div>
+                            </button>
+                            <button onclick="selectTime('12:00 PM - 2:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="font-medium">12:00 PM</div>
+                                <div class="text-xs text-gray-500 mt-1">to 2:00 PM</div>
+                            </button>
+                            <button onclick="selectTime('2:00 PM - 4:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="font-medium">2:00 PM</div>
+                                <div class="text-xs text-gray-500 mt-1">to 4:00 PM</div>
+                            </button>
+                            <button onclick="selectTime('4:00 PM - 6:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="font-medium">4:00 PM</div>
+                                <div class="text-xs text-gray-500 mt-1">to 6:00 PM</div>
+                            </button>
+                            <button onclick="selectTime('6:00 PM - 8:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="font-medium">6:00 PM</div>
+                                <div class="text-xs text-gray-500 mt-1">to 8:00 PM</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Selected Schedule Summary -->
+                    <div id="scheduleSummary" class="hidden p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <div>
+                                <div class="font-medium text-green-800">Scheduled for:</div>
+                                <div class="text-sm text-green-600">
+                                    <span id="selectedDay">-</span> at <span id="selectedTime">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6: Personal Information -->
+            <div id="step6" class="step p-8 animate-slideIn">
+                <div class="flex items-center space-x-3 mb-6">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    <h2 class="text-2xl font-bold text-gray-900">Contact Information</h2>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                            <input type="text" id="firstName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your first name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                            <input type="text" id="lastName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your last name" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your email" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your phone number" required>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-6">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-gray-900">Service Address</h3>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
+                                <input type="text" id="street" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your street address" required>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                                    <input type="text" id="city" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="City" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">State *</label>
+                                    <input type="text" id="state" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="State" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code *</label>
+                                    <input type="text" id="zipCode" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="ZIP Code" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-6">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-gray-900">Additional Information</h3>
+                        </div>
+                        <textarea id="additionalInfo" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" rows="4" placeholder="Any special instructions or notes for our cleaning team..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="bg-gray-50 px-8 py-6 flex items-center justify-between">
+                <button id="prevBtn" onclick="prevStep()" class="hidden flex items-center space-x-2 px-6 py-3 text-gray-600 hover:text-gray-900 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    <span>Previous</span>
+                </button>
+                <div></div>
+
+                <button id="nextBtn" onclick="nextStep()" class="flex items-center space-x-2 px-8 py-3 rounded-lg font-medium transition-all duration-200 bg-gray-300 text-gray-500 cursor-not-allowed">
+                    <span>Continue</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+                <button id="bookBtn" onclick="handleBooking()" class="hidden flex items-center space-x-2 px-8 py-3 rounded-lg font-medium transition-all duration-200 bg-gray-300 text-gray-500 cursor-not-allowed">
+                    <span>Book Service - $<span id="finalPrice">90</span></span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Complete Modal -->
+    <div id="bookingComplete" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center animate-fadeIn">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Booking Confirmed!</h2>
+            <p class="text-gray-600 mb-6">Thank you for choosing our cleaning service. We'll contact you shortly to confirm your appointment.</p>
+            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                <p class="text-sm text-gray-500">Total Amount</p>
+                <p id="confirmedTotal" class="text-2xl font-bold text-primary">$90</p>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                <p class="text-sm text-blue-600 font-medium">Scheduled for:</p>
+                <p id="confirmedSchedule" class="text-blue-800">Monday at 8:00 AM - 10:00 AM</p>
+            </div>
+            <button onclick="resetBooking()" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-green-800 transition-colors">
+                Book Another Service
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Booking data object
+        let bookingData = {
+            category: '',
+            service: '',
+            bedrooms: 1,
+            bathrooms: 1,
+            frequency: '',
+            addOns: [],
+            preferredDay: '',
+            preferredTime: '',
+            personalInfo: {
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: ''
+            },
+            address: {
+                street: '',
+                city: '',
+                state: '',
+                zipCode: ''
+            },
+            additionalInfo: ''
+        };
+
+        let currentStep = 1;
+        let totalPrice = 90;
+
+        // Service categories
+        const serviceCategories = {
+            'Standard Cleaning': [
+                'Regular House Cleaning',
+                'Apartment Cleaning',
+                'Weekly Maintenance'
+            ],
+            'Deep Cleaning': [
+                'Move-in Cleaning',
+                'Move-out Cleaning',
+                'Spring Cleaning',
+                'Post-Construction Cleanup'
+            ],
+            'Specialized': [
+                'Office Cleaning',
+                'Airbnb Cleaning',
+                'Post-Party Cleanup'
+            ]
+        };
+
+        // Frequency multipliers
+        const frequencyMultipliers = {
+            'weekly': 1.0,
+            'bi-weekly': 0.9,
+            'monthly': 0.8
+        };
+
+        // Calculate base price
+        function calculateBasePrice(bedrooms, bathrooms) {
+            const bedroomPrice = 90 + (bedrooms - 1) * 25;
+            const bathroomPrice = (bathrooms - 1) * 15;
+            return bedroomPrice + bathroomPrice;
+        }
+
+        // Update total price
+        function updateTotalPrice() {
+            const basePrice = calculateBasePrice(bookingData.bedrooms, bookingData.bathrooms);
+            const frequencyMultiplier = bookingData.frequency ? frequencyMultipliers[bookingData.frequency] : 1;
+            const addOnPrice = bookingData.addOns.length * 30;
+            totalPrice = Math.round((basePrice * frequencyMultiplier) + addOnPrice);
+            
+            document.getElementById('totalPrice').textContent = '$' + totalPrice;
+            document.getElementById('finalPrice').textContent = totalPrice;
+            
+            // Update frequency prices
+            document.getElementById('weeklyPrice').textContent = '$' + Math.round(basePrice * 1.0);
+            document.getElementById('biWeeklyPrice').textContent = '$' + Math.round(basePrice * 0.9);
+            document.getElementById('monthlyPrice').textContent = '$' + Math.round(basePrice * 0.8);
+            
+            // Update base price display
+            document.getElementById('basePrice').textContent = '$' + basePrice;
+        }
+
+        // Update progress
+        function updateProgress() {
+            const progress = (currentStep / 6) * 100;
+            document.getElementById('stepIndicator').textContent = `Step ${currentStep} of 6`;
+            document.getElementById('progressPercent').textContent = `${Math.round(progress)}% complete`;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Select category
+        function selectCategory(category) {
+            bookingData.category = category;
+            
+            // Update UI
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-green-50');
+                btn.classList.add('border-gray-200');
+            });
+            event.target.closest('.category-btn').classList.add('border-primary', 'bg-green-50');
+            event.target.closest('.category-btn').classList.remove('border-gray-200');
+            
+            // Show service options
+            const serviceSelection = document.getElementById('serviceSelection');
+            const serviceOptions = document.getElementById('serviceOptions');
+            serviceOptions.innerHTML = '';
+            
+            serviceCategories[category].forEach(service => {
+                const button = document.createElement('button');
+                button.className = 'service-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-left hover:shadow-md hover-card';
+                button.onclick = () => selectService(service);
+                button.innerHTML = `<span class="font-medium">${service}</span>`;
+                serviceOptions.appendChild(button);
+            });
+            
+            serviceSelection.classList.remove('hidden');
+            updateNextButton();
+        }
+
+        // Select service
+        function selectService(service) {
+            bookingData.service = service;
+            
+            // Update UI
+            document.querySelectorAll('.service-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-green-50');
+                btn.classList.add('border-gray-200');
+            });
+            event.target.classList.add('border-primary', 'bg-green-50');
+            event.target.classList.remove('border-gray-200');
+            
+            updateNextButton();
+        }
+
+        // Select bedrooms
+        function selectBedrooms(num) {
+            bookingData.bedrooms = num;
+            
+            // Update UI
+            document.querySelectorAll('.bedroom-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-green-50');
+                btn.classList.add('border-gray-200');
+            });
+            event.target.classList.add('border-primary', 'bg-green-50');
+            event.target.classList.remove('border-gray-200');
+            
+            document.getElementById('bedroomDisplay').textContent = num;
+            updateTotalPrice();
+            updateNextButton();
+        }
+
+        // Select bathrooms
+        function selectBathrooms(num) {
+            bookingData.bathrooms = num;
+            
+            // Update UI
+            document.querySelectorAll('.bathroom-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-green-50');
+                btn.classList.add('border-gray-200');
+            });
+            event.target.classList.add('border-primary', 'bg-green-50');
+            event.target.classList.remove('border-gray-200');
+            
+            document.getElementById('bathroomDisplay').textContent = num;
+            updateTotalPrice();
+            updateNextButton();
+        }
+
+        // Select frequency
+        function selectFrequency(frequency) {
+            bookingData.frequency = frequency;
+            
+            // Update UI
+            document.querySelectorAll('.frequency-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-green-50');
+                btn.classList.add('border-gray-200');
+            });
+            event.target.classList.add('border-primary', 'bg-green-50');
+            event.target.classList.remove('border-gray-200');
+            
+            updateTotalPrice();
+            updateNextButton();
+        }
+
+        // Toggle add-on
+        function toggleAddOn(addOn) {
+            const index = bookingData.addOns.indexOf(addOn);
+            const button = event.target.closest('.addon-btn');
+            
+            if (index > -1) {
+                bookingData.addOns.splice(index, 1);
+                button.classList.remove('border-primary', 'bg-green-50');
+                button.classList.add('border-gray-200');
+            } else {
+                bookingData.addOns.push(addOn);
+                button.classList.add('border-primary', 'bg-green-50');
+                button.classList.remove('border-gray-200');
+            }
+            
+            // Update add-on summary
+            const summary = document.getElementById('addOnSummary');
+            const count = document.getElementById('addOnCount');
+            const total = document.getElementById('addOnTotal');
+            
+            if (bookingData.addOns.length > 0) {
+                summary.classList.remove('hidden');
+                count.textContent = bookingData.addOns.length;
+                total.textContent = '+$' + (bookingData.addOns.length * 30);
+            } else {
+                summary.classList.add('hidden');
+            }
+            
+            updateTotalPrice();
+            updateNextButton();
+        }
+
+        // Select day
+        function selectDay(day) {
+            bookingData.preferredDay = day;
+            
+            // Update UI
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-green-50');
+                btn.classList.add('border-gray-200');
+            });
+            event.target.classList.add('border-primary', 'bg-green-50');
+            event.target.classList.remove('border-gray-200');
+            
+            updateScheduleSummary();
+            updateNextButton();
+        }
+
+        // Select time
+        function selectTime(time) {
+            bookingData.preferredTime = time;
+            
+            // Update UI
+            document.querySelectorAll('.time-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-green-50');
+                btn.classList.add('border-gray-200');
+            });
+            event.target.classList.add('border-primary', 'bg-green-50');
+            event.target.classList.remove('border-gray-200');
+            
+            updateScheduleSummary();
+            updateNextButton();
+        }
+
+        // Update schedule summary
+        function updateScheduleSummary() {
+            const summary = document.getElementById('scheduleSummary');
+            const daySpan = document.getElementById('selectedDay');
+            const timeSpan = document.getElementById('selectedTime');
+            
+            if (bookingData.preferredDay && bookingData.preferredTime) {
+                daySpan.textContent = bookingData.preferredDay;
+                timeSpan.textContent = bookingData.preferredTime;
+                summary.classList.remove('hidden');
+            } else {
+                summary.classList.add('hidden');
+            }
+        }
+
+        // Check if can proceed
+        function canProceed() {
+            switch (currentStep) {
+                case 1:
+                    return bookingData.category && bookingData.service;
+                case 2:
+                    return bookingData.bedrooms && bookingData.bathrooms;
+                case 3:
+                    return bookingData.frequency;
+                case 4:
+                    return true; // Add-ons are optional
+                case 5:
+                    return bookingData.preferredDay && bookingData.preferredTime;
+                case 6:
+                    const firstName = document.getElementById('firstName').value;
+                    const lastName = document.getElementById('lastName').value;
+                    const email = document.getElementById('email').value;
+                    const phone = document.getElementById('phone').value;
+                    const street = document.getElementById('street').value;
+                    const city = document.getElementById('city').value;
+                    const state = document.getElementById('state').value;
+                    const zipCode = document.getElementById('zipCode').value;
+                    
+                    return firstName && lastName && email && phone && street && city && state && zipCode;
+                default:
+                    return false;
+            }
+        }
+
+        // Update next button
+        function updateNextButton() {
+            const nextBtn = document.getElementById('nextBtn');
+            const bookBtn = document.getElementById('bookBtn');
+            
+            if (currentStep < 6) {
+                if (canProceed()) {
+                    nextBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                    nextBtn.classList.add('bg-primary', 'text-white', 'hover:bg-green-800', 'hover:shadow-lg');
+                } else {
+                    nextBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                    nextBtn.classList.remove('bg-primary', 'text-white', 'hover:bg-green-800', 'hover:shadow-lg');
+                }
+            } else {
+                if (canProceed()) {
+                    bookBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                    bookBtn.classList.add('bg-primary', 'text-white', 'hover:bg-green-800', 'hover:shadow-lg');
+                } else {
+                    bookBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                    bookBtn.classList.remove('bg-primary', 'text-white', 'hover:bg-green-800', 'hover:shadow-lg');
+                }
+            }
+        }
+
+        // Next step
+        function nextStep() {
+            if (!canProceed()) return;
+            
+            if (currentStep < 6) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep++;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                
+                updateProgress();
+                
+                // Show/hide navigation buttons
+                if (currentStep > 1) {
+                    document.getElementById('prevBtn').classList.remove('hidden');
+                }
+                
+                if (currentStep === 6) {
+                    document.getElementById('nextBtn').classList.add('hidden');
+                    document.getElementById('bookBtn').classList.remove('hidden');
+                }
+                
+                updateNextButton();
+            }
+        }
+
+        // Previous step
+        function prevStep() {
+            if (currentStep > 1) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                
+                updateProgress();
+                
+                // Show/hide navigation buttons
+                if (currentStep === 1) {
+                    document.getElementById('prevBtn').classList.add('hidden');
+                }
+                
+                if (currentStep < 6) {
+                    document.getElementById('nextBtn').classList.remove('hidden');
+                    document.getElementById('bookBtn').classList.add('hidden');
+                }
+                
+                updateNextButton();
+            }
+        }
+
+        // Handle booking
+        function handleBooking() {
+            if (!canProceed()) return;
+            
+            // Collect personal information
+            bookingData.personalInfo = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value
+            };
+            
+            bookingData.address = {
+                street: document.getElementById('street').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                zipCode: document.getElementById('zipCode').value
+            };
+            
+            bookingData.additionalInfo = document.getElementById('additionalInfo').value;
+            
+            // Show booking complete modal
+            document.getElementById('confirmedTotal').textContent = '$' + totalPrice;
+            document.getElementById('confirmedSchedule').textContent = `${bookingData.preferredDay} at ${bookingData.preferredTime}`;
+            document.getElementById('bookingComplete').classList.remove('hidden');
+            
+            console.log('Booking Data:', bookingData);
+        }
+
+        // Reset booking
+        function resetBooking() {
+            // Reset data
+            bookingData = {
+                category: '',
+                service: '',
+                bedrooms: 1,
+                bathrooms: 1,
+                frequency: '',
+                addOns: [],
+                preferredDay: '',
+                preferredTime: '',
+                personalInfo: { firstName: '', lastName: '', email: '', phone: '' },
+                address: { street: '', city: '', state: '', zipCode: '' },
+                additionalInfo: ''
+            };
+            
+            currentStep = 1;
+            totalPrice = 90;
+            
+            // Reset UI
+            document.getElementById('bookingComplete').classList.add('hidden');
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            document.getElementById('step1').classList.add('active');
+            
+            // Reset form fields
+            document.querySelectorAll('input, textarea').forEach(field => field.value = '');
+            
+            // Reset buttons
+            document.querySelectorAll('.category-btn, .service-btn, .bedroom-btn, .bathroom-btn, .frequency-btn, .addon-btn, .day-btn, .time-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-green-50');
+                btn.classList.add('border-gray-200');
+            });
+            
+            // Hide service selection and summaries
+            document.getElementById('serviceSelection').classList.add('hidden');
+            document.getElementById('addOnSummary').classList.add('hidden');
+            document.getElementById('scheduleSummary').classList.add('hidden');
+            
+            // Reset navigation
+            document.getElementById('prevBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+            document.getElementById('bookBtn').classList.add('hidden');
+            
+            updateProgress();
+            updateTotalPrice();
+            updateNextButton();
+        }
+
+        // Add event listeners for form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const formFields = ['firstName', 'lastName', 'email', 'phone', 'street', 'city', 'state', 'zipCode'];
+            formFields.forEach(fieldId => {
+                document.getElementById(fieldId).addEventListener('input', updateNextButton);
+            });
+            
+            updateTotalPrice();
+            updateNextButton();
+        });
+    </script>
+</body>
+</html>

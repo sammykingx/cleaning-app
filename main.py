@@ -1,23 +1,17 @@
 # application entry point
-
+from flask import render_template
 from app import create_app
-# import configurations if needed
+# import production configurations
 
 
-def main():
-    """Main entry point for the application."""
+app = create_app()
     
-    # Create the Flask application passing the configuration class as an argument
-    # e.g., create_app(DevelopmentConfig)
-    app = create_app()
+@app.route('/')
+def index():
+    """Home route for the Cleaning App."""
     
-    @app.route('/')
-    def index():
-        return "Welcome to the Cleaning App!"
+    return render_template("index.html")
     
-    # Run the application
-    app.run()
-
 
 if __name__ == "__main__":
-    main()
+    app.run()

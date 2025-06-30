@@ -13,5 +13,7 @@ wheels/
 .env
 .secrets
 
-# dev database
+# project files
 instance/
+node_modules/
+*-cp.html

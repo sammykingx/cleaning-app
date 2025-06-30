@@ -36,8 +36,8 @@ def create_app(
     with app.app_context():
         # create database tables
         db.create_all()
-        print(
-            f"{COLOR_GREEN}Database tables created successfully.{COLOR_RESET}"
-        )
+        # print(
+        #     f"{COLOR_GREEN}Database tables created successfully.{COLOR_RESET}"
+        # )
 
     return app
