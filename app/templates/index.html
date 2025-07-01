@@ -92,7 +92,10 @@
 
                     <div id="serviceSelection" class="hidden animate-fadeIn">
                         <label class="block text-sm font-medium text-accent mb-3">Choose specific service</label>
-                        <div id="serviceOptions" class="grid grid-cols-1 md:grid-cols-2 gap-4 hover:border-blue-600 transition-all duration-200"></div>
+                        <div id="serviceOptions" class="grid grid-cols-1 md:grid-cols-2 gap-4 hover:border-blue-600 transition-all duration-200">
+                            <small id="helpText" class="text-gray-500 text-xs px-2"></small>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -195,23 +198,23 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <button onclick="selectFrequency('weekly')" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
                         <div class="text-center">
-                            <h3 class="font-bold text-lg text-blue-800 mb-2">Dry Cleaning</h3>
-                            <p class="text-sm text-gray-600 mb-2">(per clothing)</p>
-                            <p id="weeklyPrice" class="font-bold text-accent">$20</p>
+                            <h3 class="font-bold text-lg text-blue-900 mb-2">Dry Cleaning</h3>
+                            <p class="text-sm text-gray-400 mb-2">(per clothing)</p>
+                            <p id="weeklyPrice" class="font-bold text-blue-900">$20</p>
                         </div>
                     </button>
                     <button onclick="selectFrequency('bi-weekly')" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
                         <div class="text-center">
-                            <h3 class="font-bold text-blue-800 text-lg mb-2">Pick Up & Drop Off</h3>
-                            <p class="text-sm text-gray-600 mb-2">Before: <s>$45</s></p>
-                            <p id="biWeeklyPrice" class="font-bold text-accent">$30</p>
+                            <h3 class="font-bold text-blue-900 text-lg mb-2">Pick Up & Drop Off</h3>
+                            <p class="text-sm text-gray-400 mb-2">Before: <s>$45</s></p>
+                            <p id="biWeeklyPrice" class="font-bold text-blue-900">$30</p>
                         </div>
                     </button>
                     <button onclick="selectFrequency('monthly')" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
                         <div class="text-center">
-                            <h3 class="font-bold text-blue-800 text-lg mb-2">Monthly</h3>
-                            <p class="text-sm text-gray-600 mb-2">Save 20%</p>
-                            <p id="monthlyPrice" class="font-bold text-accent">$72</p>
+                            <h3 class="font-bold text-blue-900 text-lg mb-2">Monthly</h3>
+                            <p class="text-sm text-gray-400 mb-2">Save 20%</p>
+                            <p id="monthlyPrice" class="font-bold text-blue-900">$72</p>
                         </div>
                     </button>
                 </div>
@@ -231,10 +234,17 @@
                     <button onclick="toggleAddOn('Fridge Cleaning')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Fridge Cleaning">
                         <div class="flex items-center space-x-3">
                             <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                            </svg>
+                                <!-- Fridge body -->
+                                <rect x="7" y="3" width="10" height="18" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <!-- Fridge door divider -->
+                                <line x1="7" y1="10" x2="17" y2="10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <!-- Door handles -->
+                                <line x1="9" y1="6" x2="9" y2="8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="9" y1="13" x2="9" y2="15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                              
                             <div class="text-left">
-                                <span class="font-medium block">Fridge Cleaning</span>
+                                <span class="font-medium block text-blue-900">Fridge Cleaning</span>
                                 <span class="text-sm text-gray-500">+$35</span>
                             </div>
                         </div>
@@ -245,7 +255,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                             </svg>
                             <div class="text-left">
-                                <span class="font-medium block">Oven Cleaning</span>
+                                <span class="font-medium block text-blue-900">Oven Cleaning</span>
                                 <span class="text-sm text-gray-500">+$35</span>
                             </div>
                         </div>
@@ -253,10 +263,18 @@
                     <button onclick="toggleAddOn('Blinds Dusting')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Blinds Dusting">
                         <div class="flex items-center space-x-3">
                             <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 3H5a2 2 0 00-2 2v12a4 4 0 004 4h2a2 2 0 002-2V5a2 2 0 00-2-2z"/>
-                            </svg>
+                                <!-- Window frame -->
+                                <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <!-- Window panes -->
+                                <line x1="12" y1="4" x2="12" y2="20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="4" y1="12" x2="20" y2="12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <!-- Squeegee / cleaning motion (optional sparkle) -->
+                                <path d="M16 8l2 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 16l2 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                              
                             <div class="text-left">
-                                <span class="font-medium block">Window Cleaning</span>
+                                <span class="font-medium block text-blue-900">Window Cleaning</span>
                                 <span class="text-sm text-gray-500">+$10/window</span>
                                 <span class="text-sm text-gray-500">interior</span>
                             </div>
@@ -265,10 +283,18 @@
                     <button onclick="toggleAddOn('Furniture Polish')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Furniture Polish">
                         <div class="flex items-center space-x-3">
                             <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                            </svg>
+                                <!-- Window frame -->
+                                <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <!-- Window panes -->
+                                <line x1="12" y1="4" x2="12" y2="20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="4" y1="12" x2="20" y2="12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <!-- Sparkle for exterior shine -->
+                                <path d="M18 6l1 1m0-1l-1 1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6 18l1 1m0-1l-1 1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                              
                             <div class="text-left">
-                                <span class="font-medium block">Window Cleaning</span>
+                                <span class="font-medium block text-blue-900">Window Cleaning</span>
                                 <span class="text-sm text-gray-500">+$15/window</span>
                                 <span class="text-sm text-gray-500">Exterior</span>
                             </div>
@@ -280,7 +306,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M8 11v6a2 2 0 002 2h4a2 2 0 002-2v-6M8 11h8"/>
                             </svg>
                             <div class="text-left">
-                                <span class="font-medium block">Carpet/Rug Cleaning</span>
+                                <span class="font-medium block text-blue-900">Carpet/Rug Cleaning</span>
                                 <span class="text-sm text-gray-500">+$30</span>
                             </div>
                         </div>
@@ -293,7 +319,7 @@
                             </svg>
                             
                             <div class="text-left">
-                                <span class="font-medium block">Deep Carpet/Rug Cleaning</span>
+                                <span class="font-medium block text-blue-900">Deep Carpet/Rug Cleaning</span>
                                 <span class="text-sm text-gray-500">+$85</span>
                             </div>
                         </div>
@@ -308,7 +334,7 @@
                             </svg>
                               
                             <div class="text-left">
-                                <span class="font-medium block">Bed Making</span>
+                                <span class="font-medium block text-blue-900">Bed Making</span>
                                 <span class="text-sm text-gray-500">+$5</span>
                             </div>
                         </div>
@@ -321,7 +347,7 @@
                                 <path d="M4 16h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                             <div class="text-left">
-                                <span class="font-medium block">Org. Services</span>
+                                <span class="font-medium block text-blue-900">Org. Services</span>
                                 <span class="text-sm text-gray-500">+$70</span>
                             </div>
                         </div>
@@ -330,7 +356,7 @@
                 <div id="windowCount"class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="mt-3 px-2">
                         <label class="block text-sm font-medium text-blue-800 mb-2">Number of Window *</label>
-                        <input type="number" id="city" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="no. of windows" min="1" max="30" required>
+                        <input type="number" id="city" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="no. of windows" min="1" max="30" value="1" required>
                     </div>
                 </div>
 

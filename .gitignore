@@ -16,4 +16,5 @@ wheels/
 # project files
 instance/
 node_modules/
-*-cp.html
+glimmr-lite-prototype/
+*cp.html
