@@ -5,7 +5,6 @@ let bookingData = {
   extraBed: 0,
   bathrooms: 1,
   extraBath: 0,
-  frequency: "",
   addOns: [],
   preferredDay: "",
   preferredTime: "",
@@ -62,12 +61,19 @@ const laundryPriceMap = {
   "pick-up & drop-off": 30,
 };
 
-// Frequency multipliers
-const frequencyMultipliers = {
-  weekly: 1.0,
-  "bi-weekly": 0.9,
-  monthly: 0.8,
-};
+const addonServicePrices = [
+  { name: "Fridge Cleaning", unitCost: 35, count: 1 },
+  { name: "Oven Cleaning", unitCost: 35, count: 1 },
+  { name: "Blinds Dusting", unitCost: 10, count: 1 },
+  { name: "Window Cleaning (Exterior)", unitCost: 15, count: 1 },
+  { name: "Carpet/Rug Cleaning", unitCost: 30, count: 1 },
+  { name: "Deep Carpet/Rug Cleaning", unitCost: 85, count: 1 },
+  { name: "Bed Making", unitCost: 5, count: 1 },
+  { name: "Pick Up & Drop Off", unitCost: 30, count: 1 },
+  { name: "Dry Cleaning", unitCost: 20, count: 1 },
+  { name: "Org. Services", unitCost: 70, count: 1 },
+  { name: "Pick-and-Drop", unitCost: 30, count: 1 },
+];
 
 // Calculate base price
 function getBasePrice() {
@@ -112,7 +118,6 @@ function displaySummary() {
 
 // Update total price
 function updateTotalPrice() {
-  //const basePrice = getBasePrice();
   const basePrice =
     bookingData.bedrooms > 1
       ? getBedroomPrice(bookingData.bedrooms) // if greater than one
@@ -129,24 +134,16 @@ function updateTotalPrice() {
     extraBathCost = 40 * bookingData.extraBath;
   }
 
-  const frequencyMultiplier = bookingData.frequency
-    ? frequencyMultipliers[bookingData.frequency]
-    : 1;
-  const addOnPrice = bookingData.addOns.length * 30;
+  const addOnPrice = bookingData.addOns.reduce((sum, addon) => {
+    return sum + addon.count * addon.unitCost;
+  }, 0);
+
   totalPrice = Math.round(
-    basePrice * frequencyMultiplier + addOnPrice + extraBathCost + extraBedCost
+    basePrice + addOnPrice + extraBathCost + extraBedCost
   );
 
   document.getElementById("totalPrice").textContent = "$" + totalPrice;
   document.getElementById("finalPrice").textContent = totalPrice;
-
-  // Update frequency prices
-  document.getElementById("weeklyPrice").textContent =
-    "$" + Math.round(basePrice * 1.0);
-  document.getElementById("biWeeklyPrice").textContent =
-    "$" + Math.round(basePrice * 0.9);
-  document.getElementById("monthlyPrice").textContent =
-    "$" + Math.round(basePrice * 0.8);
 
   // Update base price display
   document.getElementById("basePrice").textContent = "$" + basePrice;
@@ -191,13 +188,33 @@ function selectCategory(category) {
   });
 
   serviceSelection.classList.remove("hidden");
-  if (bookingData.category === "LAundry") {
+  if (bookingData.category != "Residential Cleaning") {
     // if the user comes back to select another catgory
     // after previously selecting residential cleaning
     bookingData.service = "";
-    bookingData.bedrooms = "";
+    bookingData.bedrooms = 1;
     bookingData.extraBed = "";
     bookingData.extraBath = "";
+
+    getBasePrice();
+  }
+
+  if (bookingData.category === "Laundry") {
+    // display the laundry addons section
+    document.getElementById("clothingCount").classList.remove("hidden");
+    document.getElementById("laundryAddon").classList.remove("hidden");
+
+    // hide other service addons and window count
+    document.getElementById("otherAddons").classList.add("hidden");
+    document.getElementById("windowCount").classList.add("hidden");
+  } else {
+    // hide laundry addons and clothing count
+    document.getElementById("clothingCount").classList.add("hidden");
+    document.getElementById("laundryAddon").classList.add("hidden");
+
+    // show other service addons and window count
+    document.getElementById("otherAddons").classList.remove("hidden");
+    document.getElementById("windowCount").classList.remove("hidden");
   }
   updateNextButton();
 }
@@ -205,6 +222,11 @@ function selectCategory(category) {
 // Select service
 function selectService(service) {
   bookingData.service = service;
+
+  bookingData.addOns = [];
+  const summary = document.getElementById("addOnSummary");
+  summary.classList.add("hidden");
+
   // Update total price
   updateTotalPrice();
 
@@ -216,30 +238,12 @@ function selectService(service) {
   event.target.classList.add("border-primary");
   event.target.classList.remove("border-gray-200");
 
-  // Show or hide addons based on selected category
-  // we have just two addOns categories
-  // const laundryAddons = document.getElementById("laudryAddons");
-  // const otherAddons = document.getElementById("otherAddons");
-  // if (bookingData.category === "Laundry") {
-  //   laundryAddons.classList.remove("hidden");
-  // } else {
-  //   otherAddons.classList.remove("hidden");
-  // }
-
   updateNextButton();
 }
 
 // Select bedrooms in Number of Bedrooms
 function selectBedrooms(num) {
   bookingData.bedrooms = num;
-
-  // Update UI
-  // document.querySelectorAll(".bedroom-btn").forEach((btn) => {
-  //   btn.classList.remove("border-blue-200", "border-blue-700");
-  //   btn.classList.add("border-gray-100");
-  // });
-  // event.target.classList.add("border-blue-700",);
-  // event.target.classList.remove("border-gray-100");
 
   document.querySelectorAll(".bedroom-btn").forEach((btn) => {
     btn.classList.remove("border-primary");
@@ -284,32 +288,11 @@ function extraBathrooms(num) {
     "displayExtraBath"
   ).textContent = `Extra Bath: ${num}`;
   updateTotalPrice();
-  // updateNextButton();
 }
 
-function laundryExtras(extra) {
-  const extraprice = extra;
-}
-
-// Select frequency
-function selectFrequency(frequency) {
-  bookingData.frequency = frequency;
-
-  // Update UI
-  document.querySelectorAll(".frequency-btn").forEach((btn) => {
-    btn.classList.remove("border-primary", "bg-green-50");
-    btn.classList.add("border-gray-200");
-  });
-  event.target.classList.add("border-primary", "bg-green-50");
-  event.target.classList.remove("border-gray-200");
-
-  updateTotalPrice();
-  updateNextButton();
-}
-
-// Toggle add-on
+//Toggle Addon Services
 function toggleAddOn(addOn) {
-  const index = bookingData.addOns.indexOf(addOn);
+  const index = bookingData.addOns.findIndex((a) => a.name === addOn);
   const button = event.target.closest(".addon-btn");
 
   if (index > -1) {
@@ -317,12 +300,24 @@ function toggleAddOn(addOn) {
     button.classList.remove("border-primary", "bg-green-50");
     button.classList.add("border-gray-200");
   } else {
-    bookingData.addOns.push(addOn);
+    addonIndex = addonServicePrices.findIndex((a) => a.name === addOn);
+    const newAddon = {
+      name: addOn,
+      unitCost: addonServicePrices[addonIndex].unitCost,
+      count: 1,
+    };
+    bookingData.addOns.push(newAddon);
+    console.log(bookingData.addOns);
     button.classList.add("border-primary", "bg-green-50");
     button.classList.remove("border-gray-200");
   }
 
-  // Update add-on summary
+  updateAddOnSummary();
+  updateTotalPrice();
+  updateNextButton();
+}
+
+function updateAddOnSummary() {
   const summary = document.getElementById("addOnSummary");
   const count = document.getElementById("addOnCount");
   const total = document.getElementById("addOnTotal");
@@ -330,25 +325,15 @@ function toggleAddOn(addOn) {
   if (bookingData.addOns.length > 0) {
     summary.classList.remove("hidden");
     count.textContent = bookingData.addOns.length;
-    total.textContent = "+$" + bookingData.addOns.length * 30;
+
+    const addonTotalPrice = bookingData.addOns.reduce((sum, addon) => {
+      return sum + addon.count * addon.unitCost;
+    }, 0);
+
+    total.textContent = "+$" + addonTotalPrice;
   } else {
     summary.classList.add("hidden");
   }
-
-  // Show/hide window count block
-  const windowBlock = document.getElementById("windowCount");
-  const hasWindowCleaning = bookingData.addOns.some((addon) =>
-    addon.toLowerCase().includes("window cleaning")
-  );
-
-  if (hasWindowCleaning) {
-    windowBlock.classList.remove("hidden");
-  } else {
-    windowBlock.classList.add("hidden");
-  }
-
-  updateTotalPrice();
-  updateNextButton();
 }
 
 // Select day
@@ -497,7 +482,7 @@ function updateNextButton() {
 }
 
 // Next step
-// controls the booking flow
+// controls the booking flow step
 function nextStep() {
   if (!canProceed()) return;
 
@@ -505,10 +490,11 @@ function nextStep() {
     document.getElementById(`step${currentStep}`).classList.remove("active");
 
     if (currentStep === 1) {
-      if (bookingData.category === "Commercial Cleaning") {
+      if (
+        bookingData.category === "Commercial Cleaning" ||
+        bookingData.category === "Laundry"
+      ) {
         currentStep = 4;
-      } else if (bookingData.category === "Laundry") {
-        currentStep = 3;
       } else {
         currentStep++;
       }
@@ -542,15 +528,16 @@ function prevStep() {
   if (currentStep > 1) {
     document.getElementById(`step${currentStep}`).classList.remove("active");
 
-    if (currentStep === 4 && bookingData.category === "Commercial Cleaning") {
+    if (
+      currentStep === 4 &&
+      ["Commercial Cleaning", "Laundry"].includes(bookingData.category)
+    ) {
       currentStep = 1;
     } else if (
       currentStep === 4 &&
       bookingData.category === "Residential Cleaning"
     ) {
       currentStep = 2; // takes the user back bedroom selection
-    } else if (currentStep === 3 && bookingData.category === "Laundry") {
-      currentStep = 1;
     } else {
       currentStep--;
     }
@@ -682,4 +669,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
   updateTotalPrice();
   updateNextButton();
+});
+
+// ------------ EVENT LISTENERS ------------------
+// validation and updating clothing input
+document.getElementById("clothingNum").addEventListener("input", (event) => {
+  let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 1;
+  value = Math.min(Math.max(parseInt(value, 10), 1), 30);
+  event.target.value = value;
+
+  const addOn = bookingData.addOns.find((a) => a.name === "Dry Cleaning");
+  if (addOn) {
+    addOn.count = value;
+    updateAddOnSummary();
+    updateTotalPrice();
+  }
+});
+
+// validation and updating interior window cleaning input
+document.getElementById("intWindowNum").addEventListener("input", (event) => {
+  let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 1;
+  value = Math.min(Math.max(parseInt(value, 10), 1), 30);
+  event.target.value = value;
+
+  const addOn = bookingData.addOns.find((a) => a.name === "Blinds Dusting");
+  if (addOn) {
+    addOn.count = value;
+    updateAddOnSummary();
+    updateTotalPrice();
+  }
+});
+
+// validation and updating interior window cleaning input
+document.getElementById("extWindowNum").addEventListener("input", (event) => {
+  let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 1;
+  value = Math.min(Math.max(parseInt(value, 10), 1), 30);
+  event.target.value = value;
+
+  const addOn = bookingData.addOns.find(
+    (a) => a.name === "Window Cleaning (Exterior)"
+  );
+  if (addOn) {
+    addOn.count = value;
+    updateAddOnSummary();
+    updateTotalPrice();
+  }
 });
