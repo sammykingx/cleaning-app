@@ -138,15 +138,19 @@ function updateTotalPrice() {
     return sum + addon.count * addon.unitCost;
   }, 0);
 
-  totalPrice = Math.round(
+  const subtotal = Math.round(
     basePrice + addOnPrice + extraBathCost + extraBedCost
   );
 
+  const tax = subtotal * 0.15;
+  const totalPrice = tax + subtotal;
+  bookingData.price = totalPrice;
+
   document.getElementById("totalPrice").textContent = "$" + totalPrice;
   document.getElementById("finalPrice").textContent = totalPrice;
-
-  // Update base price display
-  document.getElementById("basePrice").textContent = "$" + basePrice;
+  document.getElementById("finalPrice").textContent = totalPrice;
+  document.getElementById("subtotal").textContent = subtotal;
+  document.getElementById("tax").textContent = "$" + tax;
 }
 
 // Update progress bar
@@ -583,7 +587,8 @@ function handleBooking() {
   bookingData.additionalInfo = document.getElementById("additionalInfo").value;
 
   // Show booking complete modal
-  document.getElementById("confirmedTotal").textContent = "$" + totalPrice;
+  document.getElementById("confirmedTotal").textContent =
+    "$" + bookingData.price;
   document.getElementById(
     "confirmedSchedule"
   ).textContent = `${bookingData.preferredDay} at ${bookingData.preferredTime}`;

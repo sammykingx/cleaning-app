@@ -13,26 +13,15 @@ class Bookings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_email = db.Column(
         db.String(120),
-        db.ForeignKey("clients.id"),
         nullable=False,
         index=True,
     )
-    service_type = db.Column(db.String(100), nullable=False)
-    service_info = db.Column(
-        db.Integer,
-        db.ForeignKey("services.id"),
-        nullable=False,
-        index=True,
-    )
+    service = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String(100), nullable=False)
     addons = db.Column(
         db.Integer,
         db.ForeignKey("service_addons.id"),
         index=True,
-    )
-    frequency = db.Column(
-        db.Enum("one-time", "weekly", "bi-weekly", "monthly"),
-        default="one-time",
-        nullable=False,
     )
     notes = db.Column(db.Text)
     booking_date = db.Column(
@@ -79,19 +68,13 @@ def create_demo_bookings():
     demo_bookings = [
         Bookings(
             client_email=fake.email(),
-            service_type=fake.random_element(
-                elements=("cleaning", "maintenance")
+            service=fake.random_element(
+                elements=("Regular House Cleaning", "Deep Cleaning", "Small Office Cleaning")
             ),
-            service_info=fake.random_int(min=1, max=10),
+            category=fake.random_element(
+                elements=("Residential Cleaning", "Commercial Cleaning",)
+            ),
             addons=fake.random_int(min=1, max=5),
-            frequency=fake.random_element(
-                elements=(
-                    "one-time",
-                    "weekly",
-                    "bi-weekly",
-                    "monthly",
-                )
-            ),
             notes=fake.text(max_nb_chars=200),
             booking_date=fake.date_time_this_year(),
             cleaning_date=fake.date_time_this_year(),
