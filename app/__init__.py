@@ -2,7 +2,7 @@
 
 from flask import Flask
 from app.views import bp
-from app.extensions import db, migrate
+from app.extensions import db, migrate, csrf, mail
 from app.config import DevelopmentConfig
 
 COLOR_RESET = "\033[0m"
@@ -26,6 +26,8 @@ def create_app(
     # initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    csrf.init_app(app)
+    mail.init_app(app)
     print(
         f"{COLOR_GREEN}Extensions initialized successfully.{COLOR_RESET}"
     )

@@ -1,12 +1,14 @@
 from . import bp
-from flask import jsonify
-from datetime import datetime, timedelta
+from flask import jsonify, request
+from app.extensions import db
+from flask_wtf.csrf import CSRFError, validate_csrf
 from app.models.bookings import Bookings
 from app.models.services import Services
 from app.models.clients import Clients
-from app.extensions import db
+from app.views import serializers
+from app.services.booking_service import BookingService
 from collections import defaultdict
-from sqlalchemy import func
+from datetime import datetime, timedelta
 
 
 TIME_SLOTS = [
@@ -19,9 +21,34 @@ TIME_SLOTS = [
 MAX_BOOKINGS_PER_SLOT = 4
 
 
-@bp.route("/booking")
+@bp.route("/booking", methods=["POST"])
 def booking():
-    return "Booking Page"
+    """place booking"""
+    
+    try:
+        csrf_token = request.headers.get('X-CSRFToken')
+        validate_csrf(csrf_token)
+    
+        data = serializers.serialize_booking(request.get_json())
+        print(data)
+        # cleaned_data = ValidateBookingData(**data)
+        Booking = BookingService(data)
+        # booked_service = Booking.place_booking()
+
+    except CSRFError as e:
+      return jsonify({'status': 'error', 'message': 'CSRF validation failed', "err": e}), 403
+    #   return "", 403
+    from time import time
+    timestamp = int(time())
+    return jsonify(
+        {
+            'status': 'success',
+            'message': 'Booking saved',
+            'id': f"KS-{timestamp}",
+            'data': data,
+            # 'data': booked_service.to_dict() if booked_service else None,
+        }
+    )
 
 
 @bp.route("/all_bookings")

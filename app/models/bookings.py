@@ -1,6 +1,7 @@
 from app.extensions import db
-from datetime import datetime
+from sqlalchemy import func
 from faker import Faker
+import json
 
 COLOR_RESET = "\033[0m"
 COLOR_GREEN = "\033[92m"
@@ -18,14 +19,14 @@ class Bookings(db.Model):
     )
     service = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(100), nullable=False)
-    addons = db.Column(
-        db.Integer,
-        db.ForeignKey("service_addons.id"),
-        index=True,
-    )
+    max_bedroom = db.Column(db.Integer, default=0)
+    max_bathroom = db.Column(db.Integer, default=0)
+    extra_bedroom = db.Column(db.Integer, default=0)
+    extra_bathroom = db.Column(db.Integer, default=0)
+    add_ons = db.Column(db.Text)
     notes = db.Column(db.Text)
     booking_date = db.Column(
-        db.DateTime, default=datetime.now(), nullable=False
+        db.DateTime, server_default=func.now(), nullable=False
     )
     cleaning_date = db.Column(db.DateTime, nullable=False)
     booking_status = db.Column(
@@ -35,6 +36,7 @@ class Bookings(db.Model):
         db.String(20), default="unpaid", nullable=False
     )
     price = db.Column(db.Float, nullable=False)
+    updated_at = db.Column(db.DateTime, server_default=func.now(), server_onupdate=func.now())
 
     def __repr__(self) -> str:
         return (
@@ -43,15 +45,20 @@ class Bookings(db.Model):
             f"status={self.status})>"
         )
 
+    def set_add_ons(self, add_ons_list):
+        self.add_ons = json.dumps(add_ons_list)
+    
+    def get_add_ons(self):
+        return json.loads(self.add_ons) if self.add_ons else []
+    
     def to_dict(self) -> dict:
         """Convert the booking instance to a dictionary."""
         return {
             "id": self.id,
             "client_email": self.client_email,
-            "service_type": self.service_type,
-            "service_info": self.service_info,
-            "addons": self.addons,
-            "frequency": self.frequency,
+            "service": self.service,
+            "category": self.category,
+            "addons": self.add_ons,
             "notes": self.notes,
             "booking_date": self.booking_date.isoformat(),
             "cleaning_date": self.cleaning_date.isoformat(),

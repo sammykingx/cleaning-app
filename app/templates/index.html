@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="KleenSpotless - Professional Cleaning Services">
     <meta name="keywords" content="cleaning, services, home cleaning, office cleaning, professional cleaning">
     <meta name="author" content="Divgm Technologies">
@@ -467,19 +468,19 @@
                     <div>
                         <label class="block text-sm font-medium text-blue-900 mb-4">Preferred Time Slot</label>
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            <button onclick="selectTime('8:00 AM - 11:00 AM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                            <button onclick="selectTime(8)" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
                                 <div class="font-medium">8:00 AM</div>
                                 <div class="text-xs text-gray-500 mt-1">to 11:00 AM</div>
                             </button>
-                            <button onclick="selectTime('11:00 AM - 1:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                            <button onclick="selectTime(11)" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
                                 <div class="font-medium">11:00 AM</div>
                                 <div class="text-xs text-gray-500 mt-1">to 1:00 PM</div>
                             </button>
-                            <button onclick="selectTime('1:00 PM - 3:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                            <button onclick="selectTime(1)" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
                                 <div class="font-medium">1:00 PM</div>
                                 <div class="text-xs text-gray-500 mt-1">to 3:00 PM</div>
                             </button>
-                            <button onclick="selectTime('3:00 PM - 6:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                            <button onclick="selectTime(3)" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
                                 <div class="font-medium">3:00 PM</div>
                                 <div class="text-xs text-gray-500 mt-1">to 6:00 PM</div>
                             </button>
@@ -504,7 +505,8 @@
                             <div>
                                 <div class="font-medium text-green-800">Scheduled for:</div>
                                 <div class="text-sm text-green-600">
-                                    <span id="selectedDay">-</span> at <span id="selectedTime">-</span>
+                                    <!--<span id="selectedDay">-</span> at <span id="selectedTime">-</span>-->
+                                    <span id="selectedTime"></span>
                                 </div>
                             </div>
                         </div>
@@ -526,10 +528,12 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
                             <input type="text" id="firstName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your first name" required>
+                            <p id="firstName-error" class="text-xs mt-1 px-1 text-red-500"></p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
                             <input type="text" id="lastName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your last name" required>
+                            <p id="lastName-error" class="text-xs mt-1 px-1 text-red-500"></p>
                         </div>
                     </div>
 
@@ -537,10 +541,13 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
                             <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your email" required>
+                            <p id="email-error" class="text-xs mt-1 px-1 text-red-500"></p>
                         </div>
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
-                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your phone number" required>
+                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="+14165551234" required>
+                            <p id="phone-error" class="text-xs mt-1 px-1 text-red-500"></p>
                         </div>
                     </div>
 
@@ -568,10 +575,12 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">State *</label>
                                     <input type="text" id="state" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="State" required>
                                 </div>
+                                <!--
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code *</label>
-                                    <input type="text" id="zipCode" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="ZIP Code" required>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Country *</label>
+                                    <input type="text" id="country" value="canada" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Country" required>
                                 </div>
+                                -->
                             </div>
                         </div>
                     </div>
@@ -623,15 +632,17 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
             </div>
-            <h2 class="text-2xl font-bold text-blue-900 mb-4">Booking Confirmed!</h2>
-            <p class="text-gray-600 mb-6">Thank you for choosing our cleaning service. We'll contact you shortly to confirm your appointment.</p>
+            <h2 class="text-2xl font-bold text-blue-900 mb-4">Booking Completed!</h2>
+            <p class="text-gray-600 mb-6">Thank you for choosing our cleaning service. You'll receive a mail shortly to confirm your cleaning booking.</p>
             <div class="bg-gray-50 rounded-lg p-4 mb-6">
                 <p class="text-sm text-gray-500">Total Amount</p>
                 <p id="confirmedTotal" class="text-2xl font-bold text-primary">$90</p>
             </div>
             <div class="bg-blue-50 rounded-lg p-4 mb-6">
-                <p class="text-sm text-blue-600 font-medium">Scheduled for:</p>
-                <p id="confirmedSchedule" class="text-blue-800">Monday at 8:00 AM - 10:00 AM</p>
+                <p class="text-sm text-blue-600 pb-2 text-2l">Booking Overview:</p>
+                <p id="" class="text-blue-800 text-sm">ID: <span id="bookingID">KS-123456789</span></p>
+                <p class="text-blue-800 text-sm">Service: <span id="bookedService">Demo Cleaning Service</span></p>
+                <p id="confirmedSchedule" class="text-blue-800 text-sm">Monday at 8:00 AM - 10:00 AM</p>
             </div>
             <button onclick="resetBooking()" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-950 transition-colors">
                 Book Another Service
@@ -644,6 +655,7 @@
             <p class="text-xs">Made with ❤️ by Divgm Technologies</p>
         </div>
     </footer>
+    <script src={{ url_for('static', filename='js/validators.js') }}></script>
     <script src={{ url_for('static', filename='js/app.js') }}></script>
 </body>
 </html>

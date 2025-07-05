@@ -23,6 +23,7 @@ class Services(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "category": self.category,
             "description": self.description,
             "price": self.price,
         }
@@ -33,7 +34,7 @@ class Services(db.Model):
         return cls(
             id=data.get("id"),
             name=data.get("name"),
-            description=data.get("description"),
+            category=data.get("description"),
             price=data.get("price"),
         )
 

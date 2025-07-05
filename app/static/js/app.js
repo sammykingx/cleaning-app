@@ -18,7 +18,7 @@ let bookingData = {
     street: "",
     city: "",
     state: "",
-    zipCode: "",
+    country: "canada",
   },
   price: 0,
   additionalInfo: "",
@@ -146,6 +146,7 @@ function updateTotalPrice() {
   const totalPrice = tax + subtotal;
   bookingData.price = totalPrice;
 
+  document.getElementById("basePrice").textContent = "$" + basePrice;
   document.getElementById("totalPrice").textContent = "$" + totalPrice;
   document.getElementById("finalPrice").textContent = totalPrice;
   document.getElementById("finalPrice").textContent = totalPrice;
@@ -197,8 +198,8 @@ function selectCategory(category) {
     // after previously selecting residential cleaning
     bookingData.service = "";
     bookingData.bedrooms = 1;
-    bookingData.extraBed = "";
-    bookingData.extraBath = "";
+    bookingData.extraBed = 0;
+    bookingData.extraBath = 0;
 
     getBasePrice();
   }
@@ -311,7 +312,6 @@ function toggleAddOn(addOn) {
       count: 1,
     };
     bookingData.addOns.push(newAddon);
-    console.log(bookingData.addOns);
     button.classList.add("border-primary", "bg-green-50");
     button.classList.remove("border-gray-200");
   }
@@ -375,12 +375,14 @@ function selectTime(time) {
 // Update schedule summary
 function updateScheduleSummary() {
   const summary = document.getElementById("scheduleSummary");
-  const daySpan = document.getElementById("selectedDay");
+  //const daySpan = document.getElementById("selectedDay");
   const timeSpan = document.getElementById("selectedTime");
 
   if (bookingData.preferredDay && bookingData.preferredTime) {
-    daySpan.textContent = bookingData.preferredDay;
-    timeSpan.textContent = bookingData.preferredTime;
+    //daySpan.textContent = bookingData.preferredDay;
+    timeSpan.textContent = `${bookingData.preferredTime} to ${
+      bookingData.preferredTime + 3
+    } EST`;
     summary.classList.remove("hidden");
   } else {
     summary.classList.add("hidden");
@@ -401,28 +403,61 @@ function canProceed() {
     case 5:
       return bookingData.preferredDay && bookingData.preferredTime;
     case 6:
-      const firstName = document.getElementById("firstName").value;
-      const lastName = document.getElementById("lastName").value;
-      const email = document.getElementById("email").value;
-      const phone = document.getElementById("phone").value;
-      const street = document.getElementById("street").value;
-      const city = document.getElementById("city").value;
-      const state = document.getElementById("state").value;
-      const zipCode = document.getElementById("zipCode").value;
-
-      return (
-        firstName &&
-        lastName &&
-        email &&
-        phone &&
-        street &&
-        city &&
-        state &&
-        zipCode
-      );
+      return validateContactFields();
     default:
       return false;
   }
+}
+
+function validateContactFields() {
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+  const street = document.getElementById("street").value.trim();
+  const city = document.getElementById("city").value.trim();
+  const state = document.getElementById("state").value.trim();
+  //const country = document.getElementById("country").value.trim();
+
+  const email = emailInput.value.trim();
+  const phone = phoneInput.value.trim();
+
+  let isValid = true;
+
+  if (!isValidEmail(email)) {
+    // clears email input
+    console.log("is valid Email called");
+    isValid = false;
+  }
+
+  if (!isValidPhone(phone)) {
+    console.log("is valid phone number called");
+    isValid = false;
+  }
+
+  if (!isValidName(firstName)) {
+    console.log("first name validation fails");
+    isValid = false;
+  } else {
+    console.log("First name validation pass");
+  }
+
+  if (!isValidName(lastName)) {
+    console.log("Last name validation fails");
+    isValid = false;
+  } else {
+    console.log("Last Name validation pass");
+  }
+
+  return (
+    isValid &&
+    firstName &&
+    lastName &&
+    email &&
+    phone &&
+    street &&
+    city &&
+    state
+    //country
+  );
 }
 
 // Update next button
@@ -581,18 +616,75 @@ function handleBooking() {
     street: document.getElementById("street").value,
     city: document.getElementById("city").value,
     state: document.getElementById("state").value,
-    zipCode: document.getElementById("zipCode").value,
+    country: "canada",
   };
 
   bookingData.additionalInfo = document.getElementById("additionalInfo").value;
+  const token =
+    document.head.querySelector('meta[name="csrf-token"]')?.content || "";
 
-  // Show booking complete modal
-  document.getElementById("confirmedTotal").textContent =
-    "$" + bookingData.price;
-  document.getElementById(
-    "confirmedSchedule"
-  ).textContent = `${bookingData.preferredDay} at ${bookingData.preferredTime}`;
-  document.getElementById("bookingComplete").classList.remove("hidden");
+  fetch("/booking", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": token,
+    },
+    body: JSON.stringify(bookingData),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error("Invalid request. Please try again.");
+        } else if (response.status === 403) {
+          throw new Error(
+            "Oh dear, your session has expired please refresh the page and try again."
+          );
+        } else if (response.status === 404) {
+          throw new Error(
+            "The requested resource was not found. Please try again."
+          );
+        } else if (response.status === 422) {
+          throw new Error("You sent incorrect booking data, please try again.");
+        } else if (response.status === 500) {
+          throw new Error(
+            "There was a problem with our server. check back later."
+          );
+        } else {
+          throw new Error(
+            "Our booking service is currently not available, please try again."
+          );
+        }
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // Show booking complete modal
+      document.getElementById("confirmedTotal").textContent =
+        "$" + bookingData.price;
+      document.getElementById("bookingID").textContent =
+        data.id ?? "KS-9876345215";
+      document.getElementById("bookedService").textContent =
+        bookingData.service;
+      document.getElementById("confirmedSchedule").textContent = `${
+        bookingData.preferredTime
+      } to ${bookingData.preferredTime + 3} EST`;
+      //`${bookingData.preferredDay} at ${bookingData.preferredTime}`;
+      document.getElementById("bookingComplete").classList.remove("hidden");
+    })
+    .catch((error) => {
+      console.error("Error during booking:", error);
+      alert(error.message);
+      resetBooking();
+      window.location.reload();
+    });
+
+  // // Show booking complete modal
+  // document.getElementById("confirmedTotal").textContent =
+  //   "$" + bookingData.price;
+  // document.getElementById(
+  //   "confirmedSchedule"
+  // ).textContent = `${bookingData.preferredDay} at ${bookingData.preferredTime}`;
+  // document.getElementById("bookingComplete").classList.remove("hidden");
 
   console.log("Booking Data:", bookingData);
 }
@@ -604,13 +696,14 @@ function resetBooking() {
     category: "",
     service: "",
     bedrooms: 1,
+    extraBed: 0,
     bathrooms: 1,
-    frequency: "",
+    extraBath: 0,
     addOns: [],
     preferredDay: "",
     preferredTime: "",
     personalInfo: { firstName: "", lastName: "", email: "", phone: "" },
-    address: { street: "", city: "", state: "", zipCode: "" },
+    address: { street: "", city: "", state: "", country: "canada" },
     additionalInfo: "",
   };
 
@@ -664,7 +757,6 @@ document.addEventListener("DOMContentLoaded", function () {
     "street",
     "city",
     "state",
-    "zipCode",
   ];
   formFields.forEach((fieldId) => {
     document

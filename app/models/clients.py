@@ -1,4 +1,5 @@
 from app.extensions import db
+from sqlalchemy import func
 from faker import Faker
 
 COLOR_RESET = "\033[0m"
@@ -14,6 +15,7 @@ class Clients(db.Model):
     first_name = db.Column(db.String(25), nullable=False)
     last_name = db.Column(db.String(25), nullable=False)
     phone = db.Column(db.String(15), nullable=True)
+    timestamp = db.Column(db.DateTime, server_default=func.now())
 
     def __repr__(self) -> str:
         return (
@@ -58,14 +60,14 @@ class Address(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_email = db.Column(
         db.String(120),
-        db.ForeignKey("clients.id"),
         nullable=False,
     )
     address_line1 = db.Column(db.String(255), nullable=False)
-    address_line2 = db.Column(db.String(255), nullable=True)
+    address_line2 = db.Column(db.String(255),)
     city = db.Column(db.String(100), nullable=False)
     state = db.Column(db.String(100), nullable=False)
-    postal_code = db.Column(db.String(20), nullable=False)
+    postal_code = db.Column(db.String(20),)
+    timestamp = db.Column(db.DateTime, server_default=func.now())
 
     def __repr__(self) -> str:
         return (

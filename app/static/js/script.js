@@ -1248,4 +1248,35 @@ document.addEventListener("DOMContentLoaded", function () {
   updateTotalPrice();
   updateNextButton();
 });
-  
+
+// jump to step 4 if the category is commercial cleaning
+    // or jump to step 3 if selected category is Laundry
+    if (currentStep == 1 && bookingData.category === "Commercial Cleaning") {
+      currentStep = 4;
+    } else if (currentStep == 1 && bookingData.category === "Laundry") {
+      currentStep = 3;
+}
+    
+//  previous style
+// // Update summary
+  // const summary = document.getElementById("addOnSummary");
+  // const count = document.getElementById("addOnCount");
+  // const total = document.getElementById("addOnTotal");
+
+  // if (bookingData.addOns.length > 0) {
+  //   summary.classList.remove("hidden");
+  //   count.textContent = bookingData.addOns.length;
+
+  //   // displays the total cost of addon
+  //   const addonTotalPrice = bookingData.addOns.reduce((sum, addon) => {
+  //     return sum + addon.count * addon.unitCost;
+  //   }, 0);
+
+  //   console.log(`Addon total Price: &{addonTotalPrice}`);
+
+  //   total.textContent = "+$" + addonTotalPrice;
+  // } else {
+  //   summary.classList.add("hidden");
+  // }
+
+  // console.log(bookingData.addOns);
