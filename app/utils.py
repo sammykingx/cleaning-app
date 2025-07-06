@@ -2,8 +2,10 @@ from app.extensions import db
 from app.models.bookings import Bookings
 from app.models.services import Services
 from datetime import datetime, timedelta
+from faker import Faker
 
 
+fake = Faker()
 # Helper to create cleaning_date
 def get_cleaning_datetime(days_from_now, hour):
     date = datetime.today().replace(hour=hour, minute=0, second=0, microsecond=0)
@@ -17,31 +19,31 @@ client_email = "test@example.com"
 
 # Create bookings (simulate slots being filled)
 demo_bookings = [
-    # Friday: 8-11, 11-1 and 1-3 booking
+    # Sunday: 8-11, 11-1 and 1-3 booking
     Bookings(client_email=client_email, service="Regular House Cleaning", category="Residential Cleaning",
-             cleaning_date=get_cleaning_datetime(0, 8), price=100.0),
+             cleaning_date=get_cleaning_datetime(0, 8), price=100.0, booking_id=fake.bothify(text="KSP-########")),
     Bookings(client_email=client_email, service="Deep Cleaning", category="Residential Cleaning",
-             cleaning_date=get_cleaning_datetime(0, 11), price=100.0),
+             cleaning_date=get_cleaning_datetime(0, 11), price=100.0, booking_id=fake.bothify(text="KSP-########")),
     Bookings(client_email=client_email, service="Deep Cleaning", category="Residential Cleaning",
-             cleaning_date=get_cleaning_datetime(0, 13), price=100.0),
+             cleaning_date=get_cleaning_datetime(0, 13), price=100.0, booking_id=fake.bothify(text="KSP-########")),
 
-    # Saturday: 4 bookings in 8-11 slot (full)
+    # Monday: 4 bookings (full)
     Bookings(client_email=client_email, service="Small Office Cleaning", category="Commercial Cleaning",
-             cleaning_date=get_cleaning_datetime(1, 8), price=100.0),
+             cleaning_date=get_cleaning_datetime(1, 8), price=100.0, booking_id=fake.bothify(text="KSP-########")),
     Bookings(client_email=client_email, service="Medium Office Cleaning", category="Commercial Cleaning",
-             cleaning_date=get_cleaning_datetime(1, 11), price=100.0),
+             cleaning_date=get_cleaning_datetime(1, 11), price=100.0, booking_id=fake.bothify(text="KSP-########")),
     Bookings(client_email=client_email, service="Large Office Cleaning", category="Commercial Cleaning",
-             cleaning_date=get_cleaning_datetime(1, 13), price=100.0),
+             cleaning_date=get_cleaning_datetime(1, 13), price=100.0, booking_id=fake.bothify(text="KSP-########")),
     Bookings(client_email=client_email, service="Post Renovation Cleaning", category="Commercial Cleaning",
-             cleaning_date=get_cleaning_datetime(1, 16), price=100.0),
+             cleaning_date=get_cleaning_datetime(1, 15), price=100.0, booking_id=fake.bothify(text="KSP-########")),
 
-    # Sunday: 3 bookings in 1-3 slot
+    # Tuesday: 3 bookings in 1-3 slot
     Bookings(client_email=client_email, service="Small Office Cleaning", category="Commercial Cleaning",
-             cleaning_date=get_cleaning_datetime(2, 11), price=100.0),
+             cleaning_date=get_cleaning_datetime(2, 11), price=100.0, booking_id=fake.bothify(text="KSP-########")),
     Bookings(client_email=client_email, service="Large Office Cleaning", category="Commercial Cleaning",
-             cleaning_date=get_cleaning_datetime(2, 13), price=100.0),
+             cleaning_date=get_cleaning_datetime(2, 13), price=100.0, booking_id=fake.bothify(text="KSP-########")),
     Bookings(client_email=client_email, service="Deep Cleaning", category="Residential Cleaning",
-             cleaning_date=get_cleaning_datetime(2, 16), price=100.0),
+             cleaning_date=get_cleaning_datetime(2, 15), price=100.0, booking_id=fake.bothify(text="KSP-########")),
 ]
 
 services = [

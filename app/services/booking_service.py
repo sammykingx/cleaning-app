@@ -3,6 +3,7 @@ from app.extensions import db
 from app.models.bookings import Bookings
 from app.models.clients import Clients, Address
 from app.services.notification_service import NotificationService
+from time import time
 import json
 
 class BookingService:
@@ -19,26 +20,28 @@ class BookingService:
         
         # gets Clients record by email if the Clients object is not set
         if not self.client:
-            self.client = Clients.query.filter_by(email=self.client.get("email")).first()
+            self.client = Clients.query.filter_by(email=self.client_info.get("email")).first()
             
             # if user does not exist in the db, create a new one
             if not self.client:
-                self.client = Clients(**self.user_info)
+                self.client = Clients(**self.client_info)
                 db.session.add(self.client)
                 db.session.commit()
-        
+                print("client user saved")
+
         return self.client
     
     def save_user_address(self):
         """Creates or returns a new address for the user."""
         
         self.address = Address(
-            user_id=self.user.id,
-            **self.address
+            **self.address,
+            client_email=self.client_info.get("email"),
         )
             
         db.session.add(self.address)
         db.session.commit()
+        print("address saved")
 
         return self.address
     
@@ -47,18 +50,13 @@ class BookingService:
         
         # Check if booking object already exists
         if not self.booking:
-            print("Creating new booking record...")
             self.user = self.create_or_get_client()
             self.save_user_address()
+            timestamp = int(time())
             self.booking = Bookings(
                 **self.booking_info,
-                client_email=self.client_info.get("email"),
-                # user_id=2,  # For testing purposes, replace with self.user.id
+                booking_id=f"KSP-{timestamp}",
             )
-            # service.name, service_info fk to services table
-            # category, max_bed, max_bath, extra_bed, extra_bath
-            # addons, booking date and time, add, price
-            # service table(name of service, des, price)
             db.session.add(self.booking)
             db.session.commit()
             
@@ -131,10 +129,11 @@ class BookingService:
         
         # self.process_payment()
         
-        self.notify()
+        # self.notify()
         
         return self.booking
     
+    # passed
     def serialize_booking(self, data):
         """serialize the data for db entry on the booking table"""
         
@@ -146,8 +145,8 @@ class BookingService:
             "max_bathroom": data.get("service", {}).get("bedrooms", 0),
             "extra_bedroom": data.get("service", {}).get("extra_bedroom", 0),
             "extra_bathroom": data.get("service", {}).get("extra_bathroom", 0),
-            "add_ons": json.loads(data["add_ons"]) if self.data.get("add_ons") else "",
-            "notes": data.get("dditional_info", ""),
+            "add_ons": json.dumps(data["add_ons"]) if data.get("add_ons") else "",
+            "notes": data.get("additional_info", ""),
             "cleaning_date": data["cleaning_date"],
             "price": data["price"],
         }

@@ -62,18 +62,16 @@ class Address(db.Model):
         db.String(120),
         nullable=False,
     )
-    address_line1 = db.Column(db.String(255), nullable=False)
-    address_line2 = db.Column(db.String(255),)
+    street = db.Column(db.String(255), nullable=False)
     city = db.Column(db.String(100), nullable=False)
     state = db.Column(db.String(100), nullable=False)
-    postal_code = db.Column(db.String(20),)
     timestamp = db.Column(db.DateTime, server_default=func.now())
 
     def __repr__(self) -> str:
         return (
             f"<Address (id={self.id}, client_email={self.client_email}, "
-            f"address_line1={self.address_line1}, city={self.city}, "
-            f"state={self.state}, postal_code={self.postal_code})>"
+            f"street={self.street}, city={self.city}, "
+            f"state={self.state})>"
         )
 
     def to_dict(self) -> dict:
@@ -81,11 +79,9 @@ class Address(db.Model):
         return {
             "id": self.id,
             "client_email": self.client_email,
-            "address_line1": self.address_line1,
-            "address_line2": self.address_line2,
+            "street": self.address_line1,
             "city": self.city,
             "state": self.state,
-            "postal_code": self.postal_code,
         }
 
 
@@ -114,11 +110,9 @@ def create_demo_addresses():
     demo_addresses = [
         Address(
             client_email=fake.email(),
-            address_line1=fake.street_address(),
-            address_line2=fake.secondary_address(),
+            street=fake.street_address(),
             city=fake.city(),
             state=fake.state(),
-            postal_code=fake.postcode(),
         )
         for _ in range(10)  # Create 10 demo addresses
     ]

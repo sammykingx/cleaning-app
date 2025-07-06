@@ -1,11 +1,21 @@
 # serializer module
+from datetime import datetime
 
 def serialize_booking(booking_data:dict):
+    date_parts = [
+      booking_data.get("preferredDay"),
+      " ",
+      booking_data.get("preferredTime") 
+    ]
+    
+    cleaning_date_obj = datetime.strptime("".join(date_parts),"%d/%m/%Y %H:%M")
+    
     serialized_data = {
         "service": {"name": booking_data.get("service")},
         "category": booking_data.get("category"),
-        "preferred_day": booking_data.get("preferredDay"),
-        "preferred_time": booking_data.get("preferredTime"),
+        # "preferred_day": booking_data.get("preferredDay"),
+        # "preferred_time": booking_data.get("preferredTime"),
+        "cleaning_date": cleaning_date_obj,
         "additional_info": booking_data.get("additionalInfo"),
         "client_info": {
             "first_name": booking_data["personalInfo"]["firstName"],

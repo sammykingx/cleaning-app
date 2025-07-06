@@ -18,3 +18,4 @@ instance/
 node_modules/
 *cp.html
 migrations-*/
+test.js

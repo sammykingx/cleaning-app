@@ -26,6 +26,8 @@ let bookingData = {
 
 let currentStep = 1;
 let totalPrice = 0;
+let desiredDay = "";
+let desiredTime = "";
 
 // Service categories
 const serviceCategories = {
@@ -342,7 +344,9 @@ function updateAddOnSummary() {
 
 // Select day
 function selectDay(day) {
-  bookingData.preferredDay = day;
+  //bookingData.preferredDay = day;
+  desiredDay = day;
+  console.log(`Desired Day:${desiredDay}`);
 
   // Update UI
   document.querySelectorAll(".day-btn").forEach((btn) => {
@@ -358,7 +362,9 @@ function selectDay(day) {
 
 // Select time
 function selectTime(time) {
-  bookingData.preferredTime = time;
+  //bookingData.preferredTime = time;
+  desiredTime = time;
+  console.log(`Desired Time: ${desiredTime}`);
 
   // Update UI
   document.querySelectorAll(".time-btn").forEach((btn) => {
@@ -374,15 +380,24 @@ function selectTime(time) {
 
 // Update schedule summary
 function updateScheduleSummary() {
+  let cleaningDate;
+
+  if (desiredTime) {
+    cleaningDate = getCleaningDate(desiredDay, desiredTime);
+    bookingData.preferredDay = cleaningDate.dateStr;
+    bookingData.preferredTime = cleaningDate.time24;
+  }
+
   const summary = document.getElementById("scheduleSummary");
   //const daySpan = document.getElementById("selectedDay");
   const timeSpan = document.getElementById("selectedTime");
 
   if (bookingData.preferredDay && bookingData.preferredTime) {
     //daySpan.textContent = bookingData.preferredDay;
-    timeSpan.textContent = `${bookingData.preferredTime} to ${
-      bookingData.preferredTime + 3
-    } EST`;
+    timeSpan.textContent = formatFriendlyRange(
+      cleaningDate.dateStr,
+      cleaningDate.time24
+    );
     summary.classList.remove("hidden");
   } else {
     summary.classList.add("hidden");
@@ -665,9 +680,11 @@ function handleBooking() {
         data.id ?? "KS-9876345215";
       document.getElementById("bookedService").textContent =
         bookingData.service;
-      document.getElementById("confirmedSchedule").textContent = `${
-        bookingData.preferredTime
-      } to ${bookingData.preferredTime + 3} EST`;
+      document.getElementById("confirmedSchedule").textContent =
+        formatFriendlyRange(
+          bookingData.preferredDay,
+          bookingData.preferredTime
+        );
       //`${bookingData.preferredDay} at ${bookingData.preferredTime}`;
       document.getElementById("bookingComplete").classList.remove("hidden");
     })
@@ -709,6 +726,8 @@ function resetBooking() {
 
   currentStep = 1;
   totalPrice = 90;
+  desiredDay = "";
+  desiredTime = "";
 
   // Reset UI
   document.getElementById("bookingComplete").classList.add("hidden");

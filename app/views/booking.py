@@ -21,7 +21,7 @@ TIME_SLOTS = [
 MAX_BOOKINGS_PER_SLOT = 4
 
 
-@bp.route("/booking", methods=["POST"])
+@bp.route("/booking", methods=["GET", "POST"])
 def booking():
     """place booking"""
     
@@ -30,23 +30,22 @@ def booking():
         validate_csrf(csrf_token)
     
         data = serializers.serialize_booking(request.get_json())
-        print(data)
-        # cleaned_data = ValidateBookingData(**data)
         Booking = BookingService(data)
-        # booked_service = Booking.place_booking()
+        booked_service = Booking.place_booking()
+        print(booked_service.booking_id)
 
     except CSRFError as e:
       return jsonify({'status': 'error', 'message': 'CSRF validation failed', "err": e}), 403
     #   return "", 403
+    
     from time import time
     timestamp = int(time())
     return jsonify(
         {
             'status': 'success',
             'message': 'Booking saved',
-            'id': f"KS-{timestamp}",
-            'data': data,
-            # 'data': booked_service.to_dict() if booked_service else None,
+            'id': booked_service.booking_id, # compulsory
+            'data': booked_service.to_dict() if booked_service else None,
         }
     )
 
@@ -122,3 +121,27 @@ def get_availability():
     #     'Saturday': ['8:00 AM - 11:00 AM'],
     #     'Sunday': ['11:00 AM - 1:00 PM', '3:00 PM - 6:00 PM']
     # }
+ 
+ 
+from faker import Faker
+ 
+fake = Faker()   
+DEMO_DATA = {
+    'service': {'name': 'Wash & Fold'},
+    'category': 'Laundry',
+    'cleaning_date': datetime.now(),
+    'additional_info': 'eneter additional info',
+    'client_info': {
+        'first_name': fake.first_name(),
+        'last_name': fake.last_name(),
+        'email': fake.email(),
+        'phone': fake.phone_number(),
+    },
+    'address': {
+        'street': 'enter your street address',
+        'city': 'ontario',
+        'state': 'quebec'
+    },
+    'price': 69,
+    'add_ons': []
+}

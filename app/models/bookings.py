@@ -12,6 +12,7 @@ class Bookings(db.Model):
     """Model for bookings."""
 
     id = db.Column(db.Integer, primary_key=True)
+    booking_id = db.Column(db.String(20), index=True, unique=True, nullable=False)
     client_email = db.Column(
         db.String(120),
         nullable=False,
