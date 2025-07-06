@@ -27,7 +27,6 @@ class BookingService:
                 self.client = Clients(**self.client_info)
                 db.session.add(self.client)
                 db.session.commit()
-                print("client user saved")
 
         return self.client
     
@@ -41,7 +40,6 @@ class BookingService:
             
         db.session.add(self.address)
         db.session.commit()
-        print("address saved")
 
         return self.address
     
@@ -59,8 +57,7 @@ class BookingService:
             )
             db.session.add(self.booking)
             db.session.commit()
-            
-        print("Booking record saved successfully.")
+
         return self.booking
 
     def process_payment(self):

@@ -26,8 +26,8 @@ let bookingData = {
 
 let currentStep = 1;
 let totalPrice = 0;
-let desiredDay = "";
-let desiredTime = "";
+let desiredDay = null;
+let desiredTime = null;
 
 // Service categories
 const serviceCategories = {
@@ -344,9 +344,9 @@ function updateAddOnSummary() {
 
 // Select day
 function selectDay(day) {
-  //bookingData.preferredDay = day;
+  // Prevent selection if disabled
+  if (event.target.closest("button").disabled) return;
   desiredDay = day;
-  console.log(`Desired Day:${desiredDay}`);
 
   // Update UI
   document.querySelectorAll(".day-btn").forEach((btn) => {
@@ -356,15 +356,17 @@ function selectDay(day) {
   event.target.classList.add("border-primary", "bg-green-50");
   event.target.classList.remove("border-gray-200");
 
+  updateTimeSlotsUI(day);
   updateScheduleSummary();
   updateNextButton();
 }
 
 // Select time
 function selectTime(time) {
-  //bookingData.preferredTime = time;
+  // Prevent selection if disabled
+  if (event.target.closest("button").disabled) return;
+
   desiredTime = time;
-  console.log(`Desired Time: ${desiredTime}`);
 
   // Update UI
   document.querySelectorAll(".time-btn").forEach((btn) => {
@@ -382,7 +384,12 @@ function selectTime(time) {
 function updateScheduleSummary() {
   let cleaningDate;
 
-  if (desiredTime) {
+  if (
+    typeof desiredDay === "string" &&
+    desiredDay.trim() !== "" &&
+    typeof desiredTime === "string" &&
+    desiredTime.trim() !== ""
+  ) {
     cleaningDate = getCleaningDate(desiredDay, desiredTime);
     bookingData.preferredDay = cleaningDate.dateStr;
     bookingData.preferredTime = cleaningDate.time24;
@@ -439,27 +446,19 @@ function validateContactFields() {
 
   if (!isValidEmail(email)) {
     // clears email input
-    console.log("is valid Email called");
     isValid = false;
   }
 
   if (!isValidPhone(phone)) {
-    console.log("is valid phone number called");
     isValid = false;
   }
 
   if (!isValidName(firstName)) {
-    console.log("first name validation fails");
     isValid = false;
-  } else {
-    console.log("First name validation pass");
   }
 
   if (!isValidName(lastName)) {
-    console.log("Last name validation fails");
     isValid = false;
-  } else {
-    console.log("Last Name validation pass");
   }
 
   return (
@@ -673,6 +672,9 @@ function handleBooking() {
       return response.json();
     })
     .then((data) => {
+      // get fresh availability
+      fetchAvailability();
+
       // Show booking complete modal
       document.getElementById("confirmedTotal").textContent =
         "$" + bookingData.price;
@@ -726,8 +728,8 @@ function resetBooking() {
 
   currentStep = 1;
   totalPrice = 90;
-  desiredDay = "";
-  desiredTime = "";
+  desiredDay = null;
+  desiredTime = null;
 
   // Reset UI
   document.getElementById("bookingComplete").classList.add("hidden");

@@ -10,16 +10,15 @@ const firstNameErr = document.getElementById("firstName-error");
 const lastNameErr = document.getElementById("lastName-error");
 
 function isValidEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    console.log(`Entered email: ${email}`);
-    return re.test(email);
-};
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
 
 function isValidPhone(phone) {
   const cleaned = phone.replace(/[\s\-().]/g, "");
   const re = /^(?:\+1|1)?[2-9]\d{2}[2-9]\d{6}$/;
   return re.test(cleaned);
-};
+}
 
 function isValidName(name) {
   // Only letters, at least 3 characters
@@ -33,45 +32,42 @@ function debounce(fn, delay) {
     clearTimeout(timeout);
     timeout = setTimeout(() => fn(...args), delay);
   };
-};
+}
 
 // Real-time validation handlers
 function validateEmail() {
   let email = emailInput.value.trim();
   if (email && !isValidEmail(email)) {
-      emailError.textContent = "Invalid email format.";
+    emailError.textContent = "Invalid email format.";
   } else {
     emailError.textContent = "";
-    }
-    console.log(email);
-};
+  }
+}
 
 function validatePhone() {
   const phone = phoneInput.value.trim();
   if (phone && !isValidPhone(phone)) {
-      phoneError.textContent = "Invalid phone number.";
-      phoneInput.textContent = "";
+    phoneError.textContent = "Invalid phone number.";
+    phoneInput.textContent = "";
   } else {
     phoneError.textContent = "";
   }
-};
+}
 
 function validateName() {
-    const firstName = firstNameInput.value.trim();
-    const lastName = lastNameInput.value.trim();
-    if (firstName && !isValidName(firstName)) {
-        firstNameErr.textContent = "Invalid first name";
-        
-    } else {
-        firstNameErr.textContent = "";
-    }
+  const firstName = firstNameInput.value.trim();
+  const lastName = lastNameInput.value.trim();
+  if (firstName && !isValidName(firstName)) {
+    firstNameErr.textContent = "Invalid first name";
+  } else {
+    firstNameErr.textContent = "";
+  }
 
-    if (lastName && !isValidName(lastName)) {
-        lastNameErr.textContent = "Invalid last name";
-        console.log(isValidEmail(lastName));
-    } else {
-        lastName.textContent = "";
-    }
+  if (lastName && !isValidName(lastName)) {
+    lastNameErr.textContent = "Invalid last name";
+  } else {
+    lastName.textContent = "";
+  }
 }
 // Add listeners (debounced input + blur for final check)
 emailInput.addEventListener("input", debounce(validateEmail, 300));
