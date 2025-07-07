@@ -19,6 +19,26 @@ TIME_SLOTS = [
 
 MAX_BOOKINGS_PER_SLOT = 4
 
+SERVICE_ADDONS = [
+    {"name": "Fridge Cleaning", "unitCost": 20, "count": 1},
+    {"name": "Oven Cleaning", "unitCost": 30, "count": 3},
+    {"name": "Window Exterior", "unitCost": 30, "count": 3},
+    {"name": "Window Interior", "unitCost": 30, "count": 3},
+    {"name": "Carpet/Rug Cleaning", "unitCost": 30, "count": 3},
+    {"name": "Deep Carpet/Rug", "unitCost": 30, "count": 3},
+    {"name": "Bed Making", "unitCost": 30, "count": 3},
+    {"name": "Org. Services", "unitCost": 30, "count": 3},
+    {"name": "Dry Cleaning", "unitCost": 30, "count": 3},
+    {"name": "Pick up & Drop Off", "unitCost": 30, "count": 3},
+]
+
+
+"""_summary_
+
+
+Returns:
+     _type_: _description_
+"""
 
 @bp.route("/booking", methods=["POST"])
 def booking():
@@ -33,10 +53,12 @@ def booking():
         booked_service = Booking.place_booking()
 
     except CSRFError as e:
-      return jsonify({'status': 'error', 'message': 'CSRF validation failed', "err": e}), 403
-    #   return "", 403
+      #return jsonify({'status': 'error', 'message': 'CSRF validation failed', "err": e}), 403
+      return "", 403
+  
+    except Exception as e:
+        return "", 500
     
-    from time import time
     return jsonify(
         {
             'status': 'success',
@@ -45,6 +67,10 @@ def booking():
             'data': booked_service.to_dict() if booked_service else None,
         }
     )
+
+@bp.route("/service-addons")
+def view_template():
+    return jsonify(SERVICE_ADDONS)
 
 
 @bp.route("/all_bookings")
@@ -119,11 +145,10 @@ def get_availability():
 #   "2025-07-08": ["8:00 AM", "1:00 PM", "3:00 PM"],
 
 # }
- 
- 
+
 from faker import Faker
  
-fake = Faker()   
+fake = Faker(locale="en_CA")   
 DEMO_DATA = {
     'service': {'name': 'Wash & Fold'},
     'category': 'Laundry',
@@ -136,10 +161,10 @@ DEMO_DATA = {
         'phone': fake.phone_number(),
     },
     'address': {
-        'street': 'enter your street address',
-        'city': 'ontario',
-        'state': 'quebec'
+        'street': fake.street_address(),
+        'city': fake.city(),
+        'state': fake.administrative_unit(),
     },
     'price': 69,
-    'add_ons': []
+    'add_ons': SERVICE_ADDONS
 }

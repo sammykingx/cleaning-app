@@ -17,15 +17,15 @@ class Config:
     WTF_CSRF_HEADERS = ["X-CSRFToken",]
     
     MAIL_SERVER = os.getenv("MAIL_SERVER",)
-    MAIL_PORT = int(os.getenv("MAIL_PORT", "465"))
-    MAIL_USE_SSL = bool(os.getenv("MAIL_USE_SSL", "true"))
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
-    MAIL_PASSWORD = os.getenv("PASSWORD", "af1LTpr#ty.#")
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
     MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER")
     MAIL_MAX_EMAILS = int(os.getenv("MAIL_MAX_EMAILS", 20))
     
-    # JSON_SORT_KEYS = False
-    # JSONIFY_PRETTYPRINT_REGULAR = False
+    JSON_SORT_KEYS = False
+    JSONIFY_PRETTYPRINT_REGULAR = False
     # JSONIFY_MIMETYPE = "application/json"
     # JSON_AS_ASCII = False
 
@@ -36,3 +36,20 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = (
         os.getenv("DB_URI") or "sqlite:///cleaning-app.db"
     )
+    
+class ProductionConfig(Config):
+    DEBUG = False
+    SECRET_KEY = os.getenv("APP_SECRET_KEY")
+    ESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    REMEMBER_COOKIE_HTTPONLY = True
+    REMEMBER_COOKIE_DURATION = 86400
+    
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_size": 20,
+        "max_overflow": 20,
+        "pool_timeout": 10,
+        "pool_recycle": 600,
+        "pool_pre_ping": True
+    }

@@ -11,11 +11,11 @@ wheels/
 
 # secrets file
 .env
-.secrets
+*.secrets
 
 # project files
 instance/
 node_modules/
-*cp.html
+*test.html
 migrations-*/
 test.js

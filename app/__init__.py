@@ -22,6 +22,14 @@ def create_app(
     )
     app.config.from_object(config_class)
     app.url_map.strict_slashes = False
+    if not app.config.get("SECRET_KEY"):
+        raise RuntimeError(
+            "❌ SECRET_KEY is not set! The app will not start without it. "
+            "Please set a strong SECRET_KEY in your config or environment."
+        )
+        
+    if not app.config.get("SQLALCHEMY_DATABASE_URI"):
+        raise RuntimeError("❌ DATABASE_URL is not set. Please configure it securely.")
 
     # initialize extensions
     db.init_app(app)

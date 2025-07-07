@@ -2,8 +2,11 @@ from flask import render_template
 from app.extensions import db
 from app.models.bookings import Bookings
 from app.models.clients import Clients, Address
+from app.models.email import EmailLogs
 from app.services.notification_service import NotificationService
+from app.utils import format_datetime
 from time import time
+from typing import Dict
 import json
 
 class BookingService:
@@ -11,10 +14,40 @@ class BookingService:
         self.booking_info:dict = self.serialize_booking(data)
         self.client_info:dict = data.get("client_info", {})
         self.address:dict = data.get("address", {})
-        # self.booking_info["recurring"] = True if self.booking_info.get("frequency") != "one-off" else False
         self.booking:Bookings = None
         self.client:Clients = None
+        self.client_address = None
+        self.email_subj = None
+        
+    def place_booking(self):
+        """Run the entire booking flow."""
+        self.save_booking()
+        email_msg = self.load_email_message()
+        # self.update_email_log(email_msg)
+        self.notify(email_msg)
+        
+        return self.booking
 
+    #passed
+    def save_booking(self):
+        """Creates the booking record in the database."""
+        
+        # Check if booking object already exists
+        if not self.booking:
+            
+            self.user = self.create_or_get_client()
+            self.save_client_address()
+            timestamp = int(time())
+            self.booking = Bookings(
+                **self.booking_info,
+                booking_id=f"KSP-{timestamp}",
+            )
+            db.session.add(self.booking)
+            db.session.commit()
+            
+        return self.booking
+        
+    #passed
     def create_or_get_client(self):
         """Creates or returns a new Clients if not already exists."""
         
@@ -29,109 +62,83 @@ class BookingService:
                 db.session.commit()
 
         return self.client
-    
-    def save_user_address(self):
+   
+   #passed 
+    def save_client_address(self):
         """Creates or returns a new address for the user."""
         
-        self.address = Address(
+        self.client_address = Address(
             **self.address,
             client_email=self.client_info.get("email"),
         )
             
-        db.session.add(self.address)
+        db.session.add(self.client_address)
         db.session.commit()
 
-        return self.address
+        return self.client_address
     
-    def save_booking(self):
-        """Creates the booking record in the database."""
-        
-        # Check if booking object already exists
-        if not self.booking:
-            self.user = self.create_or_get_client()
-            self.save_user_address()
-            timestamp = int(time())
-            self.booking = Bookings(
-                **self.booking_info,
-                booking_id=f"KSP-{timestamp}",
-            )
-            db.session.add(self.booking)
-            db.session.commit()
-
-        return self.booking
-
-    def process_payment(self):
-        """Handle optional payment processing."""
-
-        # if not self.booking.price > 0:
-        #     raise ValueError("Booking price must be greater than zero for payment processing.")
-        #     # 
-        #     # result = payment.charge_user(payment_gateway=None)  # Replace None with actual payment gateway
-            
-        # elif self.booking.frequency != "one-off":
-        #     # it's a recurring service payment
-        #     # update the recurring booking table
-        #     pass
-            
-        # else:
-        #     # it's a one-off service payment
-        #     payment = PaymentService(self.booking)
-        #     response = payment.charge_user(self.user)
-        #     if not response:
-        #         raise Exception("Payment processing failed.")
-            
-        #     # Update booking status and payment status
-        #     self.booking.status = "approved"
-        #     self.booking.payment_status = "paid"
-        #     db.session.add(self.booking)
-        #     db.session.commit()
-        
-        # return response
-        return "Not configured yet"
-
-    def notify(self):
-        """Send mail notifications."""
-        
-        from app.constants import APP_NAME, APP_SUPPORT_EMAIL
-        
-        email_message =  render_template(
-            "email/payment-confirmation.html",
-            client_name=f"{self.user.full_name()}",
-            client_email= self.user.email,
-            amount=self.booking.price,
-            service_type=self.booking.service,
-            payment_date=self.booking.booking_date,
-            app_name= APP_NAME,
-            app_support_email=APP_SUPPORT_EMAIL,
-            partner_name="Kleen & Spotless",
-            partner_support_email="contact@kleenspotless.com",
-            footer_comp_name="Divgm Technologies",
+    def load_email_message(self) -> str:
+        clean_date, clean_time = format_datetime(self.booking_info.get("cleaning_date"))
+        cleaning_addons = json.loads(self.booking.add_ons)
+        self.email_subj = "Booking Confirmation - Kleenspotless.com"
+        msg = render_template(
+            "email/confirmed-booking.html",
+            f_name=self.client.first_name,
+            date=clean_date,
+            time=clean_time,
+            booking_id=self.booking.booking_id,
+            category=self.booking.category,
+            service=self.booking.service,
+            notes=self.booking.notes,
+            street=self.client_address.street,
+            city=self.client_address.city,
+            state=self.client_address.state,
+            bedrooms=self.booking.max_bedroom,
+            bathrooms=self.booking.max_bathroom,
+            extra_bed=self.booking.extra_bedroom,
+            extra_bath=self.booking.extra_bathroom,
+            s_total=self.booking.price - (self.booking.price * 0.15),
+            tax=self.booking.price * 0.15,
+            price=self.booking.price,
+            addons=cleaning_addons,
         )
-        print("email_message ready for sending")
+
+        return msg
+    
+    def notify(self, email_msg):
+        """sends the client email notification"""
         
-        mail_service = NotificationService(
-            user=self.user,
-            subject=f"Booking Confirmation - {APP_NAME}",
-            message=email_message
+        notification = NotificationService(
+            user_email=self.booking.client_email,
+            subject=self.email_subj,
+            message=email_msg,
         )
-        mail_service.send_to_customer()
-        # NotificationService.send_to_customer(self.booking)
-        # NotificationService.send_to_admin(self.booking)
+
+        resp = notification.send_to_client()
         return True
     
-    def place_booking(self):
-        """Run the entire booking flow."""
-        #self.validate()
-        self.save_booking()
-        
-        # self.process_payment()
-        
-        # self.notify()
-        
-        return self.booking
+    # passed 
+    def update_email_log(self, email_msg) -> bool:
+        """Update email record to be used by server cron job"""
+
+        email_record = EmailLogs(
+            client_email = self.booking.client_email,
+            booking_id = self.booking.booking_id,
+            subject = self.email_subj,
+            message = email_msg,
+        )
+        db.session.add(email_record)
+        db.session.commit()
+
+        return True
+       
+       
+    def process_payment(self) ->str:
+        """Handle optional payment processing."""
+
+        return "Not configured yet"
     
-    # passed
-    def serialize_booking(self, data):
+    def serialize_booking(self, data) ->Dict[str, str]:
         """serialize the data for db entry on the booking table"""
         
         return {

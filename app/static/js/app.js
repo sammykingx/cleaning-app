@@ -679,7 +679,7 @@ function handleBooking() {
       document.getElementById("confirmedTotal").textContent =
         "$" + bookingData.price;
       document.getElementById("bookingID").textContent =
-        data.id ?? "KS-9876345215";
+        data.id ?? "KSP-XXXXXXXXXX";
       document.getElementById("bookedService").textContent =
         bookingData.service;
       document.getElementById("confirmedSchedule").textContent =

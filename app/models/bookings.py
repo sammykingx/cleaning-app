@@ -42,8 +42,9 @@ class Bookings(db.Model):
     def __repr__(self) -> str:
         return (
             f"<Booking (id={self.id}, client_email={self.client_email}, "
-            f"service_type={self.service_type}, booking_date={self.booking_date}, "
-            f"status={self.status})>"
+            f"service={self.service}, category={self.category} "
+            f"booking_date={self.booking_date}, cleaning_date={self.cleaning_date}"
+            f"price={self.price}, status={self.booking_status})>"
         )
 
     def set_add_ons(self, add_ons_list):
@@ -56,6 +57,7 @@ class Bookings(db.Model):
         """Convert the booking instance to a dictionary."""
         return {
             "id": self.id,
+            "booking_id": self.booking_id,
             "client_email": self.client_email,
             "service": self.service,
             "category": self.category,
