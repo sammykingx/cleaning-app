@@ -347,6 +347,7 @@ function selectDay(day) {
   // Prevent selection if disabled
   if (event.target.closest("button").disabled) return;
   desiredDay = day;
+  desiredTime = null;
 
   // Update UI
   document.querySelectorAll(".day-btn").forEach((btn) => {
@@ -691,7 +692,7 @@ function handleBooking() {
       document.getElementById("bookingComplete").classList.remove("hidden");
     })
     .catch((error) => {
-      console.error("Error during booking:", error);
+      //console.error("Error during booking:", error);
       alert(error.message);
       resetBooking();
       window.location.reload();
@@ -704,8 +705,6 @@ function handleBooking() {
   //   "confirmedSchedule"
   // ).textContent = `${bookingData.preferredDay} at ${bookingData.preferredTime}`;
   // document.getElementById("bookingComplete").classList.remove("hidden");
-
-  console.log("Booking Data:", bookingData);
 }
 
 // Reset booking

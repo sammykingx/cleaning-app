@@ -37,12 +37,17 @@ function updateUnavailableUI() {
       }
     }
 
-    if (matchedDate && availabilityData[matchedDate] && availabilityData[matchedDate].length === 0) {
+    if (
+      matchedDate &&
+      availabilityData[matchedDate] &&
+      availabilityData[matchedDate].length === 0
+    ) {
       // No time slots available for this day, gray out
-      btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      btn.classList.add("opacity-50", "cursor-not-allowed");
       btn.disabled = true;
     } else {
-      btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      btn.classList.remove("opacity-50", "cursor-not-allowed");
       btn.disabled = false;
     }
   });

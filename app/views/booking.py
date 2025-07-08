@@ -40,7 +40,7 @@ Returns:
      _type_: _description_
 """
 
-@bp.route("/booking", methods=["POST"])
+@bp.route("/booking", methods=["GET", "POST"])
 def booking():
     """place booking"""
     

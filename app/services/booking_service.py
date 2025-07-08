@@ -23,12 +23,11 @@ class BookingService:
         """Run the entire booking flow."""
         self.save_booking()
         email_msg = self.load_email_message()
-        # self.update_email_log(email_msg)
-        self.notify(email_msg)
+        self.update_email_log(email_msg)
+        # self.notify(email_msg)
         
         return self.booking
 
-    #passed
     def save_booking(self):
         """Creates the booking record in the database."""
         
@@ -44,10 +43,9 @@ class BookingService:
             )
             db.session.add(self.booking)
             db.session.commit()
-            
+         
         return self.booking
         
-    #passed
     def create_or_get_client(self):
         """Creates or returns a new Clients if not already exists."""
         
@@ -62,8 +60,7 @@ class BookingService:
                 db.session.commit()
 
         return self.client
-   
-   #passed 
+    
     def save_client_address(self):
         """Creates or returns a new address for the user."""
         
@@ -117,7 +114,6 @@ class BookingService:
         resp = notification.send_to_client()
         return True
     
-    # passed 
     def update_email_log(self, email_msg) -> bool:
         """Update email record to be used by server cron job"""
 
