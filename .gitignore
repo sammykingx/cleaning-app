@@ -19,3 +19,4 @@ node_modules/
 *test.html
 migrations-*/
 test.js
+style.css

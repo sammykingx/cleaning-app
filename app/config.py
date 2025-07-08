@@ -1,9 +1,18 @@
 # application configuration
 from dotenv import load_dotenv
+from sqlalchemy.engine import URL
 import os
 
 load_dotenv()
 
+DB_URL = URL.create(
+    drivername="mysql",
+    username=os.getenv("DB_USER", "root"),
+    password=os.getenv("DB_PWD"),
+    host="localhost",
+    port=3306,
+    database=os.getenv("DB_NAME")
+)
 
 class Config:
     """Base configuration class."""
@@ -40,13 +49,13 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     SECRET_KEY = os.getenv("APP_SECRET_KEY")
-    ESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
     REMEMBER_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_DURATION = 86400
     
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", None)
+    SQLALCHEMY_DATABASE_URI = DB_URL
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_size": 20,
         "max_overflow": 20,

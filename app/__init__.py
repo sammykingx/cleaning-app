@@ -3,24 +3,29 @@
 from flask import Flask
 from app.views import bp
 from app.extensions import db, migrate, csrf, mail
-from app.config import DevelopmentConfig
+from app.config import DevelopmentConfig, ProductionConfig
+import os
 
 COLOR_RESET = "\033[0m"
 COLOR_GREEN = "\033[92m"
 COLOR_BLUE = "\033[94m"
 
 
-def create_app(
-    config_class: object = DevelopmentConfig,
-) -> Flask:
+def create_app() -> Flask:
     """Create and configure the Flask application."""
 
     app = Flask(__name__)
 
-    print(
-        f"{COLOR_BLUE}Creating Flask app with config: {config_class.__name__}{COLOR_RESET}"
-    )
+    ENV = os.getenv("APP_ENV", "dev")
+    if ENV == "prod":
+        config_class = ProductionConfig
+    else:
+        config_class = DevelopmentConfig
+        
     app.config.from_object(config_class)
+    print(
+        f"{COLOR_BLUE}Configured Flask app with config: {config_class.__name__}{COLOR_RESET}"
+    )
     app.url_map.strict_slashes = False
     if not app.config.get("SECRET_KEY"):
         raise RuntimeError(
