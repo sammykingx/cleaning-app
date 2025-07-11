@@ -325,8 +325,7 @@
                                                                                                    <td class="t40" style="padding:0 0 22px 0;">
                                                                                                       <p class="t38" style="margin:0;Margin:0;font-family:Roboto,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:22px;font-weight:400;font-style:normal;font-size:14px;text-decoration:none;text-transform:none;direction:ltr;color:#0E4B81;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">Time: {{ time }}</p>
                                                                                                    </td>
-                                                                                                </tr>
-                                                                                             </table>
+                                                                                                </tr>                                                                                             </table>
                                                                                           </td>
                                                                                        </tr>
                                                                                     </table>
@@ -831,7 +830,7 @@
                                                                                           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="t161" style="width:100%;">
                                                                                              <tr>
                                                                                                 <td class="t159">
-                                                                                                   <h1 class="t158" style="margin:0;Margin:0;font-family:Roboto,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:16px;font-weight:700;font-style:normal;font-size:14px;text-decoration:none;text-transform:capitalize;direction:ltr;color:#0E67AA;text-align:left;mso-line-height-rule:exactly;mso-text-raise:1px;">subtotal: $<span class="t157" style="margin:0;Margin:0;text-transform:lowercase;mso-line-height-rule:exactly;">{{ s_total }}</span></h1>
+                                                                                                   <h1 class="t158" style="margin:0;Margin:0;font-family:Roboto,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:16px;font-weight:700;font-style:normal;font-size:14px;text-decoration:none;text-transform:capitalize;direction:ltr;color:#0E67AA;text-align:left;mso-line-height-rule:exactly;mso-text-raise:1px;">subtotal: $<span class="t157" style="margin:0;Margin:0;text-transform:lowercase;mso-line-height-rule:exactly;">{{ "%.2f"|format(s_total) }}</span></h1>
                                                                                                 </td>
                                                                                                 <td class="t160" style="width:10px;" width="10"></td>
                                                                                              </tr>
@@ -841,7 +840,7 @@
                                                                                           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="t167" style="width:100%;">
                                                                                              <tr>
                                                                                                 <td class="t165">
-                                                                                                   <h1 class="t164" style="margin:0;Margin:0;font-family:Roboto,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:16px;font-weight:700;font-style:normal;font-size:14px;text-decoration:none;text-transform:capitalize;direction:ltr;color:#0E67AA;text-align:left;mso-line-height-rule:exactly;mso-text-raise:1px;">tax: $<span class="t163" style="margin:0;Margin:0;text-transform:lowercase;mso-line-height-rule:exactly;">{{ tax }}</span></h1>
+                                                                                                   <h1 class="t164" style="margin:0;Margin:0;font-family:Roboto,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:16px;font-weight:700;font-style:normal;font-size:14px;text-decoration:none;text-transform:capitalize;direction:ltr;color:#0E67AA;text-align:left;mso-line-height-rule:exactly;mso-text-raise:1px;">tax: $<span class="t163" style="margin:0;Margin:0;text-transform:lowercase;mso-line-height-rule:exactly;">{{ "%.2f"|format(tax) }}</span></h1>
                                                                                                 </td>
                                                                                                 <td class="t166" style="width:10px;" width="10"></td>
                                                                                              </tr>
@@ -851,7 +850,7 @@
                                                                                           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="t172" style="width:100%;">
                                                                                              <tr>
                                                                                                 <td class="t171">
-                                                                                                   <p class="t170" style="margin:0;Margin:0;font-family:Roboto,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:22px;font-weight:600;font-style:normal;font-size:14px;text-decoration:none;text-transform:capitalize;direction:ltr;color:#0E4B81;text-align:right;mso-line-height-rule:exactly;mso-text-raise:2px;">Total: $<span class="t169" style="margin:0;Margin:0;text-transform:lowercase;mso-line-height-rule:exactly;">{{ price }}</span> CAD</p>
+                                                                                                   <p class="t170" style="margin:0;Margin:0;font-family:Roboto,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:22px;font-weight:600;font-style:normal;font-size:14px;text-decoration:none;text-transform:capitalize;direction:ltr;color:#0E4B81;text-align:right;mso-line-height-rule:exactly;mso-text-raise:2px;">Total: $<span class="t169" style="margin:0;Margin:0;text-transform:lowercase;mso-line-height-rule:exactly;">{{ "%.2f"|format(price) }}</span> CAD</p>
                                                                                                 </td>
                                                                                              </tr>
                                                                                           </table>
@@ -883,6 +882,28 @@
                                                                      <tr>
                                                                         <td class="t185" style="padding:0 0 0 10px;">
                                                                            <p class="t184" style="margin:0;Margin:0;font-family:Roboto,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:24px;font-weight:300;font-style:normal;font-size:16px;text-decoration:none;text-transform:none;direction:ltr;color:#0E4B81;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">Please complete your payment via Interac e-Transfer to <span class="t183" style="margin:0;Margin:0;mso-line-height-rule:exactly;">contact@kleenspotless.com</span></p>
+                                                                        </td>
+                                                                     </tr>
+                                                                  </table>
+                                                               </td>
+                                                            </tr>
+                                                         </table>
+                                                      </td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>
+                                                         <div class="t189" style="mso-line-height-rule:exactly;mso-line-height-alt:40px;line-height:40px;font-size:1px;display:block;">&nbsp;&nbsp;</div>
+                                                      </td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td align="center">
+                                                         <table class="t188" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;">
+                                                            <tr>
+                                                               <td width="500" class="t187" style="width:600px;">
+                                                                  <table class="t186" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                                                                     <tr>
+                                                                        <td class="t185" style="padding:0 0 0 10px;">
+                                                                           <p class="t184" style="margin:0;Margin:0;font-family:Roboto,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:24px;font-weight:300;font-style:normal;font-size:16px;text-decoration:none;text-transform:none;direction:ltr;color:#0E4B81;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">If we need more info, we'll contact you on your phone number <span class="t183" style="margin:0;Margin:0;mso-line-height-rule:exactly;">{{ phone }}</span></p>
                                                                         </td>
                                                                      </tr>
                                                                   </table>

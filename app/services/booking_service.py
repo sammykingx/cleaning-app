@@ -18,7 +18,7 @@ class BookingService:
         self.client:Clients = None
         self.client_address = None
         self.email_subj = None
-        
+                
     def place_booking(self):
         """Run the entire booking flow."""
         self.save_booking()
@@ -83,6 +83,7 @@ class BookingService:
             f_name=self.client.first_name,
             date=clean_date,
             time=clean_time,
+            phone=self.client.phone,
             booking_id=self.booking.booking_id,
             category=self.booking.category,
             service=self.booking.service,

@@ -40,7 +40,7 @@ Returns:
      _type_: _description_
 """
 
-@bp.route("/booking", methods=["GET", "POST"])
+@bp.route("/booking", methods=["GET","POST"])
 def booking():
     """place booking"""
     
@@ -53,11 +53,12 @@ def booking():
         booked_service = Booking.place_booking()
 
     except CSRFError as e:
+        print("validation error")
       #return jsonify({'status': 'error', 'message': 'CSRF validation failed', "err": e}), 403
-      return "", 403
+        return "", 403
   
     except Exception as e:
-        return "", 500
+        return "internal error", 500
     
     return jsonify(
         {
@@ -165,6 +166,6 @@ DEMO_DATA = {
         'city': fake.city(),
         'state': fake.administrative_unit(),
     },
-    'price': 69,
+    'price': 69.678234,
     'add_ons': SERVICE_ADDONS
 }

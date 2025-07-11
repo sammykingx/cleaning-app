@@ -152,7 +152,7 @@ function updateTotalPrice() {
   document.getElementById("totalPrice").textContent = "$" + totalPrice;
   document.getElementById("finalPrice").textContent = totalPrice;
   document.getElementById("finalPrice").textContent = totalPrice;
-  document.getElementById("subtotal").textContent = subtotal;
+  document.getElementById("subtotal").textContent = "$" + subtotal;
   document.getElementById("tax").textContent = "$" + tax;
 }
 
@@ -357,6 +357,13 @@ function selectDay(day) {
   event.target.classList.add("border-primary", "bg-green-50");
   event.target.classList.remove("border-gray-200");
 
+  document.querySelectorAll(".time-btn").forEach((btn) => {
+    btn.classList.remove("border-primary", "bg-green-50");
+    btn.classList.add("border-gray-200");
+  });
+  event.target.classList.add("border-primary", "bg-green-50");
+  event.target.classList.remove("border-gray-200");
+
   updateTimeSlotsUI(day);
   updateScheduleSummary();
   updateNextButton();
@@ -400,7 +407,8 @@ function updateScheduleSummary() {
   //const daySpan = document.getElementById("selectedDay");
   const timeSpan = document.getElementById("selectedTime");
 
-  if (bookingData.preferredDay && bookingData.preferredTime) {
+  // if (bookingData.preferredDay && bookingData.preferredTime) {
+  if (desiredDay && desiredTime) {
     //daySpan.textContent = bookingData.preferredDay;
     timeSpan.textContent = formatFriendlyRange(
       cleaningDate.dateStr,
@@ -484,7 +492,7 @@ function updateNextButton() {
     if (canProceed()) {
       nextBtn.classList.remove(
         "bg-gray-300",
-        "text-gray-500",
+        "text-white",
         "cursor-not-allowed"
       );
       nextBtn.classList.add(
@@ -494,11 +502,7 @@ function updateNextButton() {
         "hover:shadow-lg"
       );
     } else {
-      nextBtn.classList.add(
-        "bg-gray-300",
-        "text-gray-500",
-        "cursor-not-allowed"
-      );
+      nextBtn.classList.add("bg-gray-300", "text-white", "cursor-not-allowed");
       nextBtn.classList.remove(
         "bg-primary",
         "text-white",

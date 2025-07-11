@@ -4,8 +4,10 @@ from flask import Flask
 from app.views import bp
 from app.extensions import db, migrate, csrf, mail
 from app.config import DevelopmentConfig, ProductionConfig
+from dotenv import load_dotenv
 import os
 
+load_dotenv()
 COLOR_RESET = "\033[0m"
 COLOR_GREEN = "\033[92m"
 COLOR_BLUE = "\033[94m"

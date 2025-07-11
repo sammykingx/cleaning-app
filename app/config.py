@@ -6,12 +6,12 @@ import os
 load_dotenv()
 
 DB_URL = URL.create(
-    drivername="mysql",
-    username=os.getenv("DB_USER", "root"),
-    password=os.getenv("DB_PWD"),
+    drivername="mysql+pymysql",
+    username="root",#os.getenv("DB_USER", "root"),
+    password="",#os.getenv("DB_PWD", ""),
     host="localhost",
     port=3306,
-    database=os.getenv("DB_NAME")
+    database="cleaning-app",#os.getenv("DB_NAME", "cleaning-app")
 )
 
 class Config:
