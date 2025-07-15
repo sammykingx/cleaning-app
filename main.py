@@ -5,22 +5,26 @@ from app.constants import HOME_URL
 # import production configurations
 
 
-app = create_app()
+application = create_app()
 
-@app.errorhandler(404)
+@application.errorhandler(404)
 def handle_404(e):
     return redirect(HOME_URL), 302
 
-@app.errorhandler(405)
+@application.errorhandler(405)
 def handle_404(e):
     return redirect(HOME_URL), 302
    
-@app.route('/')
+@application.route('/')
 def index():
     """Home route for the Cleaning App."""
     
     return render_template("index.html")
     
+@application.route("/test")
+def test_route():
+    return "hello world"
+    
 
 if __name__ == "__main__":
-    app.run()
+    application.run()

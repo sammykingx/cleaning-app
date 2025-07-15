@@ -8,10 +8,6 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-COLOR_RESET = "\033[0m"
-COLOR_GREEN = "\033[92m"
-COLOR_BLUE = "\033[94m"
-
 
 def create_app() -> Flask:
     """Create and configure the Flask application."""
@@ -26,7 +22,7 @@ def create_app() -> Flask:
         
     app.config.from_object(config_class)
     print(
-        f"{COLOR_BLUE}Configured Flask app with config: {config_class.__name__}{COLOR_RESET}"
+        f"Configured Flask app with config: {config_class.__name__}"
     )
     app.url_map.strict_slashes = False
     if not app.config.get("SECRET_KEY"):
@@ -44,17 +40,10 @@ def create_app() -> Flask:
     csrf.init_app(app)
     mail.init_app(app)
     print(
-        f"{COLOR_GREEN}Extensions initialized successfully.{COLOR_RESET}"
+        f"Extensions initialized successfully."
     )
 
     # register blueprints
     app.register_blueprint(bp)
-
-    with app.app_context():
-        # create database tables
-        db.create_all()
-        # print(
-        #     f"{COLOR_GREEN}Database tables created successfully.{COLOR_RESET}"
-        # )
 
     return app

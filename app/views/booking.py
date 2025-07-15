@@ -40,7 +40,7 @@ Returns:
      _type_: _description_
 """
 
-@bp.route("/booking", methods=["GET","POST"])
+@bp.route("/booking", methods=["POST"])
 def booking():
     """place booking"""
     
@@ -65,7 +65,7 @@ def booking():
             'status': 'success',
             'message': 'Booking saved',
             'id': booked_service.booking_id, # compulsory
-            'data': booked_service.to_dict() if booked_service else None,
+            # 'data': booked_service.to_dict() if booked_service else None,
         }
     )
 
@@ -127,7 +127,7 @@ def get_availability():
 
     # Build availability
     availability = {}
-    for i in range(7):
+    for i in range(8):
         day = today + timedelta(days=i)
         date_str = day.strftime("%Y-%m-%d")
         booked_hours = booked_slots.get(date_str, set())

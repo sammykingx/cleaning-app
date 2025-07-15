@@ -7,11 +7,11 @@ load_dotenv()
 
 DB_URL = URL.create(
     drivername="mysql+pymysql",
-    username="root",#os.getenv("DB_USER", "root"),
-    password="",#os.getenv("DB_PWD", ""),
-    host="localhost",
+    username=os.getenv("DB_USER", "root"),
+    password="PqM{tkt!$Hz,",#os.getenv("DB_PWD"),
+    host="127.0.0.1",
     port=3306,
-    database="cleaning-app",#os.getenv("DB_NAME", "cleaning-app")
+    database="divgglin_kleenspotles_app"#os.getenv("DB_NAME")
 )
 
 class Config:

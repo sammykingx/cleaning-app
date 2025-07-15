@@ -2,25 +2,59 @@
 from sqlalchemy import create_engine, URL
 from sqlalchemy.orm import sessionmaker
 from email.message import EmailMessage
-from app.models.email import EmailLogs
+from sqlalchemy.orm import declarative_base
+from sqlalchemy.dialects.mysql import LONGTEXT
 from contextlib import contextmanager
-from app.constants import SUPPORT_EMAIL, ADMINS as admin_list
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Boolean,
+    DateTime,
+    func
+)
 import smtplib
 
 
 DB_URL = URL.create(
     drivername="mysql+pymysql",
-    username="root",#"divgglin_app-admin",
-    password="", #"PqM{tkt!$Hz,",
+    username="divgglin_app-admin",
+    password="PqM{tkt!$Hz,",
     host="127.0.0.1",
     port=3306,
-    database="cleaning-app",#"divgglin_kleenspotles_app"
+    database="divgglin_kleenspotles_app"
 )
 
 MAIL_SERVER = "divgm.com"
 MAIL_PORT = 465
 MAIL_USERNAME = "booking-portal@divgm.com"
 MAIL_PASSWORD = "af1LTpr#ty.#"
+
+ADMINS = [
+    "contact@kleenspotless.com",
+    "kleenspotless50@gmail.com",
+]
+
+SUPPORT_EMAIL = "contact@kleenspotless.com"
+
+Base = declarative_base()
+class EmailLogs(Base):
+    __tablename__ = "email_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    booking_id = Column(String(20), index=True, unique=True, nullable=False)
+    client_email = Column(String(30), nullable=False)
+    subject = Column(String(35), nullable=False)
+    message = Column(LONGTEXT, nullable=False)
+    is_sent = Column(Boolean, default=False)
+    sent_at = Column(DateTime, server_onupdate=func.now())
+
+    def __str__(self):
+        return (
+            f"Booking ID: {self.booking_id}, "
+            f"Client Email: {self.client_email}, "
+            f"is_sent: {self.is_sent}"
+        )
 
 @contextmanager
 def get_db_session():
@@ -45,7 +79,7 @@ def send_email(sender, receipient, subject, msg_body) -> bool:
     msg["to"] = receipient
     msg["subject"] = subject
     msg["reply-to"] = SUPPORT_EMAIL
-    msg["cc"] = ",".join(admin_list)
+    msg["cc"] = ",".join(ADMINS)
     msg.add_alternative(msg_body, subtype="html")
     
     try:
@@ -54,7 +88,7 @@ def send_email(sender, receipient, subject, msg_body) -> bool:
 
                 mail_server.login(MAIL_USERNAME, MAIL_PASSWORD)
 
-                mail_server.send_message(msg)
+                resp = mail_server.send_message(msg)
 
             except smtplib.SMTPConnectError:
                 print(
@@ -78,7 +112,8 @@ def send_email(sender, receipient, subject, msg_body) -> bool:
     except Exception as err:
         print(f"{err}, check back later")
         return False
-    
+        
+    print(f"Email Was Sent to clinet, Response: {resp}")
     return True
 
 def process_unsent_mail():
@@ -90,7 +125,7 @@ def process_unsent_mail():
                 print(record)
                 resp = send_email(
                     MAIL_USERNAME,
-                    "iyebhorasamuel@gmail.com",# record.client_email,
+                    record.client_email,
                     record.subject, 
                     record.message,
                 )

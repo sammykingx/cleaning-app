@@ -22,6 +22,7 @@ class BookingService:
     def place_booking(self):
         """Run the entire booking flow."""
         self.save_booking()
+        print("calling load message")
         email_msg = self.load_email_message()
         self.update_email_log(email_msg)
         # self.notify(email_msg)
@@ -43,7 +44,8 @@ class BookingService:
             )
             db.session.add(self.booking)
             db.session.commit()
-         
+
+        print("Booking record saved") 
         return self.booking
         
     def create_or_get_client(self):
@@ -58,7 +60,7 @@ class BookingService:
                 self.client = Clients(**self.client_info)
                 db.session.add(self.client)
                 db.session.commit()
-
+        print("Client Record saved")
         return self.client
     
     def save_client_address(self):
@@ -72,35 +74,42 @@ class BookingService:
         db.session.add(self.client_address)
         db.session.commit()
 
+        print("Client Address Saved")
         return self.client_address
     
     def load_email_message(self) -> str:
         clean_date, clean_time = format_datetime(self.booking_info.get("cleaning_date"))
         cleaning_addons = json.loads(self.booking.add_ons)
         self.email_subj = "Booking Confirmation - Kleenspotless.com"
-        msg = render_template(
-            "email/confirmed-booking.html",
-            f_name=self.client.first_name,
-            date=clean_date,
-            time=clean_time,
-            phone=self.client.phone,
-            booking_id=self.booking.booking_id,
-            category=self.booking.category,
-            service=self.booking.service,
-            notes=self.booking.notes,
-            street=self.client_address.street,
-            city=self.client_address.city,
-            state=self.client_address.state,
-            bedrooms=self.booking.max_bedroom,
-            bathrooms=self.booking.max_bathroom,
-            extra_bed=self.booking.extra_bedroom,
-            extra_bath=self.booking.extra_bathroom,
-            s_total=self.booking.price - (self.booking.price * 0.15),
-            tax=self.booking.price * 0.15,
-            price=self.booking.price,
-            addons=cleaning_addons,
-        )
+        try:
+            print("Loading email message")
+            msg = render_template(
+                "email/confirmed-booking.html",
+                f_name=self.client.first_name,
+                date=clean_date,
+                time=clean_time,
+                phone=self.client.phone,
+                booking_id=self.booking.booking_id,
+                category=self.booking.category,
+                service=self.booking.service,
+                notes=self.booking.notes,
+                street=self.client_address.street,
+                city=self.client_address.city,
+                state=self.client_address.state,
+                bedrooms=self.booking.max_bedroom,
+                bathrooms=self.booking.max_bathroom,
+                extra_bed=self.booking.extra_bedroom,
+                extra_bath=self.booking.extra_bathroom,
+                s_total=self.booking.price - (self.booking.price * 0.15),
+                tax=self.booking.price * 0.15,
+                price=self.booking.price,
+                addons=cleaning_addons,
+            )
+            
+        except Exception as err:
+            print(err)
 
+        print("Email Message ready")
         return msg
     
     def notify(self, email_msg):
@@ -127,6 +136,7 @@ class BookingService:
         db.session.add(email_record)
         db.session.commit()
 
+        print("Email Record saved to DB")
         return True
        
        
