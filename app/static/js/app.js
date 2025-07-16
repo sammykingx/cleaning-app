@@ -75,6 +75,7 @@ const addonServicePrices = [
   { name: "Dry Cleaning", unitCost: 20, count: 1 },
   { name: "Org. Services", unitCost: 70, count: 1 },
   { name: "Pick-and-Drop", unitCost: 30, count: 1 },
+  { name: "Ironing", unitCost: 20, count: 1 },
 ];
 
 // Calculate base price
@@ -795,22 +796,26 @@ document.addEventListener("DOMContentLoaded", function () {
 // ------------ EVENT LISTENERS ------------------
 // validation and updating clothing input
 document.getElementById("clothingNum").addEventListener("input", (event) => {
-  let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 1;
-  value = Math.min(Math.max(parseInt(value, 10), 1), 30);
+  let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 0;
+  value = Math.min(Math.max(parseInt(value, 10), 0), 50);
   event.target.value = value;
 
-  const addOn = bookingData.addOns.find((a) => a.name === "Dry Cleaning");
-  if (addOn) {
-    addOn.count = value;
-    updateAddOnSummary();
-    updateTotalPrice();
-  }
+  const targetNames = ["Dry Cleaning", "Ironing"];
+
+  bookingData.addOns.forEach((addOn) => {
+    if (targetNames.includes(addOn.name)) {
+      addOn.count = value;
+    }
+  });
+  updateAddOnSummary();
+  updateTotalPrice();
 });
 
 // validation and updating interior window cleaning input
 document.getElementById("intWindowNum").addEventListener("input", (event) => {
-  let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 1;
-  value = Math.min(Math.max(parseInt(value, 10), 1), 30);
+  let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 0;
+  value = Math.min(Math.max(parseInt(value, 10), 0), 50);
+
   event.target.value = value;
 
   const addOn = bookingData.addOns.find((a) => a.name === "Blinds Dusting");
@@ -823,8 +828,8 @@ document.getElementById("intWindowNum").addEventListener("input", (event) => {
 
 // validation and updating interior window cleaning input
 document.getElementById("extWindowNum").addEventListener("input", (event) => {
-  let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 1;
-  value = Math.min(Math.max(parseInt(value, 10), 1), 30);
+  let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 0;
+  value = Math.min(Math.max(parseInt(value, 10), 0), 50);
   event.target.value = value;
 
   const addOn = bookingData.addOns.find(

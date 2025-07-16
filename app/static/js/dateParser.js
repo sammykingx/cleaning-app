@@ -100,7 +100,8 @@ function formatFriendlyRange(dateStr, time24) {
 
   const { hour12: endHour12, period: endPeriod } = to12Hour(endHour);
 
-  return `${dayName} ${dateNum}${ordinal}, ${startHour12}${startPeriod} to ${endHour12}${endPeriod}`;
+  // return `${dayName} ${dateNum}${ordinal}, ${startHour12}${startPeriod} to ${endHour12}${endPeriod}`;
+  return `${dayName} ${dateNum}${ordinal}, ${startHour12}${startPeriod}`;
 }
 
 function getEndHour(startHour) {
