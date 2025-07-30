@@ -197,28 +197,29 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                     <h2 class="text-2xl font-bold text-blue-900">Cleaning Frequency</h2>
+                    <!--<p class="text-xs text-gray-400">Save time by scheduling a recurring clean</p>-->
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <button onclick="selectFrequency('weekly')" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                    <button data-frequency="weekly" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
                         <div class="text-center">
-                            <h3 class="font-bold text-lg text-blue-900 mb-2">Dry Cleaning</h3>
-                            <p class="text-sm text-gray-400 mb-2">(per clothing)</p>
-                            <p id="weeklyPrice" class="font-bold text-blue-900">$20</p>
+                            <h3 class="font-bold text-lg text-blue-900 mb-2">Weekly Clean</h3>
+                            <p class="text-sm text-gray-400 mb-2">twice weekly</p>
+                            <!--<p id="weeklyPrice" class="font-bold text-blue-900">$20</p>-->
                         </div>
                     </button>
-                    <button onclick="selectFrequency('bi-weekly')" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                    <button data-frequency="bi-weekly" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
                         <div class="text-center">
-                            <h3 class="font-bold text-blue-900 text-lg mb-2">Pick Up & Drop Off</h3>
-                            <p class="text-sm text-gray-400 mb-2">Before: <s>$45</s></p>
-                            <p id="biWeeklyPrice" class="font-bold text-blue-900">$30</p>
+                            <h3 class="font-bold text-blue-900 text-lg mb-2">Bi-Weekly</h3>
+                            <p class="text-sm text-gray-400 mb-2">4 cleans/2 wks</p>
+                            <!--<p id="biWeeklyPrice" class="font-bold text-blue-900">$30</p>-->
                         </div>
                     </button>
-                    <button onclick="selectFrequency('monthly')" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+                    <button data-frequency="monthly" class="frequency-btn p-6 rounded-lg border-2 border-gray-200 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
                         <div class="text-center">
                             <h3 class="font-bold text-blue-900 text-lg mb-2">Monthly</h3>
-                            <p class="text-sm text-gray-400 mb-2">Save 20%</p>
-                            <p id="monthlyPrice" class="font-bold text-blue-900">$72</p>
+                            <p class="text-sm text-gray-400 mb-2">8 cleans/month</p>
+                            <!--<p id="monthlyPrice" class="font-bold text-blue-900">$72</p>-->
                         </div>
                     </button>
                 </div>

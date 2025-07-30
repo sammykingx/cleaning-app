@@ -8,6 +8,7 @@ let bookingData = {
   addOns: [],
   preferredDay: "",
   preferredTime: "",
+  frequency: "",
   personalInfo: {
     firstName: "",
     lastName: "",
@@ -141,20 +142,41 @@ function updateTotalPrice() {
     return sum + addon.count * addon.unitCost;
   }, 0);
 
-  const subtotal = Math.round(
+  let subtotal = Math.round(
     basePrice + addOnPrice + extraBathCost + extraBedCost
   );
+
+  switch (bookingData.frequency) {
+    case "weekly":
+      subtotal *= 2;
+      break;
+    case "bi-weekly":
+      subtotal *= 4;
+      break;
+    case "monthly":
+      subtotal *= 8;
+      break;
+    default:
+      // one-off booking
+      subtotal *= 1;
+      break;
+  }
 
   const tax = subtotal * 0.15;
   const totalPrice = tax + subtotal;
   bookingData.price = totalPrice;
 
-  document.getElementById("basePrice").textContent = "$" + basePrice;
-  document.getElementById("totalPrice").textContent = "$" + totalPrice;
-  document.getElementById("finalPrice").textContent = totalPrice;
-  document.getElementById("finalPrice").textContent = totalPrice;
-  document.getElementById("subtotal").textContent = "$" + subtotal;
-  document.getElementById("tax").textContent = "$" + tax;
+  document.getElementById("basePrice").textContent =
+    "$" + basePrice.toLocaleString();
+  document.getElementById("totalPrice").textContent =
+    "$" + totalPrice.toLocaleString();
+  document.getElementById("finalPrice").textContent =
+    totalPrice.toLocaleString();
+  document.getElementById("finalPrice").textContent =
+    totalPrice.toLocaleString();
+  document.getElementById("subtotal").textContent =
+    "$" + subtotal.toLocaleString();
+  document.getElementById("tax").textContent = "$" + tax.toLocaleString();
 }
 
 // Update progress bar
@@ -296,6 +318,40 @@ function extraBathrooms(num) {
     "displayExtraBath"
   ).textContent = `Extra Bath: ${num}`;
   updateTotalPrice();
+}
+
+function selectFrequency(frequency, event) {
+  bookingData.frequency = frequency;
+  console.log("selected frequency: ", frequency);
+
+  // Update UI
+  document.querySelectorAll(".frequency-btn").forEach((btn) => {
+    btn.classList.remove("border-primary");
+    btn.classList.add("border-gray-200");
+  });
+  event.target.closest(".frequency-btn").classList.add("border-primary");
+  event.target.closest(".frequency-btn").classList.remove("border-gray-200");
+
+  // Update total price based on frequency
+  // switch (frequency) {
+  //   case "weekly":
+  //     totalPrice = 20;
+  //     break;
+  //   case "bi-weekly":
+  //     totalPrice = 30;
+  //     break;
+  //   case "monthly":
+  //     totalPrice = 72;
+  //     break;
+  //   default:
+  //     totalPrice = getBasePrice();
+  //     break;
+  // }
+
+  // bookingData.price = totalPrice;
+
+  updateTotalPrice();
+  updateNextButton();
 }
 
 //Toggle Addon Services
@@ -553,12 +609,10 @@ function nextStep() {
         bookingData.category === "Commercial Cleaning" ||
         bookingData.category === "Laundry"
       ) {
-        currentStep = 4;
+        currentStep = 3;
       } else {
         currentStep++;
       }
-    } else if (currentStep === 2) {
-      currentStep = 4;
     } else {
       currentStep++;
     }
@@ -588,15 +642,10 @@ function prevStep() {
     document.getElementById(`step${currentStep}`).classList.remove("active");
 
     if (
-      currentStep === 4 &&
+      currentStep === 3 &&
       ["Commercial Cleaning", "Laundry"].includes(bookingData.category)
     ) {
       currentStep = 1;
-    } else if (
-      currentStep === 4 &&
-      bookingData.category === "Residential Cleaning"
-    ) {
-      currentStep = 2; // takes the user back bedroom selection
     } else {
       currentStep--;
     }
@@ -794,6 +843,13 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // ------------ EVENT LISTENERS ------------------
+document.querySelectorAll(".frequency-btn").forEach((btn) => {
+  btn.addEventListener("click", (event) => {
+    const freq = btn.dataset.frequency;
+    selectFrequency(freq, event);
+  });
+});
+
 // validation and updating clothing input
 document.getElementById("clothingNum").addEventListener("input", (event) => {
   let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 0;
@@ -810,6 +866,8 @@ document.getElementById("clothingNum").addEventListener("input", (event) => {
   updateAddOnSummary();
   updateTotalPrice();
 });
+
+
 
 // validation and updating interior window cleaning input
 document.getElementById("intWindowNum").addEventListener("input", (event) => {
