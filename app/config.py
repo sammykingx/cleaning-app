@@ -8,10 +8,10 @@ load_dotenv()
 DB_URL = URL.create(
     drivername="mysql+pymysql",
     username=os.getenv("DB_USER", "root"),
-    password="PqM{tkt!$Hz,",#os.getenv("DB_PWD"),
+    password=os.getenv("DB_PWD"),
     host="127.0.0.1",
     port=3306,
-    database="divgglin_kleenspotles_app"#os.getenv("DB_NAME")
+    database=os.getenv("DB_NAME")
 )
 
 class Config:

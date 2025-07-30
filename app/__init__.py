@@ -44,6 +44,13 @@ def create_app() -> Flask:
     )
 
     # register blueprints
+    with app.app_context():
+        # create database tables
+        print("Inside DB Context")
+        db.create_all()
+        print(
+            f"Database tables created successfully."
+        )
     app.register_blueprint(bp)
 
     return app
