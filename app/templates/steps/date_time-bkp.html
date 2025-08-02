@@ -1,0 +1,93 @@
+<div id="step5" class="step p-8 animate-slideIn">
+    <div class="flex items-center space-x-3 mb-6">
+        <svg class="w-6 h-6 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <h2 class="text-2xl font-bold text-blue-900">Select Date & Time</h2>
+    </div>
+
+                <div class="space-y-8">
+                    <!-- Preferred Day Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-blue-800 mb-4">Preferred Day of the Week</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+                            <button onclick="selectDay('Monday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm text-blue-900">Mon</div>
+                                <div class="text-xs text-blue-900 mt-1">Monday</div>
+                            </button>
+                            <button onclick="selectDay('Tuesday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm text-blue-900">Tue</div>
+                                <div class="text-xs text-blue-900 mt-1">Tuesday</div>
+                            </button>
+                            <button onclick="selectDay('Wednesday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm text-blue-900">Wed</div>
+                                <div class="text-xs text-blue-900 mt-1">Wednesday</div>
+                            </button>
+                            <button onclick="selectDay('Thursday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm text-blue-900">Thu</div>
+                                <div class="text-xs text-blue-900 mt-1">Thursday</div>
+                            </button>
+                            <button onclick="selectDay('Friday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm text-blue-900">Fri</div>
+                                <div class="text-xs text-blue-900 mt-1">Friday</div>
+                            </button>
+                            <button onclick="selectDay('Saturday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm text-blue-900">Sat</div>
+                                <div class="text-xs text-blue-900 mt-1">Saturday</div>
+                            </button>
+                            <button onclick="selectDay('Sunday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
+                                <div class="font-medium text-sm text-blue-900">Sun</div>
+                                <div class="text-xs text-blue-900 mt-1">Sunday</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Time Slot Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-blue-900 mb-4">Preferred Time Slot</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <button onclick="selectTime('8am')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="text-blue-900 font-medium">8:00 AM</div>
+                                <!--<div class="text-xs text-gray-500 mt-1">to 11:00 AM</div>-->
+                            </button>
+                            <button onclick="selectTime('11am')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="text-blue-900 font-medium">11:00 AM</div>
+                                <!--<div class="text-xs text-gray-500 mt-1">to 1:00 PM</div>-->
+                            </button>
+                            <button onclick="selectTime('1pm')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="text-blue-900 font-medium">1:00 PM</div>
+                                <!--<div class="text-xs text-gray-500 mt-1">to 3:00 PM</div>-->
+                            </button>
+                            <button onclick="selectTime('3pm')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="text-blue-900 font-medium">3:00 PM</div>
+                                <!--<div class="text-xs text-gray-500 mt-1">to 6:00 PM</div>-->
+                            </button>
+                            <!-- <button onclick="selectTime('4:00 PM - 6:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="font-medium">4:00 PM</div>
+                                <div class="text-xs text-gray-500 mt-1">to 6:00 PM</div>
+                            </button>
+                            <button onclick="selectTime('6:00 PM - 8:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
+                                <div class="font-medium">6:00 PM</div>
+                                <div class="text-xs text-gray-500 mt-1">to 8:00 PM</div>
+                            </button>
+                        -->
+                        </div>
+                    </div>
+
+                    <!-- Selected Schedule Summary -->
+                    <div id="scheduleSummary" class="hidden p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <div>
+                                <div class="font-medium text-green-800">Scheduled for:</div>
+                                <div class="text-sm text-green-600">
+                                    <!--<span id="selectedDay">-</span> at <span id="selectedTime">-</span>-->
+                                    <span id="selectedTime"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

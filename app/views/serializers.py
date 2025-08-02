@@ -2,13 +2,11 @@
 from datetime import datetime
 
 def serialize_booking(booking_data:dict):
-    date_parts = [
-      booking_data.get("preferredDay"),
-      " ",
-      booking_data.get("preferredTime") 
-    ]
     
-    cleaning_date_obj = datetime.strptime("".join(date_parts),"%d/%m/%Y %H:%M")
+    date_str = booking_data.get("preferredDay")
+    time_str = booking_data.get("preferredTime")
+
+    cleaning_date_obj = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
     
     serialized_data = {
         "service": {"name": booking_data.get("service")},
@@ -27,7 +25,8 @@ def serialize_booking(booking_data:dict):
             "state": booking_data["address"].get("state"),
         },
         "price": booking_data.get("price"),
-        "add_ons": booking_data.get("addOns", [])
+        "add_ons": booking_data.get("addOns", []),
+        "frequency": booking_data.get("frequency", "One-time"),
     }
     
     if booking_data.get("category").lower() == "residential cleaning":

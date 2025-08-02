@@ -60,6 +60,7 @@ class BookingService:
                 self.client = Clients(**self.client_info)
                 db.session.add(self.client)
                 db.session.commit()
+        
         print("Client Record saved")
         return self.client
     

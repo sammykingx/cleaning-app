@@ -8,7 +8,7 @@ let bookingData = {
   addOns: [],
   preferredDay: "",
   preferredTime: "",
-  frequency: "",
+  frequency: "one-off",
   personalInfo: {
     firstName: "",
     lastName: "",
@@ -322,7 +322,6 @@ function extraBathrooms(num) {
 
 function selectFrequency(frequency, event) {
   bookingData.frequency = frequency;
-  console.log("selected frequency: ", frequency);
 
   // Update UI
   document.querySelectorAll(".frequency-btn").forEach((btn) => {
@@ -331,24 +330,6 @@ function selectFrequency(frequency, event) {
   });
   event.target.closest(".frequency-btn").classList.add("border-primary");
   event.target.closest(".frequency-btn").classList.remove("border-gray-200");
-
-  // Update total price based on frequency
-  // switch (frequency) {
-  //   case "weekly":
-  //     totalPrice = 20;
-  //     break;
-  //   case "bi-weekly":
-  //     totalPrice = 30;
-  //     break;
-  //   case "monthly":
-  //     totalPrice = 72;
-  //     break;
-  //   default:
-  //     totalPrice = getBasePrice();
-  //     break;
-  // }
-
-  // bookingData.price = totalPrice;
 
   updateTotalPrice();
   updateNextButton();
@@ -399,84 +380,6 @@ function updateAddOnSummary() {
   }
 }
 
-// Select day
-function selectDay(day) {
-  // Prevent selection if disabled
-  if (event.target.closest("button").disabled) return;
-  desiredDay = day;
-  desiredTime = null;
-
-  // Update UI
-  document.querySelectorAll(".day-btn").forEach((btn) => {
-    btn.classList.remove("border-primary", "bg-green-50");
-    btn.classList.add("border-gray-200");
-  });
-  event.target.classList.add("border-primary", "bg-green-50");
-  event.target.classList.remove("border-gray-200");
-
-  document.querySelectorAll(".time-btn").forEach((btn) => {
-    btn.classList.remove("border-primary", "bg-green-50");
-    btn.classList.add("border-gray-200");
-  });
-  event.target.classList.add("border-primary", "bg-green-50");
-  event.target.classList.remove("border-gray-200");
-
-  updateTimeSlotsUI(day);
-  updateScheduleSummary();
-  updateNextButton();
-}
-
-// Select time
-function selectTime(time) {
-  // Prevent selection if disabled
-  if (event.target.closest("button").disabled) return;
-
-  desiredTime = time;
-
-  // Update UI
-  document.querySelectorAll(".time-btn").forEach((btn) => {
-    btn.classList.remove("border-primary", "bg-green-50");
-    btn.classList.add("border-gray-200");
-  });
-  event.target.classList.add("border-primary", "bg-green-50");
-  event.target.classList.remove("border-gray-200");
-
-  updateScheduleSummary();
-  updateNextButton();
-}
-
-// Update schedule summary
-function updateScheduleSummary() {
-  let cleaningDate;
-
-  if (
-    typeof desiredDay === "string" &&
-    desiredDay.trim() !== "" &&
-    typeof desiredTime === "string" &&
-    desiredTime.trim() !== ""
-  ) {
-    cleaningDate = getCleaningDate(desiredDay, desiredTime);
-    bookingData.preferredDay = cleaningDate.dateStr;
-    bookingData.preferredTime = cleaningDate.time24;
-  }
-
-  const summary = document.getElementById("scheduleSummary");
-  //const daySpan = document.getElementById("selectedDay");
-  const timeSpan = document.getElementById("selectedTime");
-
-  // if (bookingData.preferredDay && bookingData.preferredTime) {
-  if (desiredDay && desiredTime) {
-    //daySpan.textContent = bookingData.preferredDay;
-    timeSpan.textContent = formatFriendlyRange(
-      cleaningDate.dateStr,
-      cleaningDate.time24
-    );
-    summary.classList.remove("hidden");
-  } else {
-    summary.classList.add("hidden");
-  }
-}
-
 // Check if can proceed
 function canProceed() {
   switch (currentStep) {
@@ -485,58 +388,83 @@ function canProceed() {
     case 2:
       return bookingData.bedrooms && bookingData.bathrooms;
     case 3:
-      return bookingData.frequency;
+      return true;
+    // return bookingData.frequency;
     case 4:
       return true; // Add-ons are optional
     case 5:
       return bookingData.preferredDay && bookingData.preferredTime;
     case 6:
-      return validateContactFields();
+      const p = bookingData.personalInfo;
+      const a = bookingData.address;
+
+      return (
+        p.firstName &&
+        p.lastName &&
+        p.email &&
+        p.phone &&
+        a.street &&
+        a.city &&
+        a.state
+      );
+
     default:
       return false;
   }
 }
 
+// function validateContactFields() {
+//   const firstName = document.getElementById("firstName").value.trim();
+//   const lastName = document.getElementById("lastName").value.trim();
+//   const street = document.getElementById("street").value.trim();
+//   const city = document.getElementById("city").value.trim();
+//   const state = document.getElementById("state").value.trim();
+//   //const country = document.getElementById("country").value.trim();
+
+//   let isValid = true;
+
+//   if (!isValidEmail(email)) {
+//     // clears email input
+//     isValid = false;
+//   }
+
+//   if (!isValidPhone(phone)) {
+//     isValid = false;
+//   }
+
+//   if (!isValidName(firstName)) {
+//     isValid = false;
+//   }
+
+//   if (!isValidName(lastName)) {
+//     isValid = false;
+//   }
+
+//   return (
+//     isValid &&
+//     firstName &&
+//     lastName &&
+//     email &&
+//     phone &&
+//     street &&
+//     city &&
+//     state
+//     //country
+//   );
+// }
+
 function validateContactFields() {
-  const firstName = document.getElementById("firstName").value.trim();
-  const lastName = document.getElementById("lastName").value.trim();
-  const street = document.getElementById("street").value.trim();
-  const city = document.getElementById("city").value.trim();
-  const state = document.getElementById("state").value.trim();
-  //const country = document.getElementById("country").value.trim();
-
-  const email = emailInput.value.trim();
-  const phone = phoneInput.value.trim();
-
-  let isValid = true;
-
-  if (!isValidEmail(email)) {
-    // clears email input
-    isValid = false;
-  }
-
-  if (!isValidPhone(phone)) {
-    isValid = false;
-  }
-
-  if (!isValidName(firstName)) {
-    isValid = false;
-  }
-
-  if (!isValidName(lastName)) {
-    isValid = false;
-  }
+  const p = bookingData.personalInfo;
+  const a = bookingData.address;
 
   return (
-    isValid &&
-    firstName &&
-    lastName &&
-    email &&
-    phone &&
-    street &&
-    city &&
-    state
-    //country
+    isValidName(p.firstName) &&
+    isValidName(p.lastName) &&
+    isValidEmail(p.email) &&
+    isValidPhone(p.phone) &&
+    a.street &&
+    a.city &&
+    a.state
   );
 }
 
@@ -674,24 +602,25 @@ function handleBooking() {
   if (!canProceed()) return;
 
   // Collect personal information
-  bookingData.personalInfo = {
-    firstName: document.getElementById("firstName").value,
-    lastName: document.getElementById("lastName").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-  };
+  // bookingData.personalInfo = {
+  //   firstName: document.getElementById("firstName").value,
+  //   lastName: document.getElementById("lastName").value,
+  //   email: document.getElementById("email").value,
+  //   phone: document.getElementById("phone").value,
+  // };
 
-  bookingData.address = {
-    street: document.getElementById("street").value,
-    city: document.getElementById("city").value,
-    state: document.getElementById("state").value,
-    country: "canada",
-  };
+  // bookingData.address = {
+  //   street: document.getElementById("street").value,
+  //   city: document.getElementById("city").value,
+  //   state: document.getElementById("state").value,
+  //   country: "canada",
+  // };
 
   bookingData.additionalInfo = document.getElementById("additionalInfo").value;
   const token =
     document.head.querySelector('meta[name="csrf-token"]')?.content || "";
 
+  console.log("Booking Data:", bookingData);
   fetch("/booking", {
     method: "POST",
     headers: {
@@ -728,7 +657,6 @@ function handleBooking() {
     })
     .then((data) => {
       // get fresh availability
-      fetchAvailability();
 
       // Show booking complete modal
       document.getElementById("confirmedTotal").textContent =
@@ -738,12 +666,15 @@ function handleBooking() {
       document.getElementById("bookedService").textContent =
         bookingData.service;
       document.getElementById("confirmedSchedule").textContent =
-        formatFriendlyRange(
-          bookingData.preferredDay,
-          bookingData.preferredTime
-        );
+        bookingData.scheduleText;
       //`${bookingData.preferredDay} at ${bookingData.preferredTime}`;
       document.getElementById("bookingComplete").classList.remove("hidden");
+
+      // reload the page after 3 seconds
+      setTimeout(() => {
+        resetBooking();
+        location.href = location.href;
+      }, 4000);
     })
     .catch((error) => {
       //console.error("Error during booking:", error);
@@ -842,14 +773,6 @@ document.addEventListener("DOMContentLoaded", function () {
   updateNextButton();
 });
 
-// ------------ EVENT LISTENERS ------------------
-document.querySelectorAll(".frequency-btn").forEach((btn) => {
-  btn.addEventListener("click", (event) => {
-    const freq = btn.dataset.frequency;
-    selectFrequency(freq, event);
-  });
-});
-
 // validation and updating clothing input
 document.getElementById("clothingNum").addEventListener("input", (event) => {
   let value = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "") || 0;
@@ -866,8 +789,6 @@ document.getElementById("clothingNum").addEventListener("input", (event) => {
   updateAddOnSummary();
   updateTotalPrice();
 });
-
-
 
 // validation and updating interior window cleaning input
 document.getElementById("intWindowNum").addEventListener("input", (event) => {

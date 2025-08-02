@@ -12,6 +12,7 @@ async function fetchAvailability() {
             },
         });
         availabilityData = await res.json();
+        console.log("Availability data loaded: ", availabilityData);
         updateUnavailableUI();
     } catch (error) {
         console.error("Failed to load availability:", error);
@@ -82,4 +83,4 @@ function updateTimeSlotsUI(day) {
 }
 
 // Call this on page load
-document.addEventListener("DOMContentLoaded", fetchAvailability);
+// document.addEventListener("DOMContentLoaded", fetchAvailability);

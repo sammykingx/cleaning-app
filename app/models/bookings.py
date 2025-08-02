@@ -3,11 +3,6 @@ from sqlalchemy import func
 from faker import Faker
 import json
 
-COLOR_RESET = "\033[0m"
-COLOR_GREEN = "\033[92m"
-COLOR_BLUE = "\033[94m"
-
-
 class Bookings(db.Model):
     """Model for bookings."""
 
@@ -20,6 +15,7 @@ class Bookings(db.Model):
     )
     service = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(100), nullable=False)
+    frequency = db.Column(db.String(20), default="one-time")
     max_bedroom = db.Column(db.Integer, default=0)
     max_bathroom = db.Column(db.Integer, default=0)
     extra_bedroom = db.Column(db.Integer, default=0)
@@ -100,6 +96,4 @@ def create_demo_bookings():
     ]
     db.session.bulk_save_objects(demo_bookings)
     db.session.commit()
-    print(
-        f"{COLOR_BLUE}Demo bookings created successfully.{COLOR_RESET}"
-    )
+    

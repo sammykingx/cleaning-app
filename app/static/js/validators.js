@@ -1,4 +1,5 @@
 // Validates Contact Infomation
+
 const emailInput = document.getElementById("email");
 const phoneInput = document.getElementById("phone");
 const emailError = document.getElementById("email-error");
@@ -9,24 +10,24 @@ const lastNameInput = document.getElementById("lastName");
 const firstNameErr = document.getElementById("firstName-error");
 const lastNameErr = document.getElementById("lastName-error");
 
-function isValidEmail(email) {
+export function isValidEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
 }
 
-function isValidPhone(phone) {
+export function isValidPhone(phone) {
   const cleaned = phone.replace(/[\s\-().]/g, "");
   const re = /^(?:\+1|1)?[2-9]\d{2}[2-9]\d{6}$/;
   return re.test(cleaned);
 }
 
-function isValidName(name) {
+export function isValidName(name) {
   // Only letters, at least 3 characters
   const re = /^[A-Za-z]{3,}$/;
   return re.test(name);
 }
 // Helper to debounce input events
-function debounce(fn, delay) {
+export function debounce(fn, delay) {
   let timeout;
   return (...args) => {
     clearTimeout(timeout);
@@ -35,46 +36,48 @@ function debounce(fn, delay) {
 }
 
 // Real-time validation handlers
-function validateEmail() {
+export function validateEmail() {
   let email = emailInput.value.trim();
-  if (email && !isValidEmail(email)) {
+  const isValid = isValidEmail(email);
+
+  if (email && !isValid) {
     emailError.textContent = "Invalid email format.";
   } else {
     emailError.textContent = "";
   }
+  return isValid;
 }
 
-function validatePhone() {
+export function validatePhone() {
   const phone = phoneInput.value.trim();
-  if (phone && !isValidPhone(phone)) {
+  const isValid = isValidPhone(phone);
+  if (phone && !isValid) {
     phoneError.textContent = "Invalid phone number.";
     phoneInput.textContent = "";
   } else {
     phoneError.textContent = "";
   }
+  return isValid;
 }
 
-function validateName() {
+export function validateFirstName() {
   const firstName = firstNameInput.value.trim();
-  const lastName = lastNameInput.value.trim();
-  if (firstName && !isValidName(firstName)) {
+  const isValid = isValidName(firstName);
+  if (firstName && !isValid) {
     firstNameErr.textContent = "Invalid first name";
   } else {
     firstNameErr.textContent = "";
   }
+  return isValid;
+}
 
-  if (lastName && !isValidName(lastName)) {
+export function validateLastName() {
+  const lastName = lastNameInput.value.trim();
+  const isValid = isValidName(lastName);
+  if (lastName && !isValid) {
     lastNameErr.textContent = "Invalid last name";
   } else {
-    lastName.textContent = "";
+    lastNameErr.textContent = "";
   }
+  return isValid;
 }
-// Add listeners (debounced input + blur for final check)
-emailInput.addEventListener("input", debounce(validateEmail, 300));
-emailInput.addEventListener("blur", validateEmail);
-
-phoneInput.addEventListener("input", debounce(validatePhone, 300));
-phoneInput.addEventListener("blur", validatePhone);
-
-//firstNameInput.addEventListener("input", debounce(validateName, 300));
-// lastNameInput.addEventListener("input", debounce(validateName, 300));

@@ -10,12 +10,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 
 
-TIME_SLOTS = [
-    ("8:00 AM", 8),
-    ("11:00 AM", 11),
-    ("1:00 PM", 13),
-    ("3:00 PM", 15),
-]
+TIME_SLOTS = ["8:00", "11:00", "13:00", "15:00",]
 
 MAX_BOOKINGS_PER_SLOT = 4
 
@@ -100,46 +95,42 @@ def all_services():
 
 
 @bp.route("/availability")
-def get_availability():
-    """Returns available time slots for the next 7 days."""
-    today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
-    end_date = today + timedelta(days=6, hours=23, minutes=59, seconds=59)
+def get_available_slots():
+    """Generate sample availability for the next 45 days."""
+    today = datetime.today().date()
+    end_date = today + timedelta(days=45)
 
-    # Allowed time slots (24h format hour)
-    TIME_SLOTS = [
-        ("8:00 AM", 8),
-        ("11:00 AM", 11),
-        ("1:00 PM", 13),
-        ("3:00 PM", 15),
-    ]
+    # Fetch all bookings within the next 45 days
+    bookings = (
+        db.session.query(Bookings.cleaning_date)
+        .filter(Bookings.cleaning_date >= today, Bookings.cleaning_date <= end_date)
+        .all()
+    )
 
-    # Query bookings in date range
-    bookings = db.session.query(Bookings.cleaning_date).filter(
-        Bookings.cleaning_date >= today,
-        Bookings.cleaning_date <= end_date
-    ).all()
-
-    # Track booked slots: { "YYYY-MM-DD": set of hours }
-    booked_slots = defaultdict(set)
-    for (cleaning_date,) in bookings:
-        date_str = cleaning_date.strftime("%Y-%m-%d")
-        booked_slots[date_str].add(cleaning_date.hour)
+    # Group booked time slots by date
+    booked_slots_by_date = defaultdict(set)
+    for booking in bookings:
+        dt = booking.cleaning_date
+        date_str = dt.date().isoformat()
+        time_str = dt.strftime("%H:%M")
+        booked_slots_by_date[date_str].add(time_str)
 
     # Build availability
     availability = {}
-    for i in range(8):
+    for i in range(46):
         day = today + timedelta(days=i)
-        date_str = day.strftime("%Y-%m-%d")
-        booked_hours = booked_slots.get(date_str, set())
-        
-        available = [
-            label for label, hour in TIME_SLOTS
-            if hour not in booked_hours
-        ]
-        availability[date_str] = available
+        date_str = day.isoformat()
+        booked_times = booked_slots_by_date.get(date_str, set())
+        available_times = [t for t in TIME_SLOTS if t not in booked_times]
+        availability[date_str] = available_times
 
-    return jsonify(availability)
+    return availability
 
+
+@bp.route("/availability/next_45_days")
+def get_availability():
+    from app.helpers.generate_availability import generate_sample_availability
+    return jsonify(generate_sample_availability())
 # {
 #   "2025-07-06": ["11:00 AM", "1:00 PM", "3:00 PM"],
 #   "2025-07-07": ["8:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"],

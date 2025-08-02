@@ -9,7 +9,7 @@
     <meta name="author" content="Divgm Technologies">
     <title>KleenSpotless - Professional Cleaning Services</title>
     <link rel="icon" href={{ url_for('static', filename='image/ks-favicon.png') }} type="image/x-icon">
-    <link rel="stylesheet" href={{ url_for('static', filename='css/style.css') }}>
+    <link rel="stylesheet" href={{ url_for('static', filename='css/new-output.css') }}>
     <link rel="stylesheet" href={{ url_for('static', filename='css/animation.css') }}>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -18,20 +18,12 @@
         <div class="max-w-4xl mx-auto px-4 py-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <!--<div class="w-10 h-10 rounded-lg flex items-center justify-center">
-                        <img 
-                        src={{ url_for("static", filename="image/logo.png") }} 
-                        alt="Kleen and Spotless Logo" 
-                        class="w-10 h-10 sm:w-12 sm:h-12 object-contain"
-                    />
-                    </div>-->
                     <div>
                         <h1 class="text-2l md:text-2xl font-bold text-blue-900">Kleen and Spotless</h1>
                         <p class="text-sm text-gray-500">The kleen you can trust</p>
                     </div>
                 </div>
                 <div class="text-right">
-                    <!-- <p class="text-sm text-gray-500">Total</p> -->
                     <p class="text-xs text-gray-500">cost: <small id="subtotal">$20</small></p>
                     <p class="text-xs text-gray-500">tax: <small id="tax">$20</small></p>
                     <p id="totalPrice" class="text-xs font-bold text-blue-900">$90</p>
@@ -55,54 +47,7 @@
     <div class="max-w-4xl mx-auto px-4 py-8">
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
             <!-- Step 1: Service Selection -->
-            <div id="step1" class="step active p-8 animate-slideIn">
-                <div class="flex items-center space-x-3 mb-6">
-                    <svg class="w-6 h-6 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
-                    <h2 class="text-lg md:text-2xl font-bold text-blue-900">Select Your Service</h2>
-                </div>
-
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-xs md:text-sm font-medium text-blue-900 mb-3 pl-2">Choose a cleaning category</label>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <button onclick="selectCategory('Residential Cleaning')" class="category-btn p-4 rounded-lg border-2 border-gray-200 hover:border-blue-600 transition-all duration-200 text-left hover:shadow-md hover-card">
-                                <div class="flex items-center space-x-3">
-                                    <svg class="w-5 h-5 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                    </svg>
-                                    <span class="text-sm md:text-base font-medium text-blue-900">Residential Cleaning</span>
-                                </div>
-                            </button>
-                            <button onclick="selectCategory('Commercial Cleaning')" class="category-btn p-4 rounded-lg border-2 border-gray-200 hover:border-blue-600 transition-all duration-200 text-left hover:shadow-md hover-card">
-                                <div class="flex items-center space-x-3">
-                                    <svg class="w-5 h-5 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                    </svg>
-                                    <span class="text-sm md:text-base font-medium text-blue-900">Commercial Cleaning</span>
-                                </div>
-                            </button>
-                            <button onclick="selectCategory('Laundry')" class="category-btn p-4 rounded-lg border-2 border-gray-200 hover:border-blue-600 transition-all duration-200 text-left hover:shadow-md hover-card">
-                                <div class="flex items-center space-x-3">
-                                    <svg class="w-5 h-5 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                    </svg>
-                                    <span class="text-sm md:text-base font-medium text-blue-900">Laundry Services</span>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="serviceSelection" class="hidden animate-fadeIn">
-                        <label class="block text-sm font-medium text-accent mb-3">Choose specific service</label>
-                        <div id="serviceOptions" class="grid grid-cols-1 md:grid-cols-2 gap-4 hover:border-blue-600 transition-all duration-200">
-                            <!--<small id="helpText" class="text-gray-500 text-xs px-2"></small>-->
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
+            {% include "steps/service_category_selection.html" %}
 
             <!-- Step 2: Room Selection -->
             <div id="step2" class="step p-8 animate-slideIn">
@@ -226,307 +171,10 @@
             </div>
 
             <!-- Step 4: Add-on Services -->
-            <div id="step4" class="step p-8 animate-slideIn">
-                <div class="flex items-center space-x-3 mb-6">
-                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                    </svg>
-                    <h2 class="text-2l md:text-2xl font-bold text-blue-900">Add-on Services</h2>
-                    <span class="text-sm text-gray-500">(Optional)</span>
-                </div>
-
-                <div id="otherAddons" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <button onclick="toggleAddOn('Fridge Cleaning')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Fridge Cleaning">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <!-- Fridge body -->
-                                <rect x="7" y="3" width="10" height="18" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Fridge door divider -->
-                                <line x1="7" y1="10" x2="17" y2="10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Door handles -->
-                                <line x1="9" y1="6" x2="9" y2="8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <line x1="9" y1="13" x2="9" y2="15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                              </svg>
-                              
-                            <div class="text-left">
-                                <span class="text-sm md:text-base font-medium block text-blue-900">Fridge Cleaning</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$35</span>
-                            </div>
-                        </div>
-                    </button>
-                    <button onclick="toggleAddOn('Oven Cleaning')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Oven Cleaning">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                            </svg>
-                            <div class="text-left">
-                                <span class="text-sm md:text-base font-medium block text-blue-900">Oven Cleaning</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$35</span>
-                            </div>
-                        </div>
-                    </button>
-                    <button onclick="toggleAddOn('Blinds Dusting')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Blinds Dusting">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <!-- Window frame -->
-                                <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Window panes -->
-                                <line x1="12" y1="4" x2="12" y2="20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <line x1="4" y1="12" x2="20" y2="12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Squeegee / cleaning motion (optional sparkle) -->
-                                <path d="M16 8l2 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M8 16l2 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                              </svg>
-                              
-                            <div class="text-left">
-                                <span class="text-sm md:text-base font-medium block text-blue-900">Window Cleaning</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$10/window</span>
-                                <span class="text-xs md:text-sm text-gray-500">interior</span>
-                            </div>
-                        </div>
-                    </button>
-                    <button onclick="toggleAddOn('Window Cleaning (Exterior)')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Furniture Polish">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <!-- Window frame -->
-                                <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Window panes -->
-                                <line x1="12" y1="4" x2="12" y2="20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <line x1="4" y1="12" x2="20" y2="12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Sparkle for exterior shine -->
-                                <path d="M18 6l1 1m0-1l-1 1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M6 18l1 1m0-1l-1 1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                              </svg>
-                              
-                            <div class="text-left">
-                                <span class="text-sm md-text-base font-medium block text-blue-900">Window Cleaning</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$15/window</span>
-                                <span class="text-xs md:text-sm text-gray-500">Exterior</span>
-                            </div>
-                        </div>
-                    </button>
-                    <button onclick="toggleAddOn('Carpet/Rug Cleaning')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Laundry Service">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M8 11v6a2 2 0 002 2h4a2 2 0 002-2v-6M8 11h8"/>
-                            </svg>
-                            <div class="text-left">
-                                <span class="text-sm md:text-base font-medium block text-blue-900">Carpet/Rug Cleaning</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$30</span>
-                            </div>
-                        </div>
-                    </button>
-                    <button onclick="toggleAddOn('Deep Carpet/Rug Cleaning')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Garage Cleaning">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM21 17a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17h4v-5H9M15 17h2v-5h-2M7 12V6a4 4 0 118 0v6"/>
-                            </svg>
-                            
-                            <div class="text-left">
-                                <span class="text-sm md:text-base font-medium block text-blue-900">Deep Carpet/Rug Cleaning</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$85</span>
-                            </div>
-                        </div>
-                    </button>
-                    <button onclick="toggleAddOn('Bed Making')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Laundry Service">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <rect x="3" y="10" width="18" height="8" rx="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M3 10V7a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M7 10V7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M17 10V7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                              
-                            <div class="text-left">
-                                <span class="text-xs md:text-base font-medium block text-blue-900">Bed Making</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$5</span>
-                            </div>
-                        </div>
-                    </button>
-                    <button onclick="toggleAddOn('Org. Services')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Laundry Service">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M4 10h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M4 16h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <div class="text-left">
-                                <span class="text-sm md:text-base font-medium block text-blue-900">Org. Services</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$70</span>
-                            </div>
-                        </div>
-                    </button>
-                </div>
-                <div id="windowCount" class="grid grid-cols-1 md:grid-cols-3 gap-4 py-3">
-                    <div class="mt-3 px-2">
-                        <label class="block text-sm font-medium text-blue-800 mb-2">Number of Window *<sm>(interior)</sm></label>
-                        <input type="number" id="intWindowNum" max="50" autocomplete=off class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="no. of windows" required>
-                    </div>
-                    <div class="mt-3 px-2">
-                        <label class="block text-sm font-medium text-blue-800 mb-2">Number of Window *<sm>(exterior)</sm></label>
-                        <input type="number" id="extWindowNum" max="50" autocomplete=off class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="no. of windows" required>
-                    </div>
-                </div>
-
-                <div id="laundryAddon" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <button onclick="toggleAddOn('Dry Cleaning')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Dry Cleaning">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <!-- Hanger -->
-                                <path d="M12 3c0 1-1 1.5-1 2.5 0 .5.5 1 1 1s1-.5 1-1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M4 10l8-5 8 5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Shirt body -->
-                                <path d="M4 10v8h16v-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <div class="text-left">
-                                <span class="text-sm md:text-base font-medium block text-blue-900">Dry Cleaning</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$20/clothing</span>
-                            </div>
-                        </div>
-                    </button>
-                    <button onclick="toggleAddOn('Pick-and-Drop')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Pick-and-Drop">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <!-- Truck body -->
-                                <path d="M3 7h13v10H3z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Truck cab -->
-                                <path d="M16 11h5l-1.5-3H16z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Wheels -->
-                                <circle cx="5.5" cy="17" r="1.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="15.5" cy="17" r="1.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <div class="text-left">
-                                <span class="text-sm md:text-base font-medium block text-blue-900">Pick up & Drop off</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$30</span>
-                            </div>
-                        </div>
-                    </button>
-                    <button onclick="toggleAddOn('Ironing')" class="addon-btn p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card" data-addon="Dry Cleaning">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M4 16h16l-1.5-8h-10A4.5 4.5 0 004 12.5V16z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M9 8V5a2 2 0 012-2h5a2 2 0 012 2v3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-
-                            <div class="text-left">
-                                <span class="text-sm md:text-base font-medium block text-blue-900">Ironing</span>
-                                <span class="text-xs md:text-sm text-gray-500">+$20/clothing</span>
-                            </div>
-                        </div>
-                    </button>
-                </div>
-                <div id="clothingCount" class="hidden grid grid-cols-1 md:grid-cols-3 gap-4 py-3">
-                    <div class="mt-3 px-2">
-                        <label class="block text-xs md:text-sm font-medium text-blue-800 mb-2">Number of Clothing *</label>
-                        <input type="number" id="clothingNum" autocomplete=off class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="no. of windows" max="50" required>
-                    </div>
-                </div>
-                  
-
-
-                <div id="addOnSummary" class="mt-6 p-4 bg-gray-50 rounded-lg hidden">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm md:text-base text-blue-900">Add-on Services (<span id="addOnCount">0</span>)</span>
-                        <span id="addOnTotal" class="text-xs md:text-sm font-bold text-accent">+$0</span>
-                    </div>
-                </div>
-            </div>
+            {% include "steps/service_addons.html" %}
 
             <!-- Step 5: Date and Time Selection -->
-            <div id="step5" class="step p-8 animate-slideIn">
-                <div class="flex items-center space-x-3 mb-6">
-                    <svg class="w-6 h-6 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <h2 class="text-2xl font-bold text-blue-900">Select Date & Time</h2>
-                </div>
-
-                <div class="space-y-8">
-                    <!-- Preferred Day Selection -->
-                    <div>
-                        <label class="block text-sm font-medium text-blue-800 mb-4">Preferred Day of the Week</label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-                            <button onclick="selectDay('Monday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
-                                <div class="font-medium text-sm text-blue-900">Mon</div>
-                                <div class="text-xs text-blue-900 mt-1">Monday</div>
-                            </button>
-                            <button onclick="selectDay('Tuesday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
-                                <div class="font-medium text-sm text-blue-900">Tue</div>
-                                <div class="text-xs text-blue-900 mt-1">Tuesday</div>
-                            </button>
-                            <button onclick="selectDay('Wednesday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
-                                <div class="font-medium text-sm text-blue-900">Wed</div>
-                                <div class="text-xs text-blue-900 mt-1">Wednesday</div>
-                            </button>
-                            <button onclick="selectDay('Thursday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
-                                <div class="font-medium text-sm text-blue-900">Thu</div>
-                                <div class="text-xs text-blue-900 mt-1">Thursday</div>
-                            </button>
-                            <button onclick="selectDay('Friday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
-                                <div class="font-medium text-sm text-blue-900">Fri</div>
-                                <div class="text-xs text-blue-900 mt-1">Friday</div>
-                            </button>
-                            <button onclick="selectDay('Saturday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
-                                <div class="font-medium text-sm text-blue-900">Sat</div>
-                                <div class="text-xs text-blue-900 mt-1">Saturday</div>
-                            </button>
-                            <button onclick="selectDay('Sunday')" class="day-btn day-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md text-center">
-                                <div class="font-medium text-sm text-blue-900">Sun</div>
-                                <div class="text-xs text-blue-900 mt-1">Sunday</div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Time Slot Selection -->
-                    <div>
-                        <label class="block text-sm font-medium text-blue-900 mb-4">Preferred Time Slot</label>
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            <button onclick="selectTime('8am')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
-                                <div class="text-blue-900 font-medium">8:00 AM</div>
-                                <!--<div class="text-xs text-gray-500 mt-1">to 11:00 AM</div>-->
-                            </button>
-                            <button onclick="selectTime('11am')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
-                                <div class="text-blue-900 font-medium">11:00 AM</div>
-                                <!--<div class="text-xs text-gray-500 mt-1">to 1:00 PM</div>-->
-                            </button>
-                            <button onclick="selectTime('1pm')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
-                                <div class="text-blue-900 font-medium">1:00 PM</div>
-                                <!--<div class="text-xs text-gray-500 mt-1">to 3:00 PM</div>-->
-                            </button>
-                            <button onclick="selectTime('3pm')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
-                                <div class="text-blue-900 font-medium">3:00 PM</div>
-                                <!--<div class="text-xs text-gray-500 mt-1">to 6:00 PM</div>-->
-                            </button>
-                            <!-- <button onclick="selectTime('4:00 PM - 6:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
-                                <div class="font-medium">4:00 PM</div>
-                                <div class="text-xs text-gray-500 mt-1">to 6:00 PM</div>
-                            </button>
-                            <button onclick="selectTime('6:00 PM - 8:00 PM')" class="time-btn time-slot p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 text-center">
-                                <div class="font-medium">6:00 PM</div>
-                                <div class="text-xs text-gray-500 mt-1">to 8:00 PM</div>
-                            </button>
-                        -->
-                        </div>
-                    </div>
-
-                    <!-- Selected Schedule Summary -->
-                    <div id="scheduleSummary" class="hidden p-4 bg-green-50 border border-green-200 rounded-lg">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            <div>
-                                <div class="font-medium text-green-800">Scheduled for:</div>
-                                <div class="text-sm text-green-600">
-                                    <!--<span id="selectedDay">-</span> at <span id="selectedTime">-</span>-->
-                                    <span id="selectedTime"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include "steps/booking_availability.html" %}
 
             <!-- Step 6: Personal Information -->
             <div id="step6" class="step p-8 animate-slideIn">
@@ -541,12 +189,12 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-blue-900 mb-2">First Name *</label>
-                            <input type="text" id="firstName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your first name" required>
+                            <input data-group="personalInfo" data-field="firstName" type="text" id="firstName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your first name" required>
                             <p id="firstName-error" class="text-xs mt-1 px-1 text-red-500"></p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-blue-900 mb-2">Last Name *</label>
-                            <input type="text" id="lastName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your last name" required>
+                            <input data-group="personalInfo" data-field="lastName" type="text" id="lastName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your last name" required>
                             <p id="lastName-error" class="text-xs mt-1 px-1 text-red-500"></p>
                         </div>
                     </div>
@@ -554,13 +202,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-blue-900 mb-2">Email Address *</label>
-                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your email" required>
+                            <input data-group="personalInfo" data-field="email" type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your email" required>
                             <p id="email-error" class="text-xs mt-1 px-1 text-red-500"></p>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-blue-900 mb-2">Phone Number *</label>
-                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="+14165551234" required>
+                            <input data-group="personalInfo" data-field="phone" type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="+14165551234" required>
                             <p id="phone-error" class="text-xs mt-1 px-1 text-red-500"></p>
                         </div>
                     </div>
@@ -577,17 +225,17 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-blue-900 mb-2">Street Address *</label>
-                                <input type="text" id="street" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your street address" required>
+                                <input data-group="address" data-field="street" type="text" id="street" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="Enter your street address" required>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-blue-900 mb-2">City *</label>
-                                    <input type="text" id="city" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="City" required>
+                                    <input data-group="address" data-field="city" type="text" id="city" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="City" required>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-blue-900 mb-2">State *</label>
-                                    <input type="text" id="state" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="State" required>
+                                    <input data-group="address" data-field="state" type="text" id="state" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors" placeholder="State" required>
                                 </div>
                                 <!--
                                 <div>
@@ -658,9 +306,9 @@
                 <p class="text-blue-800 text-sm pb-1">Service: <span id="bookedService">Demo Cleaning Service</span></p>
                 <p id="confirmedSchedule" class="text-blue-800 text-sm pb-1">Monday at 8:00 AM - 10:00 AM</p>
             </div>
-            <button onclick="resetBooking()" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-950 transition-colors">
+            <!--<button onclick="resetBooking()" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-950 transition-colors">
                 Book Another Service
-            </button>
+            </button> -->
         </div>
     </div>
     <footer>
@@ -669,9 +317,8 @@
             <p class="text-xs">Made with ❤️ by Divgm Technologies</p>
         </div>
     </footer>
-    <script src={{ url_for('static', filename='js/validators.js') }}></script>
-    <script src={{ url_for('static', filename='js/dateParser.js') }}></script>
+    <script src={{ url_for('static', filename='js/main.js') }} type="module"></script>
     <script src={{ url_for('static', filename='js/app.js') }}></script>
-    <script src={{ url_for('static', filename='js/bookingAvailability.js') }}></script>
+    <!--<script src={{ url_for('static', filename='js/bookingAvailability.js') }}></script>-->
 </body>
 </html>
