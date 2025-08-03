@@ -4,7 +4,6 @@ from app.models.bookings import Bookings
 from app.models.clients import Clients, Address
 from app.models.email import EmailLogs
 from app.services.notification_service import NotificationService
-from app.utils import format_datetime
 from time import time
 from typing import Dict
 import json
@@ -21,8 +20,8 @@ class BookingService:
                 
     def place_booking(self):
         """Run the entire booking flow."""
+        
         self.save_booking()
-        print("calling load message")
         email_msg = self.load_email_message()
         self.update_email_log(email_msg)
         # self.notify(email_msg)
@@ -45,7 +44,6 @@ class BookingService:
             db.session.add(self.booking)
             db.session.commit()
 
-        print("Booking record saved") 
         return self.booking
         
     def create_or_get_client(self):
@@ -61,7 +59,6 @@ class BookingService:
                 db.session.add(self.client)
                 db.session.commit()
         
-        print("Client Record saved")
         return self.client
     
     def save_client_address(self):
@@ -75,20 +72,31 @@ class BookingService:
         db.session.add(self.client_address)
         db.session.commit()
 
-        print("Client Address Saved")
         return self.client_address
     
     def load_email_message(self) -> str:
-        clean_date, clean_time = format_datetime(self.booking_info.get("cleaning_date"))
-        cleaning_addons = json.loads(self.booking.add_ons)
+        """Load the email message template for booking confirmation."""
+        
+        if not self.booking:
+            raise ValueError("Booking record not found. Please save the booking first.")
+        if not self.client:
+            raise ValueError("Client record not found. Please create or get the client first.")
+        if not self.client_address:
+            raise ValueError("Client address not found. Please save the client address first.")
+        
+        # Prepare the email message
+        
+        clean_date_time = self.booking_info.get("cleaning_date")
+        clean_date = clean_date_time.strftime("%A, %B %d").replace(" 0", " ")
+        cleaning_time = clean_date_time.strftime("%I:%M%p").lstrip("0").lower()
+        cleaning_addons = json.loads(self.booking.add_ons or "[]")
         self.email_subj = "Booking Confirmation - Kleenspotless.com"
         try:
-            print("Loading email message")
             msg = render_template(
                 "email/confirmed-booking.html",
                 f_name=self.client.first_name,
                 date=clean_date,
-                time=clean_time,
+                time=cleaning_time,
                 phone=self.client.phone,
                 booking_id=self.booking.booking_id,
                 category=self.booking.category,
@@ -105,12 +113,12 @@ class BookingService:
                 tax=self.booking.price * 0.15,
                 price=self.booking.price,
                 addons=cleaning_addons,
+                frequency=self.booking.frequency,
             )
             
         except Exception as err:
             print(err)
 
-        print("Email Message ready")
         return msg
     
     def notify(self, email_msg):
@@ -137,7 +145,6 @@ class BookingService:
         db.session.add(email_record)
         db.session.commit()
 
-        print("Email Record saved to DB")
         return True
        
        
@@ -161,4 +168,5 @@ class BookingService:
             "notes": data.get("additional_info", ""),
             "cleaning_date": data["cleaning_date"],
             "price": data["price"],
+            "frequency": data.get("frequency", "one-time"),
         }

@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
+from app.constants import ALLOWED_FREQUENCIES, TIME_SLOTS, SERVICE_ADDONS
+from faker import Faker
 import random
 
-TIME_SLOTS = ["8:00", "11:00", "13:00", "15:00",]
+fake = Faker(locale="en_CA")
 
 def generate_sample_availability():
     today = datetime.today().date()
@@ -21,3 +23,32 @@ def generate_sample_availability():
         availability[date_str] = available
 
     return availability
+
+def generate_demo_booking_data():
+    """Generates demo booking data for testing purposes."""
+    
+    # Generate a random future date and time
+    future_date = datetime.today().date() + timedelta(days=random.randint(1, 30))
+    cleaning_time = random.choice(TIME_SLOTS)
+    cleaning_datetime = datetime.strptime(f"{future_date} {cleaning_time}", "%Y-%m-%d %H:%M")
+    
+    return {
+        'service': {'name': random.choice(['Regular House Cleaning', 'Deep Cleaning', 'Small Office Cleaning'])},
+        'category': random.choice(['Residential Cleaning', 'Commercial Cleaning']),
+        'cleaning_date': cleaning_datetime,
+        'additional_info': fake.sentence(nb_words=8),
+        'client_info': {
+            'first_name': fake.first_name(),
+            'last_name': fake.last_name(),
+            'email': fake.email(),
+            'phone': fake.phone_number(),
+        },
+        'address': {
+            'street': fake.street_address(),
+            'city': fake.city(),
+            'state': fake.administrative_unit(),
+        },
+        'price': 69.678234,
+        'add_ons': random.sample(SERVICE_ADDONS, k=random.randint(1, 3)),
+        'frequency': random.choice(ALLOWED_FREQUENCIES),
+    }

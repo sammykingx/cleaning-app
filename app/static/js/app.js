@@ -147,13 +147,13 @@ function updateTotalPrice() {
   );
 
   switch (bookingData.frequency) {
-    case "weekly":
+    case "1-week":
       subtotal *= 2;
       break;
-    case "bi-weekly":
+    case "2-weeks":
       subtotal *= 4;
       break;
-    case "monthly":
+    case "1-month":
       subtotal *= 8;
       break;
     default:
@@ -413,61 +413,6 @@ function canProceed() {
   }
 }
 
-// function validateContactFields() {
-//   const firstName = document.getElementById("firstName").value.trim();
-//   const lastName = document.getElementById("lastName").value.trim();
-//   const street = document.getElementById("street").value.trim();
-//   const city = document.getElementById("city").value.trim();
-//   const state = document.getElementById("state").value.trim();
-//   //const country = document.getElementById("country").value.trim();
-
-//   let isValid = true;
-
-//   if (!isValidEmail(email)) {
-//     // clears email input
-//     isValid = false;
-//   }
-
-//   if (!isValidPhone(phone)) {
-//     isValid = false;
-//   }
-
-//   if (!isValidName(firstName)) {
-//     isValid = false;
-//   }
-
-//   if (!isValidName(lastName)) {
-//     isValid = false;
-//   }
-
-//   return (
-//     isValid &&
-//     firstName &&
-//     lastName &&
-//     email &&
-//     phone &&
-//     street &&
-//     city &&
-//     state
-//     //country
-//   );
-// }
-
-function validateContactFields() {
-  const p = bookingData.personalInfo;
-  const a = bookingData.address;
-
-  return (
-    isValidName(p.firstName) &&
-    isValidName(p.lastName) &&
-    isValidEmail(p.email) &&
-    isValidPhone(p.phone) &&
-    a.street &&
-    a.city &&
-    a.state
-  );
-}
-
 // Update next button
 function updateNextButton() {
   const nextBtn = document.getElementById("nextBtn");
@@ -601,26 +546,10 @@ function prevStep() {
 function handleBooking() {
   if (!canProceed()) return;
 
-  // Collect personal information
-  // bookingData.personalInfo = {
-  //   firstName: document.getElementById("firstName").value,
-  //   lastName: document.getElementById("lastName").value,
-  //   email: document.getElementById("email").value,
-  //   phone: document.getElementById("phone").value,
-  // };
-
-  // bookingData.address = {
-  //   street: document.getElementById("street").value,
-  //   city: document.getElementById("city").value,
-  //   state: document.getElementById("state").value,
-  //   country: "canada",
-  // };
-
   bookingData.additionalInfo = document.getElementById("additionalInfo").value;
   const token =
     document.head.querySelector('meta[name="csrf-token"]')?.content || "";
 
-  console.log("Booking Data:", bookingData);
   fetch("/booking", {
     method: "POST",
     headers: {
@@ -682,14 +611,6 @@ function handleBooking() {
       resetBooking();
       window.location.reload();
     });
-
-  // // Show booking complete modal
-  // document.getElementById("confirmedTotal").textContent =
-  //   "$" + bookingData.price;
-  // document.getElementById(
-  //   "confirmedSchedule"
-  // ).textContent = `${bookingData.preferredDay} at ${bookingData.preferredTime}`;
-  // document.getElementById("bookingComplete").classList.remove("hidden");
 }
 
 // Reset booking

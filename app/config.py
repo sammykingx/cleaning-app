@@ -8,10 +8,10 @@ load_dotenv()
 DB_URL = URL.create(
     drivername="mysql+pymysql",
     username=os.getenv("DB_USER", "root"),
-    password=os.getenv("DB_PWD"),
+    password=os.getenv("DB_PWD", ""),
     host="127.0.0.1",
     port=3306,
-    database=os.getenv("DB_NAME")
+    database=os.getenv("DB_NAME", "kleenspotless-db")
 )
 
 class Config:
@@ -35,16 +35,12 @@ class Config:
     
     JSON_SORT_KEYS = False
     JSONIFY_PRETTYPRINT_REGULAR = False
-    # JSONIFY_MIMETYPE = "application/json"
-    # JSON_AS_ASCII = False
 
 class DevelopmentConfig(Config):
     """Development configuration."""
 
     SECRET_KEY = os.getenv("APP_SECRET_KEY") or "asdfjglvnmquqp28805ekwek&^%325ng;3235jlvdfwekejbr90783454"
-    SQLALCHEMY_DATABASE_URI = (
-        os.getenv("DB_URI") or "sqlite:///cleaning.db"
-    )
+    SQLALCHEMY_DATABASE_URI = DB_URL or "sqlite:///cleaning.db"
     
 class ProductionConfig(Config):
     DEBUG = False

@@ -1,31 +1,15 @@
 from . import bp
-from flask import jsonify, request
+from flask import jsonify, request, render_template, render_template_string
 from app.extensions import db
 from flask_wtf.csrf import CSRFError, validate_csrf
 from app.models.bookings import Bookings
 from app.models.services import Services
 from app.views import serializers
 from app.services.booking_service import BookingService
+from app.constants import SERVICE_ADDONS, TIME_SLOTS
+from app.utils import is_windows
 from collections import defaultdict
 from datetime import datetime, timedelta
-
-
-TIME_SLOTS = ["8:00", "11:00", "13:00", "15:00",]
-
-MAX_BOOKINGS_PER_SLOT = 4
-
-SERVICE_ADDONS = [
-    {"name": "Fridge Cleaning", "unitCost": 20, "count": 1},
-    {"name": "Oven Cleaning", "unitCost": 30, "count": 3},
-    {"name": "Window Exterior", "unitCost": 30, "count": 3},
-    {"name": "Window Interior", "unitCost": 30, "count": 3},
-    {"name": "Carpet/Rug Cleaning", "unitCost": 30, "count": 3},
-    {"name": "Deep Carpet/Rug", "unitCost": 30, "count": 3},
-    {"name": "Bed Making", "unitCost": 30, "count": 3},
-    {"name": "Org. Services", "unitCost": 30, "count": 3},
-    {"name": "Dry Cleaning", "unitCost": 30, "count": 3},
-    {"name": "Pick up & Drop Off", "unitCost": 30, "count": 3},
-]
 
 
 """_summary_
@@ -48,11 +32,12 @@ def booking():
         booked_service = Booking.place_booking()
 
     except CSRFError as e:
-        print("validation error")
+        print("CSRF validation failed:", e)
       #return jsonify({'status': 'error', 'message': 'CSRF validation failed', "err": e}), 403
         return "", 403
   
     except Exception as e:
+        print("An error occurred while placing the booking:", e)
         return "internal error", 500
     
     return jsonify(
@@ -77,13 +62,12 @@ def all_bookings():
     return jsonify(booking_list)
 
 
-@bp.route("/booking/<int:booking_id>")
+@bp.route("/booking/<booking_id>")
 def booking_detail(booking_id):
     """Fetch a specific booking by ID."""
 
     booking = Bookings.query.get_or_404(booking_id)
     return jsonify(booking.to_dict())
-
 
 @bp.route("/all_services")
 def all_services():
@@ -97,66 +81,49 @@ def all_services():
 @bp.route("/availability")
 def get_available_slots():
     """Generate sample availability for the next 45 days."""
+
     today = datetime.today().date()
     end_date = today + timedelta(days=45)
 
-    # Fetch all bookings within the next 45 days
-    bookings = (
-        db.session.query(Bookings.cleaning_date)
-        .filter(Bookings.cleaning_date >= today, Bookings.cleaning_date <= end_date)
-        .all()
-    )
+    # Fetch all bookings within the next 46 days
+    bookings = db.session.query(Bookings.cleaning_date).filter(
+        Bookings.cleaning_date >= today,
+        Bookings.cleaning_date <= end_date
+    ).all()
 
     # Group booked time slots by date
-    booked_slots_by_date = defaultdict(set)
-    for booking in bookings:
-        dt = booking.cleaning_date
-        date_str = dt.date().isoformat()
-        time_str = dt.strftime("%H:%M")
-        booked_slots_by_date[date_str].add(time_str)
+    booked_by_date = defaultdict(set)
+    for (cleaning_dt,) in bookings:
+        date_str = cleaning_dt.date().isoformat()
+        time_str = cleaning_dt.strftime("%-H:%M") if not is_windows() else cleaning_dt.strftime("%#H:%M")
+        booked_by_date[date_str].add(time_str)
 
-    # Build availability
+    # Build availability dict
     availability = {}
     for i in range(46):
         day = today + timedelta(days=i)
         date_str = day.isoformat()
-        booked_times = booked_slots_by_date.get(date_str, set())
-        available_times = [t for t in TIME_SLOTS if t not in booked_times]
+        booked_times = booked_by_date.get(date_str, set())
+        available_times = [slot for slot in TIME_SLOTS if slot not in booked_times]
         availability[date_str] = available_times
 
     return availability
 
+@bp.route("/booking_details/<b_id>")
+def email_details(b_id=None):
+    """Render email template with booking details."""
+    
+    b_id = b_id or "KSP-1754177741"
+    from app.models.email import EmailLogs
+    email_reocrd = EmailLogs.query.filter_by(booking_id=b_id).first()
+    if not email_reocrd:
+        return jsonify({"error": "Email record not found"}), 404
+    
+    return render_template_string(email_reocrd.message)
 
-@bp.route("/availability/next_45_days")
-def get_availability():
-    from app.helpers.generate_availability import generate_sample_availability
-    return jsonify(generate_sample_availability())
+# Example response format for availability
 # {
-#   "2025-07-06": ["11:00 AM", "1:00 PM", "3:00 PM"],
-#   "2025-07-07": ["8:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"],
-#   "2025-07-08": ["8:00 AM", "1:00 PM", "3:00 PM"],
-
+#   "2025-07-06": ["11:00", "13:00", "15:00"],
+#   "2025-07-07": ["8:00", "11:00", "13:00", "15:00"],
+#   "2025-07-08": ["8:00", "1:00", "15:00"],
 # }
-
-from faker import Faker
- 
-fake = Faker(locale="en_CA")   
-DEMO_DATA = {
-    'service': {'name': 'Wash & Fold'},
-    'category': 'Laundry',
-    'cleaning_date': datetime.now(),
-    'additional_info': 'eneter additional info',
-    'client_info': {
-        'first_name': fake.first_name(),
-        'last_name': fake.last_name(),
-        'email': fake.email(),
-        'phone': fake.phone_number(),
-    },
-    'address': {
-        'street': fake.street_address(),
-        'city': fake.city(),
-        'state': fake.administrative_unit(),
-    },
-    'price': 69.678234,
-    'add_ons': SERVICE_ADDONS
-}

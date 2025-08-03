@@ -24,28 +24,13 @@ export function addEventListeners() {
       const field = e.target.dataset.field;
       const value = e.target.value.trim();
 
-        if (validateField(field, value)) {
-          setClientData(group, field, value);
-          updateNextButton();
+      if (validateField(field, value)) {
+        setClientData(group, field, value);
+        updateNextButton();
       } else {
         // Optionally clear bookingData[group][field] if invalid
         clearClientData(group, field);
       }
     });
-
-    // ------------ VALIDATION EVENT LISTENERS ------------------
-    // const emailInput = document.getElementById("email");
-    // const phoneInput = document.getElementById("phone");
-
-    // // Add listeners (debounced input + blur for final check)
-    // emailInput.addEventListener("input", debounce(validateEmail, 300));
-    // emailInput.addEventListener("blur", validateEmail);
-
-    // phoneInput.addEventListener("input", debounce(validatePhone, 300));
-    // phoneInput.addEventListener("blur", validatePhone);
-
-    //firstNameInput.addEventListener("input", debounce(validateName, 300));
-    // lastNameInput.addEventListener("input", debounce(validateName, 300));
   });
 }
-
