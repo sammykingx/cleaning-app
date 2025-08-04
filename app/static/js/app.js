@@ -321,15 +321,26 @@ function extraBathrooms(num) {
 }
 
 function selectFrequency(frequency, event) {
-  bookingData.frequency = frequency;
 
-  // Update UI
-  document.querySelectorAll(".frequency-btn").forEach((btn) => {
-    btn.classList.remove("border-primary");
-    btn.classList.add("border-gray-200");
-  });
-  event.target.closest(".frequency-btn").classList.add("border-primary");
-  event.target.closest(".frequency-btn").classList.remove("border-gray-200");
+  if (frequency === bookingData.frequency) {
+    // if the frequency is already selected, set the frequecy
+    // to one-off and remove the border
+    bookingData.frequency = "one-off";
+    document.querySelectorAll(".frequency-btn").forEach((btn) => {
+      btn.classList.remove("border-primary");
+      btn.classList.add("border-gray-200");
+    });
+  } else {
+    bookingData.frequency = frequency;
+
+    // Update UI
+    document.querySelectorAll(".frequency-btn").forEach((btn) => {
+      btn.classList.remove("border-primary");
+      btn.classList.add("border-gray-200");
+    });
+    event.target.closest(".frequency-btn").classList.add("border-primary");
+    event.target.closest(".frequency-btn").classList.remove("border-gray-200");
+  }
 
   updateTotalPrice();
   updateNextButton();
