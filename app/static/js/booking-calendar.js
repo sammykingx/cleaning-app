@@ -108,25 +108,44 @@ function selectDate(date) {
 }
 
 function availableTimeByDay() {
-    const availableTime = availabilityMap[bookingData.preferredDay];
-    const timeButtonEls = document.querySelectorAll(".time-btn");
+  const preferredDay = bookingData.preferredDay;
+  const availableTimeSlots = availabilityMap[preferredDay] || [];
+  const timeButtons = document.querySelectorAll(".time-btn");
 
-    timeButtonEls.forEach((btn) => {
-        const time = btn.getAttribute("data-time"); // 24-hour format
-        // const parsed = convertTo24Hour(rawTime);       // e.g. "08:00"
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-        if (availableTime.includes(time)) {
-        btn.classList.remove("cursor-not-allowed", "bg-red-50", "text-gray-400");
-        btn.classList.add("hover:border-primary", "text-blue-900");
-        btn.disabled = false;
-        btn.onclick = (e) => selectTime(time, e);
-        } else {
-        btn.classList.add("cursor-not-allowed", "bg-red-50", "text-gray-400");
-        btn.classList.remove("hover:border-primary");
-        btn.disabled = true;
-        btn.onclick = null;
-        }
-    });
+  timeButtons.forEach((btn) => {
+    const time = btn.getAttribute("data-time"); // e.g., "13:00"
+
+    const isAvailable = availableTimeSlots.includes(time);
+    const isPast = currentMinutes > timeToMinutes(time);
+
+    if (!isAvailable || isPast) {
+      disableButton(btn);
+    } else {
+      enableButton(btn, time);
+    }
+  });
+}
+
+function timeToMinutes(timeStr) {
+  const [hours, minutes] = timeStr.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+function disableButton(btn) {
+  btn.classList.add("cursor-not-allowed", "bg-red-50", "text-gray-400");
+  btn.classList.remove("hover:border-primary", "text-blue-900");
+  btn.disabled = true;
+  btn.onclick = null;
+}
+
+function enableButton(btn, time) {
+  btn.classList.remove("cursor-not-allowed", "bg-red-50", "text-gray-400");
+  btn.classList.add("hover:border-primary", "text-blue-900");
+  btn.disabled = false;
+  btn.onclick = (e) => selectTime(time, e);
 }
 
 // Select time
