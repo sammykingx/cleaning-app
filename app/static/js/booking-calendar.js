@@ -90,10 +90,7 @@ function generateCalendarDays() {
 
 // Select date
 function selectDate(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // JS months are 0-based
-  const day = String(date.getDate()).padStart(2, "0");
-  bookingData.preferredDay = `${year}-${month}-${day}`;
+  bookingData.preferredDay = getformattedDate(date);
   bookingData.preferredTime = null; // Reset time selection when date changes
 
   document.querySelectorAll(".time-btn").forEach((btn) => {
@@ -107,6 +104,16 @@ function selectDate(date) {
   updateNextButton();
 }
 
+function getformattedDate(date = null) {
+  if (!date) {
+    date = new Date();
+  }
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function availableTimeByDay() {
   const preferredDay = bookingData.preferredDay;
   const availableTimeSlots = availabilityMap[preferredDay] || [];
@@ -114,12 +121,14 @@ function availableTimeByDay() {
 
   const now = new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const today = getformattedDate(now);
 
   timeButtons.forEach((btn) => {
     const time = btn.getAttribute("data-time"); // e.g., "13:00"
 
     const isAvailable = availableTimeSlots.includes(time);
-    const isPast = currentMinutes > timeToMinutes(time);
+    const isToday = preferredDay === today;
+    const isPast = isToday && currentMinutes > timeToMinutes(time);
 
     if (!isAvailable || isPast) {
       disableButton(btn);
