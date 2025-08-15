@@ -20,6 +20,12 @@ def index():
     """Home route for the Cleaning App."""
     
     return render_template("index.html")
+
+@application.route('/dashboard')
+def dashboard():
+    """Dashboard route for the Cleaning App."""
+    
+    return render_template("accounts/base_dashboard.html")
     
 @application.route("/test")
 def test_route():

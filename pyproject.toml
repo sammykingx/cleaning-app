@@ -8,6 +8,7 @@ dependencies = [
     "email-validator>=2.2.0",
     "faker>=37.4.0",
     "flask>=3.1.1",
+    "flask-login>=0.6.3",
     "flask-mail>=0.10.0",
     "flask-migrate>=4.1.0",
     "flask-sqlalchemy>=3.1.1",

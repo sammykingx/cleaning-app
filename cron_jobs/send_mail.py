@@ -1,34 +1,27 @@
 # email cron job
+from app.models.email import EmailLogs
 from sqlalchemy import create_engine, URL
 from sqlalchemy.orm import sessionmaker
 from email.message import EmailMessage
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.dialects.mysql import LONGTEXT
 from contextlib import contextmanager
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    Boolean,
-    DateTime,
-    func
-)
-import smtplib
+from dotenv import load_dotenv
+import os, smtplib
 
+load_dotenv()
 
 DB_URL = URL.create(
     drivername="mysql+pymysql",
-    username="divgglin_app-admin",
-    password="PqM{tkt!$Hz,",
+    username=os.getenv("DB_USER"),
+    password=os.getenv("DB_PWD"),
     host="127.0.0.1",
     port=3306,
-    database="divgglin_kleenspotles_app"
+    database=os.getenv("DB_NAME")
 )
 
-MAIL_SERVER = "divgm.com"
+MAIL_SERVER = os.getenv("MAIL_SERVER")
 MAIL_PORT = 465
-MAIL_USERNAME = "booking-portal@divgm.com"
-MAIL_PASSWORD = "af1LTpr#ty.#"
+MAIL_USERNAME = os.getenv("MAIL_USERNAME")
+MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 
 ADMINS = [
     "contact@kleenspotless.com",
@@ -36,25 +29,6 @@ ADMINS = [
 ]
 
 SUPPORT_EMAIL = "contact@kleenspotless.com"
-
-Base = declarative_base()
-class EmailLogs(Base):
-    __tablename__ = "email_logs"
-
-    id = Column(Integer, primary_key=True, index=True)
-    booking_id = Column(String(20), index=True, unique=True, nullable=False)
-    client_email = Column(String(30), nullable=False)
-    subject = Column(String(35), nullable=False)
-    message = Column(LONGTEXT, nullable=False)
-    is_sent = Column(Boolean, default=False)
-    sent_at = Column(DateTime, server_onupdate=func.now())
-
-    def __str__(self):
-        return (
-            f"Booking ID: {self.booking_id}, "
-            f"Client Email: {self.client_email}, "
-            f"is_sent: {self.is_sent}"
-        )
 
 @contextmanager
 def get_db_session():
@@ -73,9 +47,9 @@ def get_db_session():
         session.close()
 
 
-def send_email(sender, receipient, subject, msg_body) -> bool:
+def send_email(receipient, subject, msg_body) -> bool:
     msg = EmailMessage()
-    msg["from"] = sender
+    msg["from"] = MAIL_USERNAME
     msg["to"] = receipient
     msg["subject"] = subject
     msg["reply-to"] = SUPPORT_EMAIL
@@ -102,7 +76,7 @@ def send_email(sender, receipient, subject, msg_body) -> bool:
                 return False
 
             except smtplib.SMTPException as err:
-                print("Email service unavailble")
+                print(f"Email service unavailble: {err}")
                 return False
 
     except TimeoutError as err:
@@ -113,7 +87,7 @@ def send_email(sender, receipient, subject, msg_body) -> bool:
         print(f"{err}, check back later")
         return False
         
-    print(f"Email Was Sent to clinet, Response: {resp}")
+    print(f"Email Was Sent to clinet, Response: resp")
     return True
 
 def process_unsent_mail():
@@ -124,7 +98,6 @@ def process_unsent_mail():
             for record in email_records:
                 print(record)
                 resp = send_email(
-                    MAIL_USERNAME,
                     record.client_email,
                     record.subject, 
                     record.message,

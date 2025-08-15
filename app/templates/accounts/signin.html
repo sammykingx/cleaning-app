@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KleenSpotless - Admin Login</title>
+  <link rel="stylesheet" href={{ url_for("static", filename="css/output.css") }}>
+  <link rel="stylesheet" href={{ url_for("static", filename="css/signin.css") }}>
+</head>
+<body>
+  <div class="wrapper">
+    <form action="#" method="POST">
+        <h2>Login</h2>
+        {% if error %}
+            <p class="flex justify-center text-white text-sm py-3">{{ error }}</p>
+        {% endif %}
+
+        <div class="input-field">
+            <input type="text" name="email" required>
+            <label>Enter your email</label>
+        </div>
+        <div class="input-field">
+            <input type="password" name="password" required>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label>Enter your password</label>
+        </div>
+        <div class="forget">
+            <label for="remember">
+            <input type="checkbox" id="remember">
+            <p>Remember me</p>
+            </label>
+            <a href="#">Forgot password?</a>
+        </div>
+        <button type="submit">Log In</button>
+        <div class="register">
+            <p class="flex items-center justify-center space-x-2">
+                <a href="https://kleenspotless.com">Visit website</a>
+                <span>&bull;</span>
+                <a href={{ url_for("index") }}>Book a clean</a>
+            </p>
+        </div>
+    </form>
+  </div>
+</body>
+</html>

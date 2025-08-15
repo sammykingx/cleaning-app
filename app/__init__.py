@@ -2,7 +2,7 @@
 
 from flask import Flask
 from app.views import bp
-from app.extensions import db, migrate, csrf, mail
+from app.extensions import db, init_extensions
 from app.config import DevelopmentConfig, ProductionConfig
 from dotenv import load_dotenv
 import os
@@ -35,22 +35,17 @@ def create_app() -> Flask:
         raise RuntimeError("❌ DATABASE_URL is not set. Please configure it securely.")
 
     # initialize extensions
-    db.init_app(app)
-    migrate.init_app(app, db)
-    csrf.init_app(app)
-    mail.init_app(app)
-    print(
-        f"Extensions initialized successfully."
-    )
-
+    app = init_extensions(app)
+    # db.init_app(app)
+    # migrate.init_app(app, db)
+    # csrf.init_app(app)
+    # mail.init_app(app)
+    
     # register blueprints
     with app.app_context():
         # create database tables
-        print("Inside DB Context")
         db.create_all()
-        print(
-            f"Database tables created successfully."
-        )
+
     app.register_blueprint(bp)
 
     return app
