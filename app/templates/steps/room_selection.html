@@ -1,0 +1,80 @@
+<div id="step2" class="step p-8 animate-slideIn">
+	<div class="flex items-center space-x-3 mb-6">
+		<svg class="w-6 h-6 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+		</svg>
+		<h2 class="text-lg md:text-2xl font-bold text-blue-900">Property Details</h2>
+	</div>
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+		<div>
+			<label class="block text-xs md:text-sm font-medium text-blue-800 mb-3">Number of Bedrooms</label>
+			<div class="grid grid-cols-3 gap-3">
+				<button onclick="selectBedrooms(1)" class="bedroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
+				<span class="font-bold text-lg text-blue-900">1</span>
+				</button>
+				<button onclick="selectBedrooms(2)" class="bedroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
+				<span class="font-bold text-lg text-blue-900">2</span>
+				</button>
+				<button onclick="selectBedrooms(3)" class="bedroom-btn p-4 rounded-lg border-2 border-gray-200 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
+				<span class="font-bold text-lg text-blue-900">3</span>
+				</button>
+				<button onclick="selectBedrooms(4)" class="bedroom-btn p-4 rounded-lg border-2 border-blue-50 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
+				<span class="font-bold text-lg text-blue-900">4</span>
+				</button>
+				<!--
+					<button onclick="selectBedrooms(5)" class="bedroom-btn p-4 rounded-lg border-2 border-blue-800 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+					    <span class="font-bold text-lg text-blue-900">5</span>
+					</button>
+					<button onclick="selectBedrooms(6)" class="bedroom-btn p-4 rounded-lg border-2 border-blue-800 hover:border-gray-300 transition-all duration-200 hover:shadow-md hover-card">
+					    <span class="font-bold text-lg text-blue-900">6</span>
+					</button>
+					-->
+			</div>
+		</div>
+		<!---
+			<div class="mt-6">
+			    <label class="block text-sm font-medium text-accent mb-3">Extra Living Areas</label>
+			    <div class="flex items-center space-x-4">
+			        <button type="button" class="px-3 py-1 rounded-full bg-gray-200 text-xl font-bold text-blue-900 hover:bg-blue-200">-</button>
+			        <span id="livingAreaCount" class="text-lg font-bold text-blue-900">0</span>
+			        <button type="button" class="px-3 py-1 rounded-full bg-gray-200 text-xl font-bold text-blue-900 hover:bg-blue-200">+</button>
+			    </div>
+			</div> -->
+		<div>
+			<label class="block text-xs md:text-sm font-medium text-blue-800 mb-3">Extra Living Area</label>
+			<div class="grid grid-cols-3 gap-3">
+				<button onclick="extraBedrooms(1)" class="extraBed-btn p-4 rounded-lg border-2 border-blue-100 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
+				<span class="font-bold text-lg text-blue-900">1</span>
+				</button>
+				<button onclick="extraBedrooms(2)" class="extraBed-btn p-4 rounded-lg border-2 border-blue-100 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
+				<span class="font-bold text-lg text-blue-900">2</span>
+				</button>
+				<button onclick="extraBedrooms(3)" class="extraBed-btn p-4 rounded-lg border-2 border-blue-100 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
+				<span class="font-bold text-lg text-blue-900">3</span>
+				</button>
+			</div>
+			<label class="block text-xs md:text-sm font-medium text-blue-800 my-3">Extra Bathrooms</label>
+			<div class="grid grid-cols-3 gap-3">
+				<button onclick="extraBathrooms(1)" class="extraBath-btn p-4 rounded-lg border-2 border-blue-100 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
+				<span class="font-bold text-lg text-blue-900">1</span>
+				</button>
+				<button onclick="extraBathrooms(2)" class="extraBath-btn p-4 rounded-lg border-2 border-blue-100 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
+				<span class="font-bold text-lg text-blue-900">2</span>
+				</button>
+				<button onclick="extraBathrooms(3)" class="extraBath-btn p-4 rounded-lg border-2 border-blue-100 hover:border-blue-600 transition-all duration-200 hover:shadow-md hover-card">
+				<span class="font-bold text-lg text-blue-900">3</span>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="mt-8 p-4 bg-green-50 rounded-lg">
+		<div class="flex items-center justify-between">
+			<span class="text-xs md:text-sm text-blue-900 font-semibold">Base Price (<span id="bedroomDisplay">1</span> bedroom, <span id="bathroomDisplay">1</span> bath Max)</span>
+			<!--<span class="text-blue-900 font-semibold">Base Price (<span id="bedroomDisplay">1</span> bedroom)</span>-->
+			<span id="basePrice" class="text-xs md:text-sm font-bold text-blue-900">$90</span>
+		</div>
+		<p id="displaySelectedService" class="mt-1 text-gray-500 text-xs"></p>
+		<p id="displayExtraBed" class="mt-1 text-blue-500 text-xs"></p>
+		<p id="displayExtraBath" class="mt-1 text-blue-500 text-xs"></p>
+	</div>
+</div>

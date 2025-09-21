@@ -4,7 +4,7 @@ from app.models.bookings import Bookings
 from app.models.clients import Clients, Address
 from app.models.email import EmailLogs
 from app.services.notification_service import NotificationService
-from time import time
+from time import time, sleep
 from typing import Dict
 import json
 
@@ -24,6 +24,7 @@ class BookingService:
         self.save_booking()
         email_msg = self.load_email_message()
         self.update_email_log(email_msg)
+        sleep(10)
         # self.notify(email_msg)
         
         return self.booking

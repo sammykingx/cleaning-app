@@ -12,6 +12,7 @@ login_manager = LoginManager()
 
 def init_extensions(app):
     """Initialize Flask extensions."""
+    
     db.init_app(app)
     migrate.init_app(app, db)
     csrf.init_app(app)

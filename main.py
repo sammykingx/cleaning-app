@@ -11,25 +11,22 @@ application = create_app()
 def handle_404(e):
     return redirect(HOME_URL), 302
 
+
 @application.errorhandler(405)
 def handle_404(e):
     return redirect(HOME_URL), 302
-   
+
+
+@application.route("/loading")
+def loading():
+    return render_template("loading.html")
+
+
 @application.route('/')
 def index():
     """Home route for the Cleaning App."""
     
     return render_template("index.html")
-
-@application.route('/dashboard')
-def dashboard():
-    """Dashboard route for the Cleaning App."""
-    
-    return render_template("accounts/base_dashboard.html")
-    
-@application.route("/test")
-def test_route():
-    return "hello world"
     
 
 if __name__ == "__main__":

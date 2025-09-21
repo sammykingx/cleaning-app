@@ -51,22 +51,45 @@
 				<li>
 					<i class='bx bxs-calendar-check' ></i>
 					<span class="text">
-						<h3>1020</h3>
-						<p>Bookings</p>
+						{% if total_bookings %}
+							<h3>{{ "{:,}".format(total_bookings) }}</h3>
+						{% else %}
+							<h3>2,231</h3>
+						{% endif %}
+						<p class="text-xs md:text-sm">Bookings</p>
 					</span>
 				</li>
 				<li>
 					<i class='bx bxs-group' ></i>
 					<span class="text">
-						<h3>2834</h3>
-						<p></p>
+						{% if total_clients %}
+							<h3>{{ "{:,}".format(total_clients) }}</h3>
+						{% else %}
+							<h3>2,231</h3>
+						{% endif %}
+						<p class="text-xs md:text-sm">Clients</p>
 					</span>
 				</li>
 				<li>
 					<i class='bx bxs-dollar-circle' ></i>
 					<span class="text">
-						<h3>$2543</h3>
-						<p>Total Sales</p>
+						{% if paid_bookings %}
+							<h3>{{ "${:,.3f}".format(paid_bookings) }}</h3>
+						{% else %}
+							<h3>$3,543</h3>
+						{% endif %}
+						<p class="text-xs md:text-sm">Paid Bookings</p>
+					</span>
+				</li>
+				<li>
+					<i class='bx bxs-dollar-circle' ></i>
+					<span class="text">
+						{% if unpaid_bookings %}
+							<h3>{{ "${:,.3f}".format(unpaid_bookings) }}</h3>
+						{% else %}
+							<h3>$2,543</h3>
+						{% endif %}
+						<p class="text-xs md:text-sm">Unpaid Bookings</p>
 					</span>
 				</li>
 			</ul>
@@ -75,27 +98,37 @@
 			<div class="table-data">
 				<div class="order">
 					<div class="head">
-						<h3>Recent Orders</h3>
+						<h3>Recent Bookings</h3>
 						<i class='bx bx-search' ></i>
 						<i class='bx bx-filter' ></i>
 					</div>
-					<table>
+					<table class="w-full whitespace-no-wrap table-auto">
 						<thead>
 							<tr>
-								<th>User</th>
-								<th>Date Order</th>
-								<th>Status</th>
+								<th class="text-xs md:text-sm">Booking ID</th>
+								<th class="text-xs md:text-sm">Service</th>
+								<th class="text-xs md:text-sm">Email</th>
+								<th class="text-xs md:text-sm">Cleaning Date</th>
+								<th class="text-xs md:text-sm">Price</th>
+								<th class="text-xs md:text-sm">Status</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>
-									<img src={{ url_for('static', filename='image/people.png') }}>
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status completed">Completed</span></td>
-							</tr>
+							{% if bookings %}
+							    {% for booking in bookings %}
+							        <tr>
+								        <td>
+									        <!--<img src={{ url_for('static', filename='image/people.png') }}>-->
+									        <p class="whitespace-nowrap">{{ booking.booking_id }}</p>
+								        </td>
+								        <td class="text-xs md:text-sm whitespace-nowrap">{{ booking.service }}</td>
+								        <td class="text-xs md:text-sm whitespace-nowrap">{{ booking.client_email }}</td>
+								        <td class="text-xs md:text-sm whitespace-nowrap">{{ booking.cleaning_date }}</td>
+								        <td class="text-xs md:text-sm whitespace-nowrap">{{ "${:,.2f}".format(booking.price) }}</td>
+								        <td class="text-xs md:text-sm whitespace-nowrap"><span class="status completed">{{ booking.payment_status }}</span></td>
+							        </tr>
+							    {% endfor %}
+							{% else %}
 							<tr>
 								<td>
 									<img src={{ url_for('static', filename='image/people.png') }}>
@@ -128,12 +161,13 @@
 								<td>01-10-2021</td>
 								<td><span class="status completed">Completed</span></td>
 							</tr>
+						    {% endif %}
 						</tbody>
 					</table>
 				</div>
 				<div class="todo">
 					<div class="head">
-						<h3>Todos</h3>
+						<h3>Upcoming</h3>
 						<i class='bx bx-plus' ></i>
 						<i class='bx bx-filter' ></i>
 					</div>

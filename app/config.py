@@ -35,12 +35,21 @@ class Config:
     
     JSON_SORT_KEYS = False
     JSONIFY_PRETTYPRINT_REGULAR = False
+    
+    # SQUARE UP CONFIG
+    SANDBOX_APP_ID = os.getenv("SANDBOX_APP_ID")
+    SANDBOX_ACCESS_TOKEN = os.getenv("SANDBOX_ACCESS_TOKEN")
+    PROD_APP_ID = os.getenv("PROD_APP_ID")
+    PROD_ACCESS_TOKEN = os.getenv("PROD_ACCESS_TOKEN")
+    SANDBOX_LOCATION_ID = os.getenv("SANDBOX_LOCATION_ID")
+    PROD_LOCATION_ID = os.getenv("PROD_LOCATION_ID")
+
 
 class DevelopmentConfig(Config):
     """Development configuration."""
 
     SECRET_KEY = os.getenv("APP_SECRET_KEY") or "asdfjglvnmquqp28805ekwek&^%325ng;3235jlvdfwekejbr90783454"
-    SQLALCHEMY_DATABASE_URI = DB_URL or "sqlite:///cleaning.db"
+    SQLALCHEMY_DATABASE_URI = DB_URL or "sqlite:///kleen_spotless.db"
     
 class ProductionConfig(Config):
     DEBUG = False

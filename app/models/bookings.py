@@ -40,7 +40,8 @@ class Bookings(db.Model):
             f"<Booking (id={self.id}, client_email={self.client_email}, "
             f"service={self.service}, category={self.category} "
             f"booking_date={self.booking_date}, cleaning_date={self.cleaning_date}"
-            f"price={self.price}, status={self.booking_status})>"
+            f"price={self.price}, frequency={self.frequency}"\
+            f"status={self.booking_status})>"
         )
 
     def set_add_ons(self, add_ons_list):

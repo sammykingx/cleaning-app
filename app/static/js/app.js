@@ -560,6 +560,9 @@ function handleBooking() {
   bookingData.additionalInfo = document.getElementById("additionalInfo").value;
   const token =
     document.head.querySelector('meta[name="csrf-token"]')?.content || "";
+  
+  const loadingModal = document.getElementById("loadingModal");
+  loadingModal.classList.remove("hidden");
 
   fetch("/booking", {
     method: "POST",
@@ -608,9 +611,11 @@ function handleBooking() {
       document.getElementById("confirmedSchedule").textContent =
         bookingData.scheduleText;
       //`${bookingData.preferredDay} at ${bookingData.preferredTime}`;
+
+      loadingModal.classList.add("hidden");
       document.getElementById("bookingComplete").classList.remove("hidden");
 
-      // reload the page after 3 seconds
+      // reload the page after 4 seconds
       setTimeout(() => {
         resetBooking();
         location.href = location.href;
@@ -619,7 +624,7 @@ function handleBooking() {
     .catch((error) => {
       //console.error("Error during booking:", error);
       alert(error.message);
-      resetBooking();
+      // resetBooking();
       window.location.reload();
     });
 }
