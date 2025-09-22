@@ -15,7 +15,9 @@ class Clients(db.Model):
     first_name = db.Column(db.String(25), nullable=False)
     last_name = db.Column(db.String(25), nullable=False)
     phone = db.Column(db.String(15), nullable=True)
-    timestamp = db.Column(db.DateTime, server_default=func.now())
+    timestamp = db.Column(
+        db.DateTime, server_default=func.now()
+    )
 
     def __repr__(self) -> str:
         return (
@@ -65,7 +67,9 @@ class Address(db.Model):
     street = db.Column(db.String(255), nullable=False)
     city = db.Column(db.String(100), nullable=False)
     state = db.Column(db.String(100), nullable=False)
-    timestamp = db.Column(db.DateTime, server_default=func.now())
+    timestamp = db.Column(
+        db.DateTime, server_default=func.now()
+    )
 
     def __repr__(self) -> str:
         return (

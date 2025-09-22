@@ -15,7 +15,7 @@ DB_URL = URL.create(
     password=os.getenv("DB_PWD"),
     host="127.0.0.1",
     port=3306,
-    database=os.getenv("DB_NAME")
+    database=os.getenv("DB_NAME"),
 )
 
 MAIL_SERVER = os.getenv("MAIL_SERVER")
@@ -30,6 +30,7 @@ ADMINS = [
 
 SUPPORT_EMAIL = "contact@kleenspotless.com"
 
+
 @contextmanager
 def get_db_session():
     engine = create_engine(DB_URL)
@@ -38,7 +39,7 @@ def get_db_session():
     try:
         yield session
         session.commit()
-        
+
     except Exception as e:
         session.rollback()
         print(f"[DB ERROR] {e}")
@@ -55,9 +56,11 @@ def send_email(receipient, subject, msg_body) -> bool:
     msg["reply-to"] = SUPPORT_EMAIL
     msg["cc"] = ",".join(ADMINS)
     msg.add_alternative(msg_body, subtype="html")
-    
+
     try:
-        with smtplib.SMTP_SSL(MAIL_SERVER, MAIL_PORT, timeout=5) as mail_server:
+        with smtplib.SMTP_SSL(
+            MAIL_SERVER, MAIL_PORT, timeout=5
+        ) as mail_server:
             try:
 
                 mail_server.login(MAIL_USERNAME, MAIL_PASSWORD)
@@ -86,25 +89,31 @@ def send_email(receipient, subject, msg_body) -> bool:
     except Exception as err:
         print(f"{err}, check back later")
         return False
-        
+
     print(f"Email Was Sent to clinet, Response: resp")
     return True
 
+
 def process_unsent_mail():
     with get_db_session() as db:
-        email_records = db.query(EmailLogs).filter_by(is_sent=False).limit(5).all()
+        email_records = (
+            db.query(EmailLogs)
+            .filter_by(is_sent=False)
+            .limit(5)
+            .all()
+        )
 
         if email_records:
             for record in email_records:
                 print(record)
                 resp = send_email(
                     record.client_email,
-                    record.subject, 
+                    record.subject,
                     record.message,
                 )
-                
+
                 if resp:
                     record.is_sent = True
-                
-                
+
+
 process_unsent_mail()

@@ -6,7 +6,12 @@ ADMINS = [
 HOME_URL = "https://kleenspotless.com"
 SUPPORT_EMAIL = "contact@kleenspotless.com"
 
-TIME_SLOTS = ["8:00", "11:00", "13:00", "15:00",]
+TIME_SLOTS = [
+    "8:00",
+    "11:00",
+    "13:00",
+    "15:00",
+]
 
 
 MAX_BOOKINGS_PER_SLOT = 4

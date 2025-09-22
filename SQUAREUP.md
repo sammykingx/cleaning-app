@@ -86,4 +86,8 @@ https://developer.squareup.com/reference/square/payments-api/create-payment
 
 sandbox payment
 "https://developer.squareup.com/docs/devtools/sandbox/payments#web-and-mobile-client-testing"
+
+https://developer.squareup.com/docs/web-payments/take-card-payment
+
+https://developer.squareup.com/docs/devtools/sandbox/payments
 ```

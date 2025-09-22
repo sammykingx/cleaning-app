@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="KleenSpotless - Professional Cleaning Services">
+    <meta name="keywords" content="cleaning, services, home cleaning, office cleaning, professional cleaning">
+    <meta name="author" content="Divgm Technologies">
+    <title>KleenSpotless - Professional Cleaning Services</title>
+    <link rel="icon" href={{ url_for('static', filename='image/ks-favicon.png') }} type="image/x-icon">
+    <link rel="stylesheet" href={{ url_for('static', filename='css/primary.css') }}>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Hero Section -->
+  <header class="container mx-auto px-4 py-12 max-w-6xl text-center">
+    <div class="mb-12 animate-fade-in">
+      <div class="flex justify-center items-center mb-6">
+        <img 
+          src={{ url_for('static', filename='image/square-logo-dark.png') }}
+          alt="Square Logo" 
+          class="h-16 w-auto object-contain"
+        />
+      </div>
+      <h1 class="text-2xl md:text-3xl font-semibold text-foreground mb-4 t">
+        Secure Payment Processing
+      </h1>
+      <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+        Fast, secure, and reliable payments powered by Square's industry-leading technology
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 max-w-6xl flex flex-col lg:flex-row gap-12 items-start justify-center">    
+    <!-- Info Panel -->
+    <aside class="w-full lg:w-96 animate-fade-in" style="animation-delay: 200ms">
+      <div class="bg-white border border-card-border rounded-2xl p-6 mb-10">
+        <h3 class="text-lg font-semibold text-center text-foreground mb-4">
+          No Active Booking
+        </h3>
+        <ul class="space-y-3 text-sm text-muted-foreground">
+              <li class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full shrink-0"></div>
+                Book a clean with KleenSpotless
+              </li>
+              <li class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full shrink-0"></div>
+                Check your email for the payment link
+              </li>
+              <li class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full shrink-0"></div>
+                Make your Payments
+              </li>
+              <li class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full shrink-0"></div>
+                Enjoy your clean
+              </li>
+          </ul>   
+      </div>
+    </aside>
+  </main>
+
+</body>
+</html>

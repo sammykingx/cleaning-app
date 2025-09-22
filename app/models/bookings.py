@@ -1,13 +1,16 @@
 from app.extensions import db
-from sqlalchemy import func
+from sqlalchemy import func, NUMERIC
 from faker import Faker
 import json
+
 
 class Bookings(db.Model):
     """Model for bookings."""
 
     id = db.Column(db.Integer, primary_key=True)
-    booking_id = db.Column(db.String(20), index=True, unique=True, nullable=False)
+    booking_id = db.Column(
+        db.String(20), index=True, unique=True, nullable=False
+    )
     client_email = db.Column(
         db.String(120),
         nullable=False,
@@ -33,23 +36,35 @@ class Bookings(db.Model):
         db.String(20), default="unpaid", nullable=False
     )
     price = db.Column(db.Float, nullable=False)
-    updated_at = db.Column(db.DateTime, server_default=func.now(), server_onupdate=func.now())
+    square_order_id = db.Column(
+        db.String(30),
+    )
+    charged_amount = db.Column(NUMERIC(10,2))
+    is_paid = db.Column(db.Boolean, default=False)
+    paid_at = db.Column(
+        db.DateTime,
+        server_default=func.now(),)
+    updated_at = db.Column(
+        db.DateTime,
+        server_default=func.now(),
+        server_onupdate=func.now(),
+    )
 
     def __repr__(self) -> str:
         return (
             f"<Booking (id={self.id}, client_email={self.client_email}, "
             f"service={self.service}, category={self.category} "
             f"booking_date={self.booking_date}, cleaning_date={self.cleaning_date}"
-            f"price={self.price}, frequency={self.frequency}"\
+            f"price={self.price}, frequency={self.frequency}"
             f"status={self.booking_status})>"
         )
 
     def set_add_ons(self, add_ons_list):
         self.add_ons = json.dumps(add_ons_list)
-    
+
     def get_add_ons(self):
         return json.loads(self.add_ons) if self.add_ons else []
-    
+
     def to_dict(self) -> dict:
         """Convert the booking instance to a dictionary."""
         return {
@@ -58,7 +73,7 @@ class Bookings(db.Model):
             "client_email": self.client_email,
             "service": self.service,
             "category": self.category,
-            "addons": self.add_ons,
+            "add_ons": self.add_ons,
             "notes": self.notes,
             "booking_date": self.booking_date.isoformat(),
             "cleaning_date": self.cleaning_date.isoformat(),
@@ -76,10 +91,17 @@ def create_demo_bookings():
         Bookings(
             client_email=fake.email(),
             service=fake.random_element(
-                elements=("Regular House Cleaning", "Deep Cleaning", "Small Office Cleaning")
+                elements=(
+                    "Regular House Cleaning",
+                    "Deep Cleaning",
+                    "Small Office Cleaning",
+                )
             ),
             category=fake.random_element(
-                elements=("Residential Cleaning", "Commercial Cleaning",)
+                elements=(
+                    "Residential Cleaning",
+                    "Commercial Cleaning",
+                )
             ),
             addons=fake.random_int(min=1, max=5),
             notes=fake.text(max_nb_chars=200),
@@ -97,4 +119,3 @@ def create_demo_bookings():
     ]
     db.session.bulk_save_objects(demo_bookings)
     db.session.commit()
-    

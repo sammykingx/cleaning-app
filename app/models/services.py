@@ -10,7 +10,9 @@ class Services(db.Model):
     """Model for services."""
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
+    name = db.Column(
+        db.String(100), nullable=False, unique=True
+    )
     category = db.Column(db.String(30))
     description = db.Column(db.Text, nullable=True)
     price = db.Column(db.Float, nullable=False)

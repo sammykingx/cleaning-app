@@ -9,6 +9,7 @@ import os
 
 load_dotenv()
 
+
 def create_app() -> Flask:
     """Create and configure the Flask application."""
 
@@ -19,7 +20,7 @@ def create_app() -> Flask:
         config_class = ProductionConfig
     else:
         config_class = DevelopmentConfig
-        
+
     app.config.from_object(config_class)
     print(
         f"Configured Flask app with config: {config_class.__name__}"
@@ -30,9 +31,11 @@ def create_app() -> Flask:
             "❌ SECRET_KEY is not set! The app will not start without it. "
             "Please set a strong SECRET_KEY in your config or environment."
         )
-        
+
     if not app.config.get("SQLALCHEMY_DATABASE_URI"):
-        raise RuntimeError("❌ DATABASE_URL is not set. Please configure it securely.")
+        raise RuntimeError(
+            "❌ DATABASE_URL is not set. Please configure it securely."
+        )
 
     # initialize extensions
     app = init_extensions(app)
@@ -40,7 +43,7 @@ def create_app() -> Flask:
     # migrate.init_app(app, db)
     # csrf.init_app(app)
     # mail.init_app(app)
-    
+
     # register blueprints
     with app.app_context():
         # create database tables

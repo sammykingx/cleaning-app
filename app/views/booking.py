@@ -1,5 +1,10 @@
 from . import bp
-from flask import jsonify, request, render_template, render_template_string
+from flask import (
+    jsonify,
+    request,
+    render_template,
+    render_template_string,
+)
 from app.extensions import db
 from flask_wtf.csrf import CSRFError, validate_csrf
 from app.models.bookings import Bookings
@@ -7,7 +12,7 @@ from app.models.services import Services
 from app.views import serializers
 from app.services.booking_service import BookingService
 from app.constants import SERVICE_ADDONS, TIME_SLOTS
-from app.utils import is_windows
+from app.utils import is_windows, is_valid_csrf_token
 from collections import defaultdict
 from datetime import datetime, timedelta
 
@@ -19,35 +24,34 @@ Returns:
      _type_: _description_
 """
 
+
 @bp.route("/booking", methods=["POST"])
 def booking():
     """place booking"""
-    
+
+    if not is_valid_csrf_token(
+        request.headers.get("X-CSRFToken")
+    ):
+        return "", 403
+
     try:
-        csrf_token = request.headers.get('X-CSRFToken')
-        validate_csrf(csrf_token)
-    
         data = serializers.serialize_booking(request.get_json())
         Booking = BookingService(data)
         booked_service = Booking.place_booking()
 
-    except CSRFError as e:
-        print("CSRF validation failed:", e)
-      #return jsonify({'status': 'error', 'message': 'CSRF validation failed', "err": e}), 403
-        return "", 403
-  
     except Exception as e:
         print("An error occurred while placing the booking:", e)
         return "internal error", 500
-    
+
     return jsonify(
         {
-            'status': 'success',
-            'message': 'Booking saved',
-            'id': booked_service.booking_id, # compulsory
+            "status": "success",
+            "message": "Booking saved",
+            "id": booked_service.booking_id,  # compulsory
             # 'data': booked_service.to_dict() if booked_service else None,
         }
     )
+
 
 @bp.route("/service-addons")
 def view_template():
@@ -69,6 +73,7 @@ def booking_detail(booking_id):
     booking = Bookings.query.get_or_404(booking_id)
     return jsonify(booking.to_dict())
 
+
 @bp.route("/all_services")
 def all_services():
     """Fetch all services."""
@@ -86,16 +91,24 @@ def get_available_slots():
     end_date = today + timedelta(days=45)
 
     # Fetch all bookings within the next 46 days
-    bookings = db.session.query(Bookings.cleaning_date).filter(
-        Bookings.cleaning_date >= today,
-        Bookings.cleaning_date <= end_date
-    ).all()
+    bookings = (
+        db.session.query(Bookings.cleaning_date)
+        .filter(
+            Bookings.cleaning_date >= today,
+            Bookings.cleaning_date <= end_date,
+        )
+        .all()
+    )
 
     # Group booked time slots by date
     booked_by_date = defaultdict(set)
     for (cleaning_dt,) in bookings:
         date_str = cleaning_dt.date().isoformat()
-        time_str = cleaning_dt.strftime("%-H:%M") if not is_windows() else cleaning_dt.strftime("%#H:%M")
+        time_str = (
+            cleaning_dt.strftime("%-H:%M")
+            if not is_windows()
+            else cleaning_dt.strftime("%#H:%M")
+        )
         booked_by_date[date_str].add(time_str)
 
     # Build availability dict
@@ -104,22 +117,31 @@ def get_available_slots():
         day = today + timedelta(days=i)
         date_str = day.isoformat()
         booked_times = booked_by_date.get(date_str, set())
-        available_times = [slot for slot in TIME_SLOTS if slot not in booked_times]
+        available_times = [
+            slot
+            for slot in TIME_SLOTS
+            if slot not in booked_times
+        ]
         availability[date_str] = available_times
 
     return availability
 
+
 @bp.route("/booking_details/<b_id>")
 def email_details(b_id=None):
     """Render email template with booking details."""
-    
+
     b_id = b_id or "KSP-1754177741"
     from app.models.email import EmailLogs
-    email_reocrd = EmailLogs.query.filter_by(booking_id=b_id).first()
+
+    email_reocrd = EmailLogs.query.filter_by(
+        booking_id=b_id
+    ).first()
     if not email_reocrd:
         return jsonify({"error": "Email record not found"}), 404
-    
+
     return render_template_string(email_reocrd.message)
+
 
 # Example response format for availability
 # {
