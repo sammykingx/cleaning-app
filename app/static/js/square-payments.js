@@ -169,7 +169,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (data.status === "completed") {
               buttonText.textContent = "PAID";
               setTimeout(() => {
-                console.log(data.receipt_url);
                 location.href = data.receipt_url;
               }, 2000);
             }

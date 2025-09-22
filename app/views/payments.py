@@ -86,14 +86,15 @@ def payments():
         )
         idempotency_key = uuid.uuid4()
         # payment_ref = f"PAYREF-{uuid.uuid4().hex[:12].upper()}"
+        str_amount = data.get("bookingDetails").get("amount")
 
         try:
             resp = client.payments.create(
                 source_id=nonce,
                 idempotency_key=idempotency_key,
                 amount_money={
-                    "amount": float(
-                        data.get("bookingDetails").get("amount")
+                    "amount": round(
+                        float(str_amount) * 100
                     ),
                     "currency": "CAD",
                 },

@@ -27,8 +27,7 @@ class BookingService:
         self.save_booking()
         email_msg = self.load_email_message()
         self.update_email_log(email_msg)
-        sleep(10)
-        # self.notify(email_msg)
+        self.notify(email_msg)
 
         return self.booking
 
@@ -153,7 +152,7 @@ class BookingService:
             message=email_msg,
         )
 
-        resp = notification.send_to_client()
+        notification.send_to_client()
         return True
 
     def update_email_log(self, email_msg) -> bool:

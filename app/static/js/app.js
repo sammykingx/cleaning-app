@@ -615,11 +615,11 @@ function handleBooking() {
       loadingModal.classList.add("hidden");
       document.getElementById("bookingComplete").classList.remove("hidden");
 
-      // reload the page after 4 seconds
+      // reload the page after 3 seconds
       setTimeout(() => {
         resetBooking();
-        location.href = location.href;
-      }, 4000);
+        location.href = data.checkout_url;
+      }, 3000);
     })
     .catch((error) => {
       //console.error("Error during booking:", error);

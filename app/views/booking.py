@@ -2,11 +2,10 @@ from . import bp
 from flask import (
     jsonify,
     request,
-    render_template,
     render_template_string,
+    url_for
 )
 from app.extensions import db
-from flask_wtf.csrf import CSRFError, validate_csrf
 from app.models.bookings import Bookings
 from app.models.services import Services
 from app.views import serializers
@@ -48,6 +47,7 @@ def booking():
             "status": "success",
             "message": "Booking saved",
             "id": booked_service.booking_id,  # compulsory
+            "checkout_url": url_for("main.payments", booking_id=booked_service.booking_id), # compulsory
             # 'data': booked_service.to_dict() if booked_service else None,
         }
     )

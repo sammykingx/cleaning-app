@@ -2,7 +2,7 @@
 from flask import current_app
 from flask_mail import Message
 from app.extensions import mail
-from app.constants import ADMINS as admins_list
+from app.constants import SUPPORT_EMAIL, ADMINS as admins_list
 
 
 class NotificationService:
@@ -24,7 +24,7 @@ class NotificationService:
             recipients=[self.user_email],
             html=self.message,
             cc=[*admins_list],
-            reply_to="seromosele@divgm.com",
+            reply_to=SUPPORT_EMAIL,
         )
 
         try:
