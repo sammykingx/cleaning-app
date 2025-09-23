@@ -90,4 +90,7 @@ sandbox payment
 https://developer.squareup.com/docs/web-payments/take-card-payment
 
 https://developer.squareup.com/docs/devtools/sandbox/payments
+
+# working with amounts
+https://developer.squareup.com/docs/build-basics/common-data-types/working-with-monetary-amounts
 ```

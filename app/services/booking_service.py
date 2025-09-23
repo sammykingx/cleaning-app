@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, url_for
 from app.extensions import db
 from app.models.bookings import Bookings
 from app.models.clients import Clients, Address
@@ -136,6 +136,7 @@ class BookingService:
                 price=self.booking.price,
                 addons=cleaning_addons,
                 frequency=self.booking.frequency,
+                checkout_url=url_for("main.payments", booking_id=self.booking.booking_id, _external=True),
             )
 
         except Exception as err:
