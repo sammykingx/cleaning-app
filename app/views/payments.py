@@ -84,7 +84,12 @@ def payments():
                 else SquareEnvironment.SANDBOX
             ),
         )
-        idempotency_key = uuid.uuid4()
+        if not cleaning_booking.idempotency_key:
+            idempotency_key = uuid.uuid4()
+            cleaning_booking.idempotency_key = idempotency_key
+        else:
+            idempotency_key = session["square_idempotency"]
+
         # payment_ref = f"PAYREF-{uuid.uuid4().hex[:12].upper()}"
         str_amount = data.get("bookingDetails").get("amount")
 
@@ -100,7 +105,7 @@ def payments():
                 },
                 location_id=squareup.get("location_id"),
                 reference_id=cleaning_booking.booking_id,
-                app_fee_money={"amount": 1, "currency": "CAD"},
+                app_fee_money={"amount": round(0.01*100), "currency": "CAD"},
             )
             
             result = resp.model_dump()
@@ -157,6 +162,7 @@ def payments():
     ).first()
 
     session["booking_id"] = cleaning_booking.booking_id
+    session["square_idempotency"] = uuid.uuid4()
     
     return render_template(
         "square-payments.html",

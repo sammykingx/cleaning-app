@@ -39,6 +39,7 @@ class Bookings(db.Model):
     square_order_id = db.Column(
         db.String(30),
     )
+    idempotency_key= db.Column(db.String(45))
     charged_amount = db.Column(NUMERIC(10,2))
     is_paid = db.Column(db.Boolean, default=False)
     paid_at = db.Column(
