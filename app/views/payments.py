@@ -48,7 +48,8 @@ def payments():
 
     if request.method == "POST":
         if not is_valid_csrf_token(
-            request.headers.get("X-CSRFToken")
+            request.headers.get("X-CSRFToken") or
+            request.cookies.get("csrf_token")
         ):
             return {
                 "type": "warning",
@@ -61,7 +62,7 @@ def payments():
         cleaning_booking = Bookings.query.filter_by(
             booking_id=session.get("booking_id", None)
         ).first()
-        if not cleaning_booking:
+        if cleaning_booking is None:
             return {
                 "type": "info",
                 "title": "Booking Not Found",
@@ -84,11 +85,6 @@ def payments():
                 else SquareEnvironment.SANDBOX
             ),
         )
-        if not cleaning_booking.idempotency_key:
-            idempotency_key = uuid.uuid4()
-            cleaning_booking.idempotency_key = idempotency_key
-        else:
-            idempotency_key = session["square_idempotency"]
 
         # payment_ref = f"PAYREF-{uuid.uuid4().hex[:12].upper()}"
         str_amount = data.get("bookingDetails").get("amount")
@@ -96,7 +92,7 @@ def payments():
         try:
             resp = client.payments.create(
                 source_id=nonce,
-                idempotency_key=idempotency_key,
+                idempotency_key=cleaning_booking.idempotency_key,
                 amount_money={
                     "amount": round(
                         float(str_amount) * 100
@@ -137,6 +133,7 @@ def payments():
         )
         
         session.pop("booking_id", None)
+        
         return {
             "type": "success",
             "title": "Payment Successful",
@@ -150,8 +147,13 @@ def payments():
     cleaning_booking = Bookings.query.filter_by(
         booking_id=booking_id
     ).first()
-    if not cleaning_booking:
+    if cleaning_booking is None:
         return render_template("invalid-booking.html")
+    if cleaning_booking.idempotency_key is None:
+        idempotency_key = uuid.uuid4()
+        cleaning_booking.idempotency_key = idempotency_key
+        db.session.commit()
+        print("No idm key, so we created one: %s", idempotency_key)
 
     client = Clients.query.filter_by(
         email=cleaning_booking.client_email
@@ -162,7 +164,6 @@ def payments():
     ).first()
 
     session["booking_id"] = cleaning_booking.booking_id
-    session["square_idempotency"] = uuid.uuid4()
     
     return render_template(
         "square-payments.html",
@@ -173,5 +174,5 @@ def payments():
         square_app_id=squareup.get("app_id"),
         square_location_id=squareup.get("location_id"),
         checkout_url=squareup.get("checkout_url"),
-        # is_paid=cleaning_booking.is_paid,
+        is_paid=cleaning_booking.is_paid,
     )

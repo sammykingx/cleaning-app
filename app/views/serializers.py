@@ -2,7 +2,7 @@
 from datetime import datetime
 
 
-def serialize_booking(booking_data: dict):
+def serialize_booking_payload(booking_data: dict):
 
     date_str = booking_data.get("preferredDay")
     time_str = booking_data.get("preferredTime")

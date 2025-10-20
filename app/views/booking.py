@@ -1,5 +1,6 @@
 from . import bp
 from flask import (
+    current_app,
     jsonify,
     request,
     render_template_string,
@@ -29,17 +30,18 @@ def booking():
     """place booking"""
 
     if not is_valid_csrf_token(
-        request.headers.get("X-CSRFToken")
+        request.headers.get("X-CSRFToken") or
+        request.cookies.get("csrf_token")
     ):
         return "", 403
 
     try:
-        data = serializers.serialize_booking(request.get_json())
+        data = serializers.serialize_booking_payload(request.get_json())
         Booking = BookingService(data)
         booked_service = Booking.place_booking()
 
     except Exception as e:
-        print("An error occurred while placing the booking:", e)
+        current_app.logger.error("An error occurred while placing the booking: %s", e, exc_info=1)
         return "internal error", 500
 
     return jsonify(

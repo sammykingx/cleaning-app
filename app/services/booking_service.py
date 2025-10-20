@@ -6,7 +6,7 @@ from app.models.email import EmailLogs
 from app.services.notification_service import (
     NotificationService,
 )
-from time import time, sleep
+from time import time
 from typing import Dict
 import json
 

@@ -1,5 +1,7 @@
 # email cron job
 from app.models.email import EmailLogs
+from app.constants import ADMINS, SUPPORT_EMAIL
+from app.config import Config
 from sqlalchemy import create_engine, URL
 from sqlalchemy.orm import sessionmaker
 from email.message import EmailMessage
@@ -18,18 +20,10 @@ DB_URL = URL.create(
     database=os.getenv("DB_NAME"),
 )
 
-MAIL_SERVER = os.getenv("MAIL_SERVER")
-MAIL_PORT = 465
-MAIL_USERNAME = os.getenv("MAIL_USERNAME")
-MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
-
-ADMINS = [
-    "contact@kleenspotless.com",
-    "kleenspotless50@gmail.com",
-]
-
-SUPPORT_EMAIL = "contact@kleenspotless.com"
-
+MAIL_SERVER = Config.MAIL_SERVER
+MAIL_PORT = Config.MAIL_PORT
+MAIL_USERNAME = Config.MAIL_USERNAME
+MAIL_PASSWORD = Config.MAIL_PASSWORD
 
 @contextmanager
 def get_db_session():
@@ -116,4 +110,5 @@ def process_unsent_mail():
                     record.is_sent = True
 
 
-process_unsent_mail()
+if __name__ == "__main__":
+    process_unsent_mail()
