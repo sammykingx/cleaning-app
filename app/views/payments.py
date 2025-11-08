@@ -153,7 +153,6 @@ def payments():
         idempotency_key = uuid.uuid4()
         cleaning_booking.idempotency_key = idempotency_key
         db.session.commit()
-        print("No idm key, so we created one: %s", idempotency_key)
 
     client = Clients.query.filter_by(
         email=cleaning_booking.client_email

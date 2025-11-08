@@ -19,11 +19,6 @@ def handle_404(e):
     return redirect(HOME_URL), 302
 
 
-@application.route("/loading")
-def loading():
-    return render_template("loading.html")
-
-
 @application.route("/")
 def index():
     """Home route for the Cleaning App."""

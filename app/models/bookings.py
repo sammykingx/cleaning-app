@@ -1,6 +1,5 @@
 from app.extensions import db
 from sqlalchemy import func, NUMERIC
-from faker import Faker
 import json
 
 
@@ -37,7 +36,7 @@ class Bookings(db.Model):
     )
     price = db.Column(db.Float, nullable=False)
     square_order_id = db.Column(
-        db.String(30),
+        db.String(45),
     )
     idempotency_key= db.Column(db.String(45))
     charged_amount = db.Column(NUMERIC(10,2))
@@ -83,40 +82,3 @@ class Bookings(db.Model):
             "price": self.price,
         }
 
-
-def create_demo_bookings():
-    """Create demo bookings for testing purposes."""
-
-    fake = Faker()
-    demo_bookings = [
-        Bookings(
-            client_email=fake.email(),
-            service=fake.random_element(
-                elements=(
-                    "Regular House Cleaning",
-                    "Deep Cleaning",
-                    "Small Office Cleaning",
-                )
-            ),
-            category=fake.random_element(
-                elements=(
-                    "Residential Cleaning",
-                    "Commercial Cleaning",
-                )
-            ),
-            addons=fake.random_int(min=1, max=5),
-            notes=fake.text(max_nb_chars=200),
-            booking_date=fake.date_time_this_year(),
-            cleaning_date=fake.date_time_this_year(),
-            booking_status=fake.random_element(
-                elements=("pending", "confirmed", "cancelled")
-            ),
-            payment_status=fake.random_element(
-                elements=("unpaid", "paid")
-            ),
-            price=fake.random_number(digits=3, fix_len=True),
-        )
-        for _ in range(10)  # Create 10 demo bookings
-    ]
-    db.session.bulk_save_objects(demo_bookings)
-    db.session.commit()
